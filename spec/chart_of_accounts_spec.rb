@@ -49,5 +49,14 @@ RSpec.describe PrimordialBooks::ChartOfAccounts do
     expect(ChartOfAccounts.new(data).name_for_id('301')).to eq('Retained Earnings')
   end
 
+  it 'correctly determines the debit/credit flag of the account' do
+    data = "101 D Cash in Bank\n201 C Loan Payable\n301 C Retained Earnings"
+    chart = ChartOfAccounts.new(data)
+    expect(chart.debit_or_credit_for_id('101')).to eq(:debit)
+    expect(chart.debit_or_credit_for_id('201')).to eq(:credit)
+    expect(chart.debit_or_credit_for_id('301')).to eq(:credit)
+  end
+
+
 end
 end

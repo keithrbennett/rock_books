@@ -11,10 +11,11 @@ class Journal
 
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
-  attr_reader :account_code, :date_prefix, :doc_type, :title, :entries
+  attr_reader :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
 
 
-  def initialize(input_string)
+  def initialize(chart_of_accounts, input_string)
+    @chart_of_accounts = chart_of_accounts
     @entries = []
     @date_prefix = ''
     lines = input_string.split("\n")
@@ -30,6 +31,10 @@ class Journal
         @doc_type = line.split('doc_type:').last.strip
       when  /^@account_code:/
         @account_code = line.split('account_code:').last.strip
+        @debit_or_credit = chart_of_accounts.debit_or_credit_for_id(account_code)
+        if @debit_or_credit.nil?
+          raise Error.new("Account code #{@account_code} not found in Chart of Accounts.")
+        end
       when /^@title:/
         @title = line.split('title:').last.strip
       when /^@date_prefix:/

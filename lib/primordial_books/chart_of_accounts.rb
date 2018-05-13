@@ -69,9 +69,20 @@ class ChartOfAccounts
   end
 
 
+  def account_for_id(id)
+    accounts.detect { |a| a.id == id }
+  end
+
+
   def name_for_id(id)
-    found = accounts.detect { |a| a.id == id }
+    found = account_for_id(id)
     found ? found.name : nil
+  end
+
+
+  def debit_or_credit_for_id(id)
+    found = account_for_id(id)
+    found ? found.debit_or_credit : nil
   end
 end
 end
