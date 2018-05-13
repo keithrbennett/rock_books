@@ -31,7 +31,7 @@ module PrimordialBooks
     end
 
     it 'correctly determines the main journal account' do
-      data = '@account_code: 101'
+      data = '@account_code: 101 '
       expect(Journal.new(data).account_code).to eq('101')
     end
   end

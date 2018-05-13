@@ -1,7 +1,9 @@
+require_relative 'error'
+
 module PrimordialBooks
 class ChartOfAccounts
 
-  class Account < Struct.new(:id, :name); end
+  class Account < Struct.new(:id, :debit_or_credit, :name); end
 
   attr_reader :date_prefix, :doc_type, :title, :accounts
 
@@ -19,6 +21,8 @@ class ChartOfAccounts
       @doc_type = line.split('doc_type:').last.strip
     when /^@title:/
       @title = line.split('title:').last.strip
+    when /^@debit_or_credit:/
+      @debit_or_credit = line.split('debit_or_credit:').last.strip
     when /^@date_prefix:/
       @date_prefix = line.split('@date_prefix:').last.strip
     when /^$/
@@ -26,9 +30,26 @@ class ChartOfAccounts
     when /^#/
       # ignore comment line
     else
-      # this is an account line in the form: 101 blah blah blah
+      # this is an account line in the form: 101 D First National City Bank
+      # The regex below gets everything before the first whitespace in token 1, and the rest in token 2.
       matcher = line.match(/^(\S+)\s+(.*)$/)
-      accounts << Account.new(matcher[1], matcher[2])
+      code = matcher[1]
+      rest = matcher[2]
+
+      matcher = rest.match(/^(\S+)\s+(.*)$/)
+      debit_or_credit_token = matcher[1]
+      name = matcher[2]
+
+      debit_or_credit = case debit_or_credit_token[0].upcase
+        when 'D'
+          :debit
+        when 'C'
+          :credit
+        else
+          raise Error.new("Debit or credit type must begin with d, D, c, or C. Was #{debit_or_credit_token}.")
+        end
+
+      accounts << Account.new(code, debit_or_credit, name)
     end
   end
 

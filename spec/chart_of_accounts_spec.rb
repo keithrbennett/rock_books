@@ -22,12 +22,12 @@ RSpec.describe PrimordialBooks::ChartOfAccounts do
   end
 
   it 'can read an account code and name' do
-    data = '101 My Bank Checking Account'
-    expect(ChartOfAccounts.new(data).accounts).to eq([ChartOfAccounts::Account.new('101', 'My Bank Checking Account')])
+    data = '101 D My Bank Checking Account'
+    expect(ChartOfAccounts.new(data).accounts).to eq([ChartOfAccounts::Account.new('101', :debit, 'My Bank Checking Account')])
   end
 
   it 'can produce a report string' do
-    data = "@title: Title\n101 Cash in Bank\n"
+    data = "@title: Title\n101 D Cash in Bank\n"
     report_string = ChartOfAccounts.new(data).report_string
     expect(report_string).to include('Title')
     expect(report_string).to include('101')
@@ -35,17 +35,17 @@ RSpec.describe PrimordialBooks::ChartOfAccounts do
   end
 
   it 'can look up a name by an id' do
-    data = "101 Cash in Bank\n201 Loan Payable\n301 Retained Earnings"
+    data = "101 D Cash in Bank\n201 C Loan Payable\n301 C Retained Earnings"
     expect(ChartOfAccounts.new(data).name_for_id('201')).to eq('Loan Payable')
   end
 
   it 'does not choke on empty or comment lines' do
-    data = "101 Cash in Bank\n\n\n\n201 Loan Payable\n301 Retained Earnings\n#\n#\n"
+    data = "101 D Cash in Bank\n\n\n\n201 C Loan Payable\n301 C Retained Earnings\n#\n#\n"
     ChartOfAccounts.new(data)
   end
 
   it 'can handle a final line without a line ending' do
-    data = "101 Cash in Bank\n201 Loan Payable\n301 Retained Earnings"
+    data = "101 D Cash in Bank\n201 C Loan Payable\n301 C Retained Earnings"
     expect(ChartOfAccounts.new(data).name_for_id('301')).to eq('Retained Earnings')
   end
 
