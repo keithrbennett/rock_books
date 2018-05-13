@@ -30,5 +30,9 @@ module PrimordialBooks
       expect(journal_entry.acct_amounts).to eq([AcctAmount.new('333', 333.33)])
     end
 
+    it 'correctly determines the main journal account' do
+      data = '@account_code: 101'
+      expect(Journal.new(data).account_code).to eq('101')
+    end
   end
 end

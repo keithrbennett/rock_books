@@ -8,7 +8,7 @@ class Journal
 
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
-  attr_reader :date_prefix, :doc_type, :title, :entries
+  attr_reader :account_code, :date_prefix, :doc_type, :title, :entries
 
 
   def initialize(input_string)
@@ -25,6 +25,8 @@ class Journal
     case line.strip
       when /^@doc_type:/
         @doc_type = line.split('doc_type:').last.strip
+      when  /^@account_code:/
+        @account_code = line.split('account_code:').last.strip
       when /^@title:/
         @title = line.split('title:').last.strip
       when /^@date_prefix:/
