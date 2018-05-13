@@ -4,6 +4,9 @@ require_relative 'acct_amount'
 require_relative 'journal_entry'
 
 module PrimordialBooks
+
+# The journal will create journal entries, each of which containing an array of account/amount objects,
+# copying the entry date to them.
 class Journal
 
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
@@ -49,7 +52,7 @@ class Journal
     tokens = line.split
     date = Date.iso8601(date_prefix + tokens[0])
     total_amount = tokens[1].to_f
-    acct_entries = AcctAmount.parse_tokens(tokens[2..-1], total_amount)
+    acct_entries = AcctAmount.parse_tokens(date, tokens[2..-1], total_amount)
     entries << JournalEntry.new(date, acct_entries, nil)
   end
 

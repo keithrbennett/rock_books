@@ -27,7 +27,7 @@ module PrimordialBooks
       data = "2018-05-13 333.33  333"
       journal_entry = Journal.new(data).entries.first
       expect(journal_entry.date.to_s).to eq('2018-05-13')
-      expect(journal_entry.acct_amounts).to eq([AcctAmount.new('333', 333.33)])
+      expect(journal_entry.acct_amounts).to eq([AcctAmount.new(Date.iso8601('2018-05-13'), '333', 333.33)])
     end
 
     it 'correctly determines the main journal account' do
