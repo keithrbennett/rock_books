@@ -1,0 +1,14 @@
+@title Checking Account Journal
+@doc_type journal
+@account_id: 101
+@date_prefix 2018-
+
+1-1  -5000 251
+Initial Deposit from Shareholder
+
+1-5  1234.45 201
+
+1-7  -100   302
+Invoice #101, ABC, Inc.
+
+

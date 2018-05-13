@@ -3,7 +3,7 @@ class ChartOfAccounts
 
   class Account < Struct.new(:id, :name); end
 
-  attr_reader :date_prefix, :title, :accounts
+  attr_reader :date_prefix, :doc_type, :title, :accounts
 
 
   def initialize(input_string)
@@ -15,12 +15,16 @@ class ChartOfAccounts
 
   def parse_line(line)
     case line.strip
+    when /^@doc_type:/
+      @doc_type = line.split('doc_type:').last.strip
     when /^@title:/
       @title = line.split('title:').last.strip
     when /^@date_prefix:/
       @date_prefix = line.split('@date_prefix:').last.strip
     when /^$/
       # ignore empty line
+    when /^#/
+      # ignore comment line
     else
       # this is an account line in the form: 101 blah blah blah
       matcher = line.match(/^(\S+)\s+(.*)$/)

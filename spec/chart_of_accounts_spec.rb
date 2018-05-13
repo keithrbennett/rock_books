@@ -16,6 +16,11 @@ RSpec.describe PrimordialBooks::ChartOfAccounts do
     expect(ChartOfAccounts.new(data).date_prefix).to eq('2018-')
   end
 
+  it 'correctly handles doc_type' do
+    data = "@doc_type: chart_of_accounts\n101 Cash in Bank"
+    expect(ChartOfAccounts.new(data).doc_type).to eq('chart_of_accounts')
+  end
+
   it 'can read an account code and name' do
     data = '101 My Bank Checking Account'
     expect(ChartOfAccounts.new(data).accounts).to eq([ChartOfAccounts::Account.new('101', 'My Bank Checking Account')])
@@ -33,5 +38,16 @@ RSpec.describe PrimordialBooks::ChartOfAccounts do
     data = "101 Cash in Bank\n201 Loan Payable\n301 Retained Earnings"
     expect(ChartOfAccounts.new(data).name_for_id('201')).to eq('Loan Payable')
   end
+
+  it 'does not choke on empty or comment lines' do
+    data = "101 Cash in Bank\n\n\n\n201 Loan Payable\n301 Retained Earnings\n#\n#\n"
+    ChartOfAccounts.new(data)
+  end
+
+  it 'can handle a final line without a line ending' do
+    data = "101 Cash in Bank\n201 Loan Payable\n301 Retained Earnings"
+    expect(ChartOfAccounts.new(data).name_for_id('301')).to eq('Retained Earnings')
+  end
+
 end
 end

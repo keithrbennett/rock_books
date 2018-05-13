@@ -1,0 +1,16 @@
+@ title Chart of Accounts
+@ doc_type chart_of_accounts
+
+101 Checking Account
+
+201 Credit Card Payable
+251 Loan to Shareholder
+
+301 Retained Earnings
+
+401 Sales - Consulting
+402 Sales - Tutoring
+
+701 Office Supplies
+702 Travel
+
