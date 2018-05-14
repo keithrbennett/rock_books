@@ -23,8 +23,6 @@ class Journal
   end
 
 
-
-
   def parse_line(line)
     case line.strip
       when /^@doc_type:/
@@ -53,12 +51,78 @@ class Journal
 
   # Parses main line of the entry, the one that includes the date, account number and amount entries
   def parse_main_transaction_line(line)
+    if account_code.nil?
+      raise Error.new("An '@account_code: ' line has not yet been specified in this journal." )
+    end
     # this is an account line in the form: 101 blah blah blah
     tokens = line.split
     date = Date.iso8601(date_prefix + tokens[0])
-    total_amount = tokens[1].to_f
-    acct_entries = AcctAmount.parse_tokens(date, tokens[2..-1], total_amount)
+    acct_entries = build_acct_amount_array(date, tokens[1..-1])
     entries << JournalEntry.new(date, acct_entries, nil)
+  end
+
+
+  # Returns an array of AcctAmount instances for the array of tokens.
+  #
+  # This token array will start with the transaction's total amount and be followed by
+  # account/amount pairs.
+  #
+  # Examples, assuming journal account is '101', 'D' 'My Checking Account', total amt is 5.79:
+  # ['5.79', '701', '1.23', '702', '4.56'] --> \
+  # [AcctAmount id: '101', amount: -5.79, AcctAmount id: '701', 1.23, AcctAmount id: '702', 4.56, ]
+  #
+  # shortcut: if there is only 1 account (that is, it is not a split entry), give it the total amount
+  # ['5.79', '701'] --> [AcctAmount id: '101', amount: -5.79, AcctAmount id: '701', 5.79]
+  #
+  # If the account is a credit account, the signs will be reversed.
+  def build_acct_amount_array(date, tokens)
+
+    tokens = tokens.clone
+    tokens.unshift(account_code)  # So the total amount will be associated with the journal's account code.
+    if tokens.size == 3
+      tokens << tokens[1]  # copy the total amount to the sole account's amount
+    end
+
+    if tokens.size.odd?
+      raise Error.new("Incorrect sequence of account codes and amounts: #{tokens}")
+    end
+
+    # Tokens in the odd numbered positions are dollar amounts that need to be converted from string to float.
+    convert_amounts_to_floats = ->(tokens) do
+      (1...tokens.size).step(2) do |amount_index|
+        tokens[amount_index] = Float(tokens[amount_index])
+      end
+    end
+
+    # As a convenience, all normal journal amounts are entered as positive numbers.
+    # This code negates the amounts as necessary so that debits are + and credits are -.
+    convert_signs_for_debit_credit = ->(tokens) do
+
+      # Adjust the sign of the amount for the main journal account (e.g. the checking account or credit card account)
+      adjust_sign_for_main_account = ->(amount) do
+        (debit_or_credit == :debit) ? amount : -amount
+      end
+
+      adjust_sign_for_other_accounts = ->(amount) do
+        (debit_or_credit == :credit) ? amount : -amount
+      end
+
+      tokens[1] = adjust_sign_for_main_account.(tokens[1])
+      (3...tokens.size).step(2) do |amount_index|
+        tokens[amount_index] = adjust_sign_for_other_accounts.(tokens[amount_index])
+      end
+    end
+
+    convert_amounts_to_floats.(tokens)
+    convert_signs_for_debit_credit.(tokens)
+
+    acct_amounts = []
+
+    tokens[0..-1].each_slice(2).each do |(account_code, amount)|
+      acct_amounts << AcctAmount.new(date, account_code, amount)
+    end
+
+    acct_amounts
   end
 
 end
