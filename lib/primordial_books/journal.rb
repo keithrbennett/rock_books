@@ -1,4 +1,6 @@
 require 'date'
+require 'json'
+require 'yaml'
 
 require_relative 'acct_amount'
 require_relative 'journal_entry'
@@ -12,6 +14,21 @@ class Journal
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
   attr_reader :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
+
+  def to_h
+    {
+        title:           title,
+        account_code:    account_code,
+        debit_or_credit: debit_or_credit,
+        doc_type:        doc_type,
+        date_prefix:     date_prefix,
+        entries:         entries
+    }
+  end
+
+
+  def to_json; to_h.to_json; end
+  def to_yaml; to_h.to_yaml; end
 
 
   def initialize(chart_of_accounts, input_string)
