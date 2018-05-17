@@ -1,4 +1,5 @@
 require_relative '../lib/primordial_books/journal'
+require 'awesome_print'
 
 module PrimordialBooks
 
@@ -68,6 +69,31 @@ module PrimordialBooks
       expect { EMPTY_JOURNAL.build_acct_amount_array(TEST_DATE, %w(8.88  201  4.44  202)) }.to raise_error(RuntimeError)
     end
 
+    it 'can produce JSON which can then be parsed and entries contain the expect values' do
+      account_code = '101'
+      data = "@account_code: #{account_code}\n2018-05-13 333.33  201"
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+
+      parsed_code = JSON.parse(journal.to_json)["account_code"]
+      expect(parsed_code).to eq(account_code)
+    end
+
+    it 'can produce YAML which can then be parsed and entries contain the expected values' do
+
+      first_entry_account_code = '101'
+      second_entry_account_code = '201'
+
+      data = "@account_code: #{first_entry_account_code}\n2018-05-13 333.33  #{second_entry_account_code}"
+
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+      parsed_journal = YAML.load(journal.to_yaml)
+
+      parsed_journal_code = parsed_journal[:account_code]
+      expect(parsed_journal_code).to eq(first_entry_account_code)
+
+      parsed_second_code = parsed_journal[:entries].first.acct_amounts[1].acct_id
+      expect(parsed_second_code).to eq(second_entry_account_code)
+    end
 
   end
 end
