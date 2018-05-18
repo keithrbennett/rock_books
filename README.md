@@ -5,7 +5,10 @@ for reporting.
 
 It assumes the traditional double entry bookkeeping system, with debits and credits.
 In general, assets and expenses are debit balance accounts, and liabilities and equity
-are credit balance accounts. 
+are credit balance accounts.
+
+So, to really have this software make sense to you, you should probably understand
+the double entry bookkeeping paradigm pretty well. 
 
 # Terminology Usage
 
@@ -81,6 +84,51 @@ So, the chart of accounts data might include something like this:
 401 Consulting Sales
 701 Supplies
 ```
+
+
+### Journals
+
+Journals are used to record transactions of, for example:
+
+* cash disbursements (expenditures for a single checking account)
+* cash receipts (funds coming into a single checking account)
+* combined cash disbursements and receipts
+* a credit card account
+* a Paypal account
+* sales
+
+Each journal data file needs to contain:
+
+`@doc_type: journal`
+
+Also, it needs to identify the code of the account the journal is representing.
+So for example, if it is a journal of a PayPal account, and the PayPal 
+account's code is `103`, then `@account_code` must be set to `103`:
+
+`@account_code: 103`
+
+In addition, the debit or credit nature of the journal needs to be specified.
+As an example, in the case of a checking account, each entry would credit the
+cash account and debit whatever account(s) the money was spent on,
+e.g. `712 Rent`. In this case, the `@debit_or_credit` property should be set to
+`credit`. This is arbitrary, but the way I remember it is whichever direction
+(debit or credit) the money will go in an entry to/from the journal's primary
+account.
+
+So if the primary account is a checking account, then each positive entry in the 
+journal will result in a credit to the checking account.
+
+Here's what it looks like:
+
+`@debit_or_credit: credit`
+
+#### General Journal
+
+The general journal is a special form of journal that does not have a primary account.
+
+In this journal, debits and credits need to be specified literally as account code/amount
+pairs, where positive numbers will result in debits, and negative numbers will result in credits.
+
 
 
 ## Installation
