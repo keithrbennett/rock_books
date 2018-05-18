@@ -1,9 +1,9 @@
-require_relative '../lib/primordial_books/journal'
+require_relative '../lib/rock_books/journal'
 require 'awesome_print'
 
-module PrimordialBooks
+module RockBooks
 
-  RSpec.describe PrimordialBooks::Journal do
+  RSpec.describe RockBooks::Journal do
 
     CHART_OF_ACCOUNTS = ChartOfAccounts.new("101 Cash in Bank, 201 Accounts Payable")
     EMPTY_JOURNAL = Journal.new(CHART_OF_ACCOUNTS, "@account_code: 101")
@@ -95,5 +95,18 @@ module PrimordialBooks
       expect(parsed_second_code).to eq(second_entry_account_code)
     end
 
+    it 'can include a 1-line description' do
+      description = "Office Depot - Stapler, Shredder, Vacuum Cleaner"
+      data = "@account_code: 101\n2018-05-13 14.79  711\n#{description}\n2018-05-14  32.11  741\n"
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+      expect(journal.entries.first.description).to start_with(description)
+    end
+
+    it 'can include a 2-line description' do
+      description = "Office Depot - Stapler, Shredder, Vacuum Cleaner,\nPrinter paper, pens"
+      data = "@account_code: 101\n2018-05-13 14.79  711\n#{description}\n2018-05-14  32.11  741\n"
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+      expect(journal.entries.first.description).to start_with(description)
+    end
   end
 end

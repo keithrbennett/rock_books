@@ -5,10 +5,13 @@ require 'yaml'
 require_relative 'acct_amount'
 require_relative 'journal_entry'
 
-module PrimordialBooks
+module RockBooks
 
 # The journal will create journal entries, each of which containing an array of account/amount objects,
 # copying the entry date to them.
+#
+# Warning: Any line beginning with a number will be assumed to be the date of a data line for an entry,
+# so descriptions cannot begin with a number.
 class Journal
 
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
@@ -60,8 +63,9 @@ class Journal
         # ignore comment line
       when /^\d/  # a date/acct/amount line starting with a number
         parse_main_transaction_line(line)
-      else # A text line to be attached to the most recently parsed transaction
-        # ?
+      else # Text line(s) to be attached to the most recently parsed transaction
+        entries.last.description ||= ''
+        entries.last.description << line << "\n"
       end
   end
 

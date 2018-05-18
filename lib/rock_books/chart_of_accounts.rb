@@ -1,6 +1,6 @@
 require_relative 'error'
 
-module PrimordialBooks
+module RockBooks
 class ChartOfAccounts
 
   class Account < Struct.new(:id, :debit_or_credit, :name); end

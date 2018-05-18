@@ -1,4 +1,4 @@
-module PrimordialBooks
+module RockBooks
 
 # This class represents an account id and an amount.
 # Journal entries will have multiple instances of these.

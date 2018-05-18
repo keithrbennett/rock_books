@@ -1,8 +1,8 @@
-require_relative '../lib/primordial_books/journal'
+require_relative '../lib/rock_books/journal'
 
-module PrimordialBooks
+module RockBooks
 
-  RSpec.describe PrimordialBooks::AcctAmount do
+  RSpec.describe RockBooks::AcctAmount do
 
     it 'can output and parse YAML correctly' do
       id = 333; amount = 1000; date = Date.iso8601('2018-05-16')

@@ -1,6 +1,6 @@
-module PrimordialBooks
+module RockBooks
 
-RSpec.describe PrimordialBooks::ChartOfAccounts do
+RSpec.describe RockBooks::ChartOfAccounts do
 
   it "can be instantiated" do
     expect(ChartOfAccounts.new('')).not_to be nil
@@ -56,7 +56,6 @@ RSpec.describe PrimordialBooks::ChartOfAccounts do
     expect(chart.debit_or_credit_for_id('201')).to eq(:credit)
     expect(chart.debit_or_credit_for_id('301')).to eq(:credit)
   end
-
 
 end
 end
