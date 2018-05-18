@@ -5,7 +5,7 @@ class ChartOfAccounts
 
   class Account < Struct.new(:id, :debit_or_credit, :name); end
 
-  attr_reader :date_prefix, :doc_type, :title, :accounts
+  attr_reader :doc_type, :title, :accounts
 
 
   def initialize(input_string)
@@ -23,8 +23,6 @@ class ChartOfAccounts
       @title = line.split('title:').last.strip
     when /^@debit_or_credit:/
       @debit_or_credit = line.split('debit_or_credit:').last.strip
-    when /^@date_prefix:/
-      @date_prefix = line.split('@date_prefix:').last.strip
     when /^$/
       # ignore empty line
     when /^#/
