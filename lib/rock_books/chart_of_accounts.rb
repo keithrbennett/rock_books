@@ -52,6 +52,11 @@ class ChartOfAccounts
   end
 
 
+  def include?(candidate_id)
+    accounts.any? { |account| account.id == candidate_id }
+  end
+
+
   def report_string
     result = ''
 

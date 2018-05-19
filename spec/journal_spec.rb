@@ -5,8 +5,18 @@ module RockBooks
 
   RSpec.describe RockBooks::Journal do
 
-    CHART_OF_ACCOUNTS = ChartOfAccounts.new("101 Cash in Bank, 201 Accounts Payable")
-    EMPTY_JOURNAL = Journal.new(CHART_OF_ACCOUNTS, "@account_code: 101")
+    CHART_OF_ACCOUNTS = ChartOfAccounts.new(
+        <<~HEREDOC
+        101 C Cash in Bank
+        201 D Accounts Payable
+        301 C Owners Equity
+        401 C Sales
+        701 D Office Supplies
+        702 D Rent
+        703 D Professional Fees
+        HEREDOC
+    )
+    EMPTY_JOURNAL = Journal.new(CHART_OF_ACCOUNTS, "@account_code: 101\n@debit_or_credit: credit")
     TEST_DATE = Date.iso8601('2018-05-13')
 
     it "can be instantiated" do
@@ -45,15 +55,16 @@ module RockBooks
       expect(Journal.new(chart_of_accounts, data).account_code).to eq('101')
     end
 
-    it 'raises an error when the journal account code is not present in the chart of accounts.' do
-      chart_of_accounts = ChartOfAccounts.new('101 D Cash in Bank')
-      data = '@account_code: 999'
-      expect { Journal.new(chart_of_accounts, data) }.to raise_error(Error)
-    end
-
     it 'parses account tokens correctly with only account number' do
-      expected = [AcctAmount.new(TEST_DATE, '101', -7.89), AcctAmount.new(TEST_DATE, '909', 7.89)]
-      expect(EMPTY_JOURNAL.build_acct_amount_array(TEST_DATE, %w(7.89  909))).to eq(expected)
+      expected = [
+          AcctAmount.new(TEST_DATE, '101', -7.89),
+          AcctAmount.new(TEST_DATE, '701', 7.89)
+      ]
+      actual = EMPTY_JOURNAL.build_acct_amount_array(TEST_DATE, %w(7.89  701), false)
+
+      expect(actual[0]).to eq(expected[0])
+      expect(actual[1]).to eq(expected[1])
+      expect(actual).to eq(expected)
     end
 
     it 'parses account tokens correctly with pairs' do
@@ -62,11 +73,11 @@ module RockBooks
           AcctAmount.new(TEST_DATE, '888', 1.25),
           AcctAmount.new(TEST_DATE, '999', 2.50)
       ]
-      expect(EMPTY_JOURNAL.build_acct_amount_array(TEST_DATE, %w(3.75  888  1.25  999  2.50))).to eq(expected)
+      expect(EMPTY_JOURNAL.build_acct_amount_array(TEST_DATE, %w(3.75  888  1.25  999  2.50), false)).to eq(expected)
     end
 
     it 'raises an error when an even number of tokens greater than 0 is passed' do
-      expect { EMPTY_JOURNAL.build_acct_amount_array(TEST_DATE, %w(8.88  201  4.44  202)) }.to raise_error(RuntimeError)
+      expect { EMPTY_JOURNAL.build_acct_amount_array(TEST_DATE, %w(8.88  201  4.44  202), false) }.to raise_error(RuntimeError)
     end
 
     it 'can produce JSON which can then be parsed and entries contain the expect values' do
@@ -97,14 +108,14 @@ module RockBooks
 
     it 'can include a 1-line description' do
       description = "Office Depot - Stapler, Shredder, Vacuum Cleaner"
-      data = "@account_code: 101\n2018-05-13 14.79  711\n#{description}\n2018-05-14  32.11  741\n"
+      data = "@account_code: 101\n2018-05-13 14.79  701\n#{description}\n2018-05-14  32.11  702\n"
       journal = Journal.new(CHART_OF_ACCOUNTS, data)
       expect(journal.entries.first.description).to start_with(description)
     end
 
     it 'can include a 2-line description' do
       description = "Office Depot - Stapler, Shredder, Vacuum Cleaner,\nPrinter paper, pens"
-      data = "@account_code: 101\n2018-05-13 14.79  711\n#{description}\n2018-05-14  32.11  741\n"
+      data = "@account_code: 101\n2018-05-13 14.79  701\n#{description}\n2018-05-14  32.11  702\n"
       journal = Journal.new(CHART_OF_ACCOUNTS, data)
       expect(journal.entries.first.description).to start_with(description)
     end
@@ -121,14 +132,26 @@ module RockBooks
     end
 
     it 'can produce totals by account' do
-      data = "@account_code: 101\n2018-05-13 1.00  711\n2018-05-14  10.00  741\n" \
-          << "2018-05-14  20.00  741\n\n2018-05-14  100.00  751"
+      data = "@account_code: 101\n2018-05-13 1.00  701\n2018-05-14  10.00  702\n" \
+          << "2018-05-14  20.00  703\n\n2018-05-14  100.00  703"
       journal = Journal.new(CHART_OF_ACCOUNTS, data)
       totals = journal.totals_by_account
       expect(totals['101']).to eq(-131.00)
-      expect(totals['711']).to eq(1.00)
-      expect(totals['741']).to eq(30.00)
-      expect(totals['751']).to eq(100.00)
+      expect(totals['701']).to eq(1.00)
+      expect(totals['702']).to eq(10.00)
+      expect(totals['703']).to eq(120.00)
+    end
+
+    it %q{raises an error when an journal's main account id does not exist} do
+      bad_account_id = '666'
+      data = "@account_code: #{bad_account_id}\n2018-05-13 1.00  701"
+      expect { Journal.new(CHART_OF_ACCOUNTS, data) }.to raise_error(AccountNotFoundError)
+    end
+
+    it %q{raises an error when an entry's account id does not exist} do
+      bad_account_id = '666'
+      data = "@account_code: 101\n2018-05-13 1.00  #{bad_account_id}"
+      expect { Journal.new(CHART_OF_ACCOUNTS, data) }.to raise_error(AccountNotFoundError)
     end
   end
 end

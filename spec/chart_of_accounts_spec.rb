@@ -52,5 +52,12 @@ RSpec.describe RockBooks::ChartOfAccounts do
     expect(chart.debit_or_credit_for_id('301')).to eq(:credit)
   end
 
+  it 'correctly determines whether or not an account id is included' do
+    data = "101 D Cash in Bank\n"
+    chart = ChartOfAccounts.new(data)
+    expect(chart.include?('101')).to eq(true)
+    expect(chart.include?('aaa')).to eq(false)
+  end
+
 end
 end

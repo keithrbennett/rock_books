@@ -2,6 +2,7 @@ require 'date'
 require 'json'
 require 'yaml'
 
+require_relative 'account_not_found_error'
 require_relative 'acct_amount'
 require_relative 'journal_entry'
 
@@ -46,17 +47,22 @@ class Journal
   def parse_line(line)
     case line.strip
       when /^@doc_type:/
-        @doc_type = line.split('doc_type:').last.strip
+        @doc_type = line.split(/^@doc_type:/).last.strip
       when  /^@account_code:/
-        @account_code = line.split('account_code:').last.strip
-        @debit_or_credit = chart_of_accounts.debit_or_credit_for_id(account_code)
-        if @debit_or_credit.nil?
-          raise Error.new("Account code #{@account_code} not found in Chart of Accounts.")
+        @account_code = line.split(/^@account_code:/).last.strip
+        unless chart_of_accounts.include?(@account_code)
+          raise AccountNotFoundError.new(@account_code)
+        end
+        if @debit_or_credit.nil?  # has not yet been explicitly specified
+          @debit_or_credit = chart_of_accounts.debit_or_credit_for_id(account_code)
         end
       when /^@title:/
-        @title = line.split('title:').last.strip
+        @title = line.split(/^@title:/).last.strip
       when /^@date_prefix:/
-        @date_prefix = line.split('@date_prefix:').last.strip
+        @date_prefix = line.split(/^@date_prefix:/).last.strip
+      when /^@debit_or_credit:/
+        data = line.split(/^@debit_or_credit:/).last.strip
+        @debit_or_credit = data
       when /^$/
         # ignore empty line
       when /^#/
@@ -96,7 +102,7 @@ class Journal
   # ['5.79', '701'] --> [AcctAmount id: '101', amount: -5.79, AcctAmount id: '701', 5.79]
   #
   # If the account is a credit account, the signs will be reversed.
-  def build_acct_amount_array(date, tokens)
+  def build_acct_amount_array(date, tokens, validate_in_chart_of_accounts = true)
 
     tokens = tokens.clone
     tokens.unshift(account_code)  # So the total amount will be associated with the journal's account code.
@@ -140,7 +146,10 @@ class Journal
     acct_amounts = []
 
     tokens[0..-1].each_slice(2).each do |(account_code, amount)|
-      acct_amounts << AcctAmount.new(date, account_code, amount)
+      acct_amount = validate_in_chart_of_accounts \
+          ? AcctAmount.create_with_chart_validation(date, account_code, amount, chart_of_accounts) \
+          : AcctAmount.new(date, account_code, amount)
+      acct_amounts << acct_amount
     end
 
     acct_amounts
@@ -155,7 +164,6 @@ class Journal
   def totals_by_account
     aas = acct_amounts
     totals = aas.each_with_object(Hash.new(0)) { |aa, totals| totals[aa.acct_id] += aa.amount }
-    puts totals
     totals
   end
 
