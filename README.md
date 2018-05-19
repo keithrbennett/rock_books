@@ -1,4 +1,4 @@
-# rockBooks
+# RockBooks
 
 A super primitive bookkeeping system using text files as data and console output
 for reporting.

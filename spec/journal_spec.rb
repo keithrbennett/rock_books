@@ -108,5 +108,27 @@ module RockBooks
       journal = Journal.new(CHART_OF_ACCOUNTS, data)
       expect(journal.entries.first.description).to start_with(description)
     end
+
+
+    it 'can produce an array of all the AcctAmounts for the journal' do
+      data = "@account_code: 101\n@date_prefix: 2018-05-\n01  1.00  701\n"
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+      expected = [
+          AcctAmount.new(Date.iso8601('2018-05-01'), '101', -1.00),
+          AcctAmount.new(Date.iso8601('2018-05-01'), '701', 1.00),
+      ]
+      expect(journal.acct_amounts).to eq(expected)
+    end
+
+    it 'can produce totals by account' do
+      data = "@account_code: 101\n2018-05-13 1.00  711\n2018-05-14  10.00  741\n" \
+          << "2018-05-14  20.00  741\n\n2018-05-14  100.00  751"
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+      totals = journal.totals_by_account
+      expect(totals['101']).to eq(-131.00)
+      expect(totals['711']).to eq(1.00)
+      expect(totals['741']).to eq(30.00)
+      expect(totals['751']).to eq(100.00)
+    end
   end
 end

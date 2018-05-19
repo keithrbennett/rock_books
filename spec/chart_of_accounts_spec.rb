@@ -11,11 +11,6 @@ RSpec.describe RockBooks::ChartOfAccounts do
     expect(ChartOfAccounts.new(data).title).to eq('My Chart of Accounts')
   end
 
-  it 'can read its date prefix' do
-    data = '@date_prefix: 2018-'
-    expect(ChartOfAccounts.new(data).date_prefix).to eq('2018-')
-  end
-
   it 'correctly handles doc_type' do
     data = "@doc_type: chart_of_accounts\n101 Cash in Bank"
     expect(ChartOfAccounts.new(data).doc_type).to eq('chart_of_accounts')

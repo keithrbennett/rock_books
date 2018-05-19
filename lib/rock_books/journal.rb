@@ -146,5 +146,18 @@ class Journal
     acct_amounts
   end
 
+
+  def acct_amounts
+    entries.each_with_object([]) { |entry, acct_amounts|  acct_amounts << entry.acct_amounts }.flatten
+  end
+
+
+  def totals_by_account
+    aas = acct_amounts
+    totals = aas.each_with_object(Hash.new(0)) { |aa, totals| totals[aa.acct_id] += aa.amount }
+    puts totals
+    totals
+  end
+
 end
 end
