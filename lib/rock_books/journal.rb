@@ -167,5 +167,14 @@ class Journal
     totals
   end
 
+
+  def to_s
+    super.to_s + ': ' + \
+    {
+        account_code: account_code,
+        debit_or_credit: debit_or_credit,
+        title: title
+    }.to_s
+  end
 end
 end
