@@ -52,10 +52,11 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
         chart_of_accounts.name_for_code(acct_amounts[1].code)
     ]
 
-    fragments.join('   ')
-    # <<~HEREDOC
-    # #{entry.date}  #{format_account_code(document.account_code)}  }
-    # HEREDOC
+    s = fragments.join('   ')
+    if entry.description && entry.description.length > 0
+      s << "\n" << entry.description
+    end
+    s
   end
 
 
