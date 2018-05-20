@@ -55,7 +55,7 @@ as `05-18`.
 ### Chart of Accounts
 
 Pretty much everything in this application assumes the presence of a chart of accounts
-listing the accounts; their id's and their names.
+listing the accounts; their codes and their names.
 
 
 You'll need a chart of accounts file named `chart_of_accounts.rdt`, containing the accounts
@@ -63,7 +63,7 @@ that will be used. They should contain:
 
   attr_reader :date_prefix, :doc_type, :title, :accounts
 
-A commonly used convention for account id's is to assign 3 digit codes to each account,
+A commonly used convention for account codes is to assign 3 digit codes to each account,
 where the first digit represents the type of account it is:
 
 | First Digit | Account Type  |

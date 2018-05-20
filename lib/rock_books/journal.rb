@@ -55,7 +55,7 @@ class Journal
           raise AccountNotFoundError.new(@account_code)
         end
         if @debit_or_credit.nil?  # has not yet been explicitly specified
-          @debit_or_credit = chart_of_accounts.debit_or_credit_for_id(account_code)
+          @debit_or_credit = chart_of_accounts.debit_or_credit_for_code(account_code)
         end
       when /^@title:/
         @title = line.split(/^@title:/).last.strip
@@ -63,7 +63,7 @@ class Journal
         @date_prefix = line.split(/^@date_prefix:/).last.strip
       when /^@debit_or_credit:/
         data = line.split(/^@debit_or_credit:/).last.strip
-        @debit_or_credit = data
+        @debit_or_credit = data.to_sym
       when /^$/
         # ignore empty line
       when /^#/
@@ -82,7 +82,7 @@ class Journal
     if account_code.nil?
       raise Error.new("An '@account_code: ' line has not yet been specified in this journal." )
     end
-    # this is an account line in the form: 101 blah blah blah
+    # this is an account line in the form: yyyy-mm-dd 101 blah blah blah
     tokens = line.split
     date = Date.iso8601(date_prefix + tokens[0])
     acct_entries = build_acct_amount_array(date, tokens[1..-1])
@@ -97,16 +97,22 @@ class Journal
   #
   # Examples, assuming journal account is '101', 'D' 'My Checking Account', total amt is 5.79:
   # ['5.79', '701', '1.23', '702', '4.56'] --> \
-  # [AcctAmount id: '101', amount: -5.79, AcctAmount id: '701', 1.23, AcctAmount id: '702', 4.56, ]
+  # [AcctAmount code: '101', amount: -5.79, AcctAmount code: '701', 1.23, AcctAmount code: '702', 4.56, ]
   #
   # shortcut: if there is only 1 account (that is, it is not a split entry), give it the total amount
-  # ['5.79', '701'] --> [AcctAmount id: '101', amount: -5.79, AcctAmount id: '701', 5.79]
+  # ['5.79', '701'] --> [AcctAmount code: '101', amount: -5.79, AcctAmount code: '701', 5.79]
   #
   # If the account is a credit account, the signs will be reversed.
   def build_acct_amount_array(date, tokens, validate_in_chart_of_accounts = true)
 
     tokens = tokens.clone
-    tokens.unshift(account_code)  # So the total amount will be associated with the journal's account code.
+
+    # Prepend the array with the document account code so that total amount will be associated with it.
+    tokens.unshift(account_code)
+
+    # For convenience, when there is no split, we permit the user to omit the amount after the
+    # account code, since we know it will be equal to the total amount.
+    # We add it here, because we *will* need to include it in the data.
     if tokens.size == 3
       tokens << tokens[1]  # copy the total amount to the sole account's amount
     end
@@ -127,12 +133,14 @@ class Journal
     convert_signs_for_debit_credit = ->(tokens) do
 
       # Adjust the sign of the amount for the main journal account (e.g. the checking account or credit card account)
+      # e.g. If it's a checking account, it is an asset, a debit account, and the transaction total
+      # will represent a credit to that checking account.
       adjust_sign_for_main_account = ->(amount) do
-        (debit_or_credit == :debit) ? amount : -amount
+        (debit_or_credit == :debit) ? -amount : amount
       end
 
       adjust_sign_for_other_accounts = ->(amount) do
-        (debit_or_credit == :credit) ? amount : -amount
+        - adjust_sign_for_main_account.(amount)
       end
 
       tokens[1] = adjust_sign_for_main_account.(tokens[1])
@@ -163,9 +171,7 @@ class Journal
 
 
   def totals_by_account
-    aas = acct_amounts
-    totals = aas.each_with_object(Hash.new(0)) { |aa, totals| totals[aa.acct_id] += aa.amount }
-    totals
+    acct_amounts.each_with_object(Hash.new(0)) { |aa, totals| totals[aa.code] += aa.amount }
   end
 
 

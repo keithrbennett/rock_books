@@ -3,7 +3,7 @@ require_relative 'error'
 module RockBooks
 class ChartOfAccounts
 
-  class Account < Struct.new(:id, :debit_or_credit, :name); end
+  class Account < Struct.new(:code, :debit_or_credit, :name); end
 
   attr_reader :doc_type, :title, :accounts
 
@@ -52,8 +52,8 @@ class ChartOfAccounts
   end
 
 
-  def include?(candidate_id)
-    accounts.any? { |account| account.id == candidate_id }
+  def include?(candidate_code)
+    accounts.any? { |account| account.code == candidate_code }
   end
 
 
@@ -64,28 +64,33 @@ class ChartOfAccounts
       result << title << "\n\n"
     end
 
-    id_width = @accounts.inject(0) { |width, a| width = [width, a.id.length].max }
-    format_string = "%#{id_width}s  %s\n"
-    accounts.each { |a| result << format_string % [a.id, a.name] }
+    code_width = @accounts.inject(0) { |width, a| width = [width, a.code.length].max }
+    format_string = "%#{code_width}s  %s\n"
+    accounts.each { |a| result << format_string % [a.code, a.name] }
 
     result
   end
 
 
-  def account_for_id(id)
-    accounts.detect { |a| a.id == id }
+  def account_for_code(code)
+    accounts.detect { |a| a.code == code }
   end
 
 
-  def name_for_id(id)
-    found = account_for_id(id)
+  def name_for_code(code)
+    found = account_for_code(code)
     found ? found.name : nil
   end
 
 
-  def debit_or_credit_for_id(id)
-    found = account_for_id(id)
-    found ? found.debit_or_credit : nil
+  def debit_or_credit_for_code(code)
+    found = account_for_code(code)
+    found ? found.debit_or_credit.to_sym : nil
+  end
+
+
+  def max_account_code_length
+    @max_account_code_length ||= accounts.map { |a| a.code.length }.max
   end
 end
 end

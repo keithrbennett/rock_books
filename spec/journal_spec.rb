@@ -7,8 +7,8 @@ module RockBooks
 
     CHART_OF_ACCOUNTS = ChartOfAccounts.new(
         <<~HEREDOC
-        101 C Cash in Bank
-        201 D Accounts Payable
+        101 D Cash in Bank
+        201 C Accounts Payable
         301 C Owners Equity
         401 C Sales
         701 D Office Supplies
@@ -16,7 +16,7 @@ module RockBooks
         703 D Professional Fees
         HEREDOC
     )
-    EMPTY_JOURNAL = Journal.new(CHART_OF_ACCOUNTS, "@account_code: 101\n@debit_or_credit: credit")
+    EMPTY_JOURNAL = Journal.new(CHART_OF_ACCOUNTS, "@account_code: 101\n@debit_or_credit: debit")
     TEST_DATE = Date.iso8601('2018-05-13')
 
     it "can be instantiated" do
@@ -45,7 +45,7 @@ module RockBooks
       expect(journal_entry.date.to_s).to eq('2018-05-13')
 
       date = Date.iso8601('2018-05-13')
-      expected = [AcctAmount.new(TEST_DATE, '101', 333.33), AcctAmount.new(date, '201', -333.33)]
+      expected = [AcctAmount.new(TEST_DATE, '101', -333.33), AcctAmount.new(date, '201', 333.33)]
       expect(journal_entry.acct_amounts).to eq(expected)
     end
 
@@ -102,7 +102,7 @@ module RockBooks
       parsed_journal_code = parsed_journal[:account_code]
       expect(parsed_journal_code).to eq(first_entry_account_code)
 
-      parsed_second_code = parsed_journal[:entries].first.acct_amounts[1].acct_id
+      parsed_second_code = parsed_journal[:entries].first.acct_amounts[1].code
       expect(parsed_second_code).to eq(second_entry_account_code)
     end
 
@@ -142,15 +142,15 @@ module RockBooks
       expect(totals['703']).to eq(120.00)
     end
 
-    it %q{raises an error when an journal's main account id does not exist} do
-      bad_account_id = '666'
-      data = "@account_code: #{bad_account_id}\n2018-05-13 1.00  701"
+    it %q{raises an error when an journal's main account code does not exist} do
+      bad_account_code = '666'
+      data = "@account_code: #{bad_account_code}\n2018-05-13 1.00  701"
       expect { Journal.new(CHART_OF_ACCOUNTS, data) }.to raise_error(AccountNotFoundError)
     end
 
-    it %q{raises an error when an entry's account id does not exist} do
-      bad_account_id = '666'
-      data = "@account_code: 101\n2018-05-13 1.00  #{bad_account_id}"
+    it %q{raises an error when an entry's account code does not exist} do
+      bad_account_code = '666'
+      data = "@account_code: 101\n2018-05-13 1.00  #{bad_account_code}"
       expect { Journal.new(CHART_OF_ACCOUNTS, data) }.to raise_error(AccountNotFoundError)
     end
   end

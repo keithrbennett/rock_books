@@ -12,7 +12,7 @@ RSpec.describe RockBooks::ChartOfAccounts do
   end
 
   it 'correctly handles doc_type' do
-    data = "@doc_type: chart_of_accounts\n101 Cash in Bank"
+    data = "@doc_type: chart_of_accounts\n101 D Cash in Bank"
     expect(ChartOfAccounts.new(data).doc_type).to eq('chart_of_accounts')
   end
 
@@ -29,9 +29,9 @@ RSpec.describe RockBooks::ChartOfAccounts do
     expect(report_string).to include('Cash in Bank')
   end
 
-  it 'can look up a name by an id' do
+  it 'can look up a name by a code' do
     data = "101 D Cash in Bank\n201 C Loan Payable\n301 C Retained Earnings"
-    expect(ChartOfAccounts.new(data).name_for_id('201')).to eq('Loan Payable')
+    expect(ChartOfAccounts.new(data).name_for_code('201')).to eq('Loan Payable')
   end
 
   it 'does not choke on empty or comment lines' do
@@ -41,18 +41,18 @@ RSpec.describe RockBooks::ChartOfAccounts do
 
   it 'can handle a final line without a line ending' do
     data = "101 D Cash in Bank\n201 C Loan Payable\n301 C Retained Earnings"
-    expect(ChartOfAccounts.new(data).name_for_id('301')).to eq('Retained Earnings')
+    expect(ChartOfAccounts.new(data).name_for_code('301')).to eq('Retained Earnings')
   end
 
   it 'correctly determines the debit/credit flag of the account' do
     data = "101 D Cash in Bank\n201 C Loan Payable\n301 C Retained Earnings"
     chart = ChartOfAccounts.new(data)
-    expect(chart.debit_or_credit_for_id('101')).to eq(:debit)
-    expect(chart.debit_or_credit_for_id('201')).to eq(:credit)
-    expect(chart.debit_or_credit_for_id('301')).to eq(:credit)
+    expect(chart.debit_or_credit_for_code('101')).to eq(:debit)
+    expect(chart.debit_or_credit_for_code('201')).to eq(:credit)
+    expect(chart.debit_or_credit_for_code('301')).to eq(:credit)
   end
 
-  it 'correctly determines whether or not an account id is included' do
+  it 'correctly determines whether or not an account code is included' do
     data = "101 D Cash in Bank\n"
     chart = ChartOfAccounts.new(data)
     expect(chart.include?('101')).to eq(true)

@@ -7,8 +7,29 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
   include Reporter
 
 
-  def header
-    subtitle = "Account: #{document.account_code} -- #{chart_of_accounts.name_for_id(document.account_code)}"
+  def initialize(document, chart_of_accounts, page_width)
+    super
+    @max_account_code_length = chart_of_accounts.max_account_code_length
+  end
+
+
+  def format_account_code(code)
+    "%*.*s" % [@max_account_code_length, @max_account_code_length, code]
+  end
+
+
+  def format_amount(amount)
+    "%9.2f" % amount
+  end
+
+
+  def format_acct_amount(acct_amount)
+    "%s  %s" % [format_account_code(acct_amount.code), format_amount(acct_amount.amount)]
+  end
+
+
+  def format_header
+    subtitle = "Account: #{document.account_code} -- #{chart_of_accounts.name_for_code(document.account_code)}"
 
     <<~HEREDOC
     #{banner_line}
@@ -20,16 +41,29 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
   end
 
 
-  def entry(entry)
-    <<~HEREDOC
+  def format_entry(entry)
+    acct_amounts = entry.acct_amounts
+    total_amount = acct_amounts.first.amount
 
-    HEREDOC
+    fragments = [
+        entry.date.to_s,
+        format_amount(total_amount),
+        format_acct_amount(acct_amounts[1]),
+        chart_of_accounts.name_for_code(acct_amounts[1].code)
+    ]
 
-
+    fragments.join('   ')
+    # <<~HEREDOC
+    # #{entry.date}  #{format_account_code(document.account_code)}  }
+    # HEREDOC
   end
 
+
   def generate_report
-    header
+    sio = StringIO.new
+    sio << format_header
+    document.entries.each { |entry| sio << format_entry(entry) << "\n" }
+    sio.string
   end
 
 
