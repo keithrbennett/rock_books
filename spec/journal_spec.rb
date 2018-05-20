@@ -153,5 +153,17 @@ module RockBooks
       data = "@account_code: 101\n2018-05-13 1.00  #{bad_account_code}"
       expect { Journal.new(CHART_OF_ACCOUNTS, data) }.to raise_error(AccountNotFoundError)
     end
+
+    it 'returns the correct transaction total of zero' do
+      data = "@account_code: 101\n@date_prefix: 2018-05-\n01  1.00  701\n"
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+      expect(journal.total_amount).to eq(0)
+    end
+
+    it 'returns the correct transaction total of non-zero' do
+      data = "@account_code: 101\n@date_prefix: 2018-05-\n01  100.00  701  10.00\n"
+      journal = Journal.new(CHART_OF_ACCOUNTS, data)
+      expect(journal.total_amount).to eq(-90.0)
+    end
   end
 end

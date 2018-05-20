@@ -175,6 +175,11 @@ class Journal
   end
 
 
+  def total_amount
+    AcctAmount.total_amount(acct_amounts)
+  end
+
+
   def to_s
     super.to_s + ': ' + \
     {

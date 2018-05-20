@@ -9,22 +9,6 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
 
   def initialize(document, chart_of_accounts, page_width)
     super
-    @max_account_code_length = chart_of_accounts.max_account_code_length
-  end
-
-
-  def format_account_code(code)
-    "%*.*s" % [@max_account_code_length, @max_account_code_length, code]
-  end
-
-
-  def format_amount(amount)
-    "%9.2f" % amount
-  end
-
-
-  def format_acct_amount(acct_amount)
-    "%s  %s" % [format_account_code(acct_amount.code), format_amount(acct_amount.amount)]
   end
 
 
