@@ -1,7 +1,11 @@
 # RockBooks
 
-A super primitive bookkeeping system using text files as data and console output
+A super primitive bookkeeping system using text files as input documents and console output
 for reporting.
+
+A supreme goal of this project is to give _you_ control over your data. 
+Want to serialize it to YAML, JSON, CSV, or manipulate it in your custom code?
+No problem! 
 
 It assumes the traditional double entry bookkeeping system, with debits and credits.
 In general, assets and expenses are debit balance accounts, and liabilities and equity
@@ -28,7 +32,7 @@ as opposed to transactions, etc., will be expressed as lines beginning with `@`:
 ```
 @doc_type: journal
 @title: "ABC Bank Checking Account Disbursements Journal"
-@account: 101
+@account: ck_abc
 ```
 
 Repeating data types such as entries in journals, and accounts in the chart of accounts,
@@ -59,32 +63,31 @@ listing the accounts; their codes and their names.
 
 
 You'll need a chart of accounts file named `chart_of_accounts.rdt`, containing the accounts
-that will be used. They should contain:
+that will be used. Each account should contain the following fields:
 
-  attr_reader :date_prefix, :doc_type, :title, :accounts
-
-A commonly used convention for account codes is to assign 3 digit codes to each account,
-where the first digit represents the type of account it is:
-
-| First Digit | Account Type  |
-| ----------- | ------------- |
-|1            |Asset          |
-|2            |Liability      |
-|3            |Owners' Equity |
-|4            |Income         |
-|7            |Expenses       |
-|9            |Income Taxes   |
+| Property Name | Description |
+| ------------- | ------------- |
+| code          | a short string with which to identify an account, e.g. `ret_earn` for retained earnings
+| name          | a longer more descriptive name, used in reports, so no more than 30 or so characters long is recommended
+| debit_or_credit | which side of debit/credit will be increased when value is added to this account; debit for assets and expenses, credit for income, liabilities, and equity.
+  
 
 So, the chart of accounts data might include something like this:
 
 ```
-101 XYZ Bank Checking Account
-201 Loan Payable to Owner
-301 Owner's Equity
-401 Consulting Sales
-701 Supplies
+ck.xyz       D   XYZ Bank Checking Account
+loan.owner   C   Loan Payable to Owner
+o.equity     C   Owner's Equity
+sls.cons     C   Consulting Sales
+tr.airfare   D   Travel - Air Fare
 ```
 
+Although hyphens and underscores are typically used to logically separate string fragments,
+we recommend periods; they're much easier to type, and you'll be doing a lot of that.
+
+There is no maximum length for account codes, and reports will automatically align based
+on the longest account code. However, keep in mind that you will need to type these codes,
+and they will consume space in reports.
 
 ### Journals
 
@@ -103,14 +106,14 @@ Each journal data file needs to contain:
 
 Also, it needs to identify the code of the account the journal is representing.
 So for example, if it is a journal of a PayPal account, and the PayPal 
-account's code is `103`, then `@account_code` must be set to `103`:
+account's code is `paypal`, then you'll need a line like this in your journal file:
 
-`@account_code: 103`
+`@account_code: paypal`
 
 In addition, the debit or credit nature of the journal needs to be specified.
 As an example, in the case of a checking account, each entry would credit the
 cash account and debit whatever account(s) the money was spent on,
-e.g. `712 Rent`. In this case, the `@debit_or_credit` property should be set to
+e.g. `tr.airfare Travel - Air Fare`. In this case, the `@debit_or_credit` property should be set to
 `credit`. This is arbitrary, but the way I remember it is whichever direction
 (debit or credit) the money will go in an entry to/from the journal's primary
 account.
