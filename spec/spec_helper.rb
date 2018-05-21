@@ -1,5 +1,6 @@
 require "bundler/setup"
-require_relative '../lib/../lib/rock_books/chart_of_accounts'
+
+require_relative '../lib/rock_books'
 
 
 RSpec.configure do |config|

@@ -1,5 +1,2 @@
-require "rock_books/version"
+Dir[File.join(File.dirname(__FILE__), '**/*.rb')].each { |file| require file }
 
-module RockBooks
-  # Your code goes here...
-end
