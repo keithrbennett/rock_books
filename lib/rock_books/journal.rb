@@ -76,7 +76,7 @@ class Journal
   # ['5.79', '701'] --> [AcctAmount code: '101', amount: -5.79, AcctAmount code: '701', 5.79]
   #
   # If the account is a credit account, the signs will be reversed.
-  def build_acct_amount_array(date, tokens, validate_in_chart_of_accounts = true)
+  def build_acct_amount_array(date, tokens, want_account_validation = true)
 
     tokens = tokens.clone
 
@@ -119,17 +119,7 @@ class Journal
 
     convert_alternate_amounts_to_floats(tokens)
     convert_signs_for_debit_credit.(tokens)
-
-    acct_amounts = []
-
-    tokens[0..-1].each_slice(2).each do |(account_code, amount)|
-      acct_amount = validate_in_chart_of_accounts \
-          ? AcctAmount.create_with_chart_validation(date, account_code, amount, chart_of_accounts) \
-          : AcctAmount.new(date, account_code, amount)
-      acct_amounts << acct_amount
-    end
-
-    acct_amounts
+    acct_amounts_from_tokens(tokens, date, want_account_validation)
   end
 
 

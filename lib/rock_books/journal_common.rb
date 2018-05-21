@@ -43,5 +43,18 @@ module JournalCommon
     end
   end
 
+
+  def acct_amounts_from_tokens(tokens, date, want_account_validation)
+    acct_amounts = []
+
+    tokens[0..-1].each_slice(2).each do |(account_code, amount)|
+      acct_amount = want_account_validation \
+          ? AcctAmount.create_with_chart_validation(date, account_code, amount, chart_of_accounts) \
+          : AcctAmount.new(date, account_code, amount)
+      acct_amounts << acct_amount
+    end
+
+    acct_amounts
+  end
 end
 end
