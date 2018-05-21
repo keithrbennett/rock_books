@@ -4,8 +4,8 @@ require 'yaml'
 
 require_relative 'account_not_found_error'
 require_relative 'acct_amount'
-require_relative 'journal_common'
 require_relative 'journal_entry'
+require_relative 'journal_entry_builder'
 require_relative 'reporter'
 
 module RockBooks
@@ -16,8 +16,6 @@ module RockBooks
 # Warning: Any line beginning with a number will be assumed to be the date of a data line for an entry,
 # so descriptions cannot begin with a number.
 class Journal
-
-  include JournalCommon
 
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
@@ -48,98 +46,37 @@ class Journal
   end
 
 
-  def general_journal?
-    @document_type == 'general_journal'
-  end
-
-
-  # Parses main line of the entry, the one that includes the date, account number and amount entries
-  def parse_main_transaction_line(line)
-    # this is an account line in the form: yyyy-mm-dd 101 blah blah blah
-    tokens = line.split
-    date = Date.iso8601(date_prefix + tokens[0])
-    acct_amount_tokens = tokens[1..-1]
-    acct_entries = build_acct_amount_array(date, acct_amount_tokens)
-    entries << JournalEntry.new(date, acct_entries, nil)
-  end
-
-
-    def validate_acct_amount_token_array_size(tokens)
-      if tokens.size.odd?
-        raise Error.new("Incorrect sequence of account codes and amounts: #{tokens}")
+  def parse_line(line)
+    case line.strip
+    when /^@doc_type:/
+      @doc_type = line.split(/^@doc_type:/).last.strip
+    when  /^@account_code:/
+      @account_code = line.split(/^@account_code:/).last.strip
+      unless chart_of_accounts.include?(@account_code)
+        raise AccountNotFoundError.new(@account_code)
       end
-    end
-
-
-  # For regular journal only, not general journal.
-  # This converts the entered signs to the correct debit/credit signs.
-  def convert_signs_for_debit_credit(tokens)
-
-    # Adjust the sign of the amount for the main journal account (e.g. the checking account or credit card account)
-    # e.g. If it's a checking account, it is an asset, a debit account, and the transaction total
-    # will represent a credit to that checking account.
-    adjust_sign_for_main_account = ->(amount) do
-      (debit_or_credit == :debit) ? -amount : amount
-    end
-
-    adjust_sign_for_other_accounts = ->(amount) do
-      - adjust_sign_for_main_account.(amount)
-    end
-
-    tokens[1] = adjust_sign_for_main_account.(tokens[1])
-    (3...tokens.size).step(2) do |amount_index|
-      tokens[amount_index] = adjust_sign_for_other_accounts.(tokens[amount_index])
+      if @debit_or_credit.nil?  # has not yet been explicitly specified
+        @debit_or_credit = chart_of_accounts.debit_or_credit_for_code(account_code)
+      end
+    when /^@title:/
+      @title = line.split(/^@title:/).last.strip
+    when /^@date_prefix:/
+      @date_prefix = line.split(/^@date_prefix:/).last.strip
+    when /^@debit_or_credit:/
+      data = line.split(/^@debit_or_credit:/).last.strip
+      @debit_or_credit = data.to_sym
+    when /^$/
+      # ignore empty line
+    when /^#/
+      # ignore comment line
+    when /^\d/  # a date/acct/amount line starting with a number
+      entries << JournalEntryBuilder.new(line, self).build
+    else # Text line(s) to be attached to the most recently parsed transaction
+      entries.last.description ||= ''
+      entries.last.description << line << "\n"
     end
   end
 
-
-  # Returns an array of AcctAmount instances for the array of tokens.
-  #
-  # This token array will start with the transaction's total amount and be followed by
-  # account/amount pairs.
-  #
-  # Examples, assuming journal account is '101', 'D' 'My Checking Account', total amt is 5.79:
-  # ['5.79', '701', '1.23', '702', '4.56'] --> \
-  # [AcctAmount code: '101', amount: -5.79, AcctAmount code: '701', 1.23, AcctAmount code: '702', 4.56, ]
-  #
-  # shortcut: if there is only 1 account (that is, it is not a split entry), give it the total amount
-  # ['5.79', '701'] --> [AcctAmount code: '101', amount: -5.79, AcctAmount code: '701', 5.79]
-  #
-  # If the account is a credit account, the signs will be reversed.
-  def build_acct_amount_array(date, tokens, want_account_validation = true)
-
-    tokens = tokens.clone
-
-    unless general_journal?
-      if account_code.nil?
-        raise Error.new("An '@account_code: ' line has not yet been specified in this journal." )
-      end
-
-      # Prepend the array with the document account code so that total amount will be associated with it.
-      tokens.unshift(account_code)
-
-      # For convenience, when there is no split, we permit the user to omit the amount after the
-      # account code, since we know it will be equal to the total amount.
-      # We add it here, because we *will* need to include it in the data.
-      if tokens.size == 3
-        tokens << tokens[1]  # copy the total amount to the sole account's amount
-      end
-    end
-
-    validate_acct_amount_token_array_size(tokens)
-
-    # Tokens in the odd numbered positions are dollar amounts that need to be converted from string to float.
-    convert_amounts_to_floats(tokens)
-
-    unless general_journal?
-      # As a convenience, all normal journal amounts are entered as positive numbers.
-      # This code negates the amounts as necessary so that debits are + and credits are -.
-      # In general journals, the debit and credit amounts must be entered correctly already.
-      convert_signs_for_debit_credit(tokens)
-    end
-
-    acct_amounts_from_tokens(tokens, date, want_account_validation)
-  end
 
 
   def acct_amounts
