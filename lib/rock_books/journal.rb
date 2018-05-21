@@ -48,18 +48,48 @@ class Journal
   end
 
 
+  def general_journal?
+    @document_type == 'general_journal'
+  end
 
 
   # Parses main line of the entry, the one that includes the date, account number and amount entries
   def parse_main_transaction_line(line)
-    if account_code.nil?
-      raise Error.new("An '@account_code: ' line has not yet been specified in this journal." )
-    end
     # this is an account line in the form: yyyy-mm-dd 101 blah blah blah
     tokens = line.split
     date = Date.iso8601(date_prefix + tokens[0])
-    acct_entries = build_acct_amount_array(date, tokens[1..-1])
+    acct_amount_tokens = tokens[1..-1]
+    acct_entries = build_acct_amount_array(date, acct_amount_tokens)
     entries << JournalEntry.new(date, acct_entries, nil)
+  end
+
+
+    def validate_acct_amount_token_array_size(tokens)
+      if tokens.size.odd?
+        raise Error.new("Incorrect sequence of account codes and amounts: #{tokens}")
+      end
+    end
+
+
+  # For regular journal only, not general journal.
+  # This converts the entered signs to the correct debit/credit signs.
+  def convert_signs_for_debit_credit(tokens)
+
+    # Adjust the sign of the amount for the main journal account (e.g. the checking account or credit card account)
+    # e.g. If it's a checking account, it is an asset, a debit account, and the transaction total
+    # will represent a credit to that checking account.
+    adjust_sign_for_main_account = ->(amount) do
+      (debit_or_credit == :debit) ? -amount : amount
+    end
+
+    adjust_sign_for_other_accounts = ->(amount) do
+      - adjust_sign_for_main_account.(amount)
+    end
+
+    tokens[1] = adjust_sign_for_main_account.(tokens[1])
+    (3...tokens.size).step(2) do |amount_index|
+      tokens[amount_index] = adjust_sign_for_other_accounts.(tokens[amount_index])
+    end
   end
 
 
@@ -80,45 +110,34 @@ class Journal
 
     tokens = tokens.clone
 
-    # Prepend the array with the document account code so that total amount will be associated with it.
-    tokens.unshift(account_code)
+    unless general_journal?
+      if account_code.nil?
+        raise Error.new("An '@account_code: ' line has not yet been specified in this journal." )
+      end
 
-    # For convenience, when there is no split, we permit the user to omit the amount after the
-    # account code, since we know it will be equal to the total amount.
-    # We add it here, because we *will* need to include it in the data.
-    if tokens.size == 3
-      tokens << tokens[1]  # copy the total amount to the sole account's amount
+      # Prepend the array with the document account code so that total amount will be associated with it.
+      tokens.unshift(account_code)
+
+      # For convenience, when there is no split, we permit the user to omit the amount after the
+      # account code, since we know it will be equal to the total amount.
+      # We add it here, because we *will* need to include it in the data.
+      if tokens.size == 3
+        tokens << tokens[1]  # copy the total amount to the sole account's amount
+      end
     end
 
-    if tokens.size.odd?
-      raise Error.new("Incorrect sequence of account codes and amounts: #{tokens}")
-    end
+    validate_acct_amount_token_array_size(tokens)
 
     # Tokens in the odd numbered positions are dollar amounts that need to be converted from string to float.
+    convert_amounts_to_floats(tokens)
 
-    # As a convenience, all normal journal amounts are entered as positive numbers.
-    # This code negates the amounts as necessary so that debits are + and credits are -.
-    convert_signs_for_debit_credit = ->(tokens) do
-
-      # Adjust the sign of the amount for the main journal account (e.g. the checking account or credit card account)
-      # e.g. If it's a checking account, it is an asset, a debit account, and the transaction total
-      # will represent a credit to that checking account.
-      adjust_sign_for_main_account = ->(amount) do
-        (debit_or_credit == :debit) ? -amount : amount
-      end
-
-      adjust_sign_for_other_accounts = ->(amount) do
-        - adjust_sign_for_main_account.(amount)
-      end
-
-      tokens[1] = adjust_sign_for_main_account.(tokens[1])
-      (3...tokens.size).step(2) do |amount_index|
-        tokens[amount_index] = adjust_sign_for_other_accounts.(tokens[amount_index])
-      end
+    unless general_journal?
+      # As a convenience, all normal journal amounts are entered as positive numbers.
+      # This code negates the amounts as necessary so that debits are + and credits are -.
+      # In general journals, the debit and credit amounts must be entered correctly already.
+      convert_signs_for_debit_credit(tokens)
     end
 
-    convert_alternate_amounts_to_floats(tokens)
-    convert_signs_for_debit_credit.(tokens)
     acct_amounts_from_tokens(tokens, date, want_account_validation)
   end
 

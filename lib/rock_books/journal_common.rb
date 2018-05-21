@@ -5,7 +5,7 @@ module JournalCommon
 
   module_function
 
-  def convert_alternate_amounts_to_floats(tokens)
+  def convert_amounts_to_floats(tokens)
     (1...tokens.size).step(2) do |amount_index|
       tokens[amount_index] = Float(tokens[amount_index])
     end
