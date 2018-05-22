@@ -17,7 +17,7 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
         line_items << LineItem.new(document.short_name, entry)
       end
     end
-    line_items = line_items.sort_by! { |line_item| [line_item.entry.date, document_short_name] }
+    line_items = line_items.sort_by! { |line_item| [line_item.entry.date, line_item.document_short_name] }
     line_items
   end
 
