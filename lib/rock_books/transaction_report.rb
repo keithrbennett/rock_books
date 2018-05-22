@@ -32,7 +32,7 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
     acct_amounts = entry.acct_amounts
     total_amount = acct_amounts.first.amount
 
-    fragments << [
+    output = [
         entry.date.to_s,
         format_amount(total_amount),
         format_acct_amount(acct_amounts[1]),
@@ -79,6 +79,7 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
     sio = StringIO.new
     sio << format_header
     document.entries.each { |entry| sio << format_entry(entry) << "\n" }
+    sio << generate_and_format_totals(document.acct_amounts, chart_of_accounts)
     sio.string
   end
 

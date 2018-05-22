@@ -21,8 +21,11 @@ class AcctAmount < Struct.new(:date, :code, :amount)
   # Returns a hash whose keys are account codes and values are the totals for those codes.
   # The 'aggregate' in the method name is intended to be a noun, not a verb.
   def self.aggregate_amounts_by_account(acct_amounts)
-    acct_amounts.each_with_object(Hash.new(0)) do |acct_amount, by_account|
+    totals = acct_amounts.each_with_object(Hash.new(0)) do |acct_amount, by_account|
       by_account[acct_amount.code] += acct_amount.amount
+    end
+    totals.each do |code, amount |
+      totals[code] = amount.round(2)
     end
   end
 end

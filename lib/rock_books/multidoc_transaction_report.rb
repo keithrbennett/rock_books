@@ -14,7 +14,6 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
     line_items = []
     documents.each do |document|
       document.entries.each do |entry|
-        puts "entry should be a JournalEntry but is a #{entry.class}" unless entry.is_a?(JournalEntry)
         line_items << LineItem.new(document.short_name, entry)
       end
     end
@@ -95,6 +94,13 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
     sio = StringIO.new
     sio << format_header
     data.each { |line_item| sio << format_line_item(line_item) << "\n" }
+
+    acct_amounts = documents.each_with_object([]) do |document, acct_amounts|
+      acct_amounts << document.acct_amounts
+      acct_amounts.flatten!
+    end
+    sio << generate_and_format_totals(acct_amounts, chart_of_accounts)
+    sio << "\n"
     sio.string
   end
 
