@@ -5,7 +5,9 @@ module RockBooks
 
   RSpec.describe RockBooks::JournalEntryBuilder do
 
-    create_empty_journal = -> { Journal.new(Samples.chart_of_accounts, "@account_code: 101\n@debit_or_credit: debit") }
+    create_empty_journal = -> do
+      Journal.new(Samples.chart_of_accounts, "@account_code: 101\n@debit_or_credit: debit")
+    end
     TEST_DATE = Date.iso8601('2018-05-13')
 
 
@@ -46,6 +48,13 @@ module RockBooks
     end
 
 
+    it 'parses a general journal' do
+      gj_filespec = File.join(File.dirname(__FILE__), 'samples', 'general_journal.rdt')
+      general_journal = Journal.new(Samples.chart_of_accounts, File.read(gj_filespec))
+      acct_amounts = general_journal.entries.first.acct_amounts
+      expect(acct_amounts.map(&:code)).to eq(%w(101  141  142  201  301))
+      expect(acct_amounts.map(&:amount)).to eq([1000.00, 2500.00, -500.00, -800.00, -2200.00])
+    end
   end
 
 end

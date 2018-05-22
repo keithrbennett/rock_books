@@ -2,6 +2,8 @@
 @ doc_type chart_of_accounts
 
 101 Checking Account
+141 Computer Equipment
+142 Computer Equipment - Accumulated Depreciation
 
 201 Credit Card Payable
 251 Loan to Shareholder

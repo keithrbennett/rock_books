@@ -8,6 +8,8 @@ module RockBooks
       ChartOfAccounts.new(
         <<~HEREDOC
           101 D Cash in Bank
+          141 D Computer Equipment
+          142 D Computer Equipment - Accumulated Depreciation
           201 C Accounts Payable
           301 C Owners Equity
           401 C Sales

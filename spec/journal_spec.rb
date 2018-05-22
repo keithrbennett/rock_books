@@ -14,35 +14,40 @@ module RockBooks
     end
 
     it 'can read its title' do
-      data = '@title: ABC Checking Account'
-      expect(Journal.new(nil, data).title).to eq('ABC Checking Account')
+      title = 'ABC Checking Account'
+      data = '@title: ' + title
+      expect(Journal.new(nil, data).title).to eq(title)
     end
 
     it 'can read its date prefix' do
-      data = '@date_prefix: 2018-'
-      expect(Journal.new(nil, data).date_prefix).to eq('2018-')
+      date_prefix = '2018-'
+      data = '@date_prefix: ' + date_prefix
+      expect(Journal.new(nil, data).date_prefix).to eq(date_prefix)
     end
 
     it 'correctly handles doc_type' do
-      data = "@doc_type: journal\n"
-      expect(Journal.new(nil, data).doc_type).to eq('journal')
+      doc_type = 'journal'
+      data = '@doc_type: ' + doc_type
+      expect(Journal.new(nil, data).doc_type).to eq(doc_type)
     end
 
     it 'correctly parses a journal entry without a split and without a description' do
       chart_of_accounts = ChartOfAccounts.new("101 D Cash in Bank\n201 C Accounts Payable")
-      data = "@account_code: 101\n2018-05-13 333.33  201"
+      data = "@account_code: 101\n#{TEST_DATE} 333.33  201"
       journal_entry = Journal.new(chart_of_accounts, data).entries.first
-      expect(journal_entry.date.to_s).to eq('2018-05-13')
+      expect(journal_entry.date).to eq(TEST_DATE)
 
-      date = Date.iso8601('2018-05-13')
-      expected = [AcctAmount.new(TEST_DATE, '101', -333.33), AcctAmount.new(date, '201', 333.33)]
+      expected = [
+          AcctAmount.new(TEST_DATE, '101', -333.33),
+          AcctAmount.new(TEST_DATE, '201', 333.33)]
       expect(journal_entry.acct_amounts).to eq(expected)
     end
 
     it 'correctly determines the main journal account' do
-      data = '@account_code: 101 '
-      chart_of_accounts = ChartOfAccounts.new('101 D Cash in Bank')
-      expect(Journal.new(chart_of_accounts, data).account_code).to eq('101')
+      acct_code = '101'
+      data = '@account_code: ' + acct_code
+      chart_of_accounts = ChartOfAccounts.new(acct_code + ' D Cash in Bank')
+      expect(Journal.new(chart_of_accounts, data).account_code).to eq(acct_code)
     end
 
     it 'can produce JSON which can then be parsed and entries contain the expect values' do
@@ -56,19 +61,19 @@ module RockBooks
 
     it 'can produce YAML which can then be parsed and entries contain the expected values' do
 
-      first_entry_account_code = '101'
-      second_entry_account_code = '201'
+      acct_code_1 = '101'
+      acct_code_2 = '201'
 
-      data = "@account_code: #{first_entry_account_code}\n2018-05-13 333.33  #{second_entry_account_code}"
+      data = "@account_code: #{acct_code_1}\n2018-05-13 333.33  #{acct_code_2}"
 
       journal = Journal.new(Samples.chart_of_accounts, data)
       parsed_journal = YAML.load(journal.to_yaml)
 
       parsed_journal_code = parsed_journal[:account_code]
-      expect(parsed_journal_code).to eq(first_entry_account_code)
+      expect(parsed_journal_code).to eq(acct_code_1)
 
       parsed_second_code = parsed_journal[:entries].first.acct_amounts[1].code
-      expect(parsed_second_code).to eq(second_entry_account_code)
+      expect(parsed_second_code).to eq(acct_code_2)
     end
 
     it 'can include a 1-line description' do
