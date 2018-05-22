@@ -17,7 +17,7 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
         line_items << LineItem.new(document.short_name, entry)
       end
     end
-    line_items = line_items.sort_by! { |line_item| line_item.entry.date }
+    line_items = line_items.sort_by! { |line_item| [line_item.entry.date, document_short_name] }
     line_items
   end
 
@@ -25,7 +25,7 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
   def format_header
     lines = [banner_line, center('Multi Document Transaction Report'), center('Source Documents:'), '']
     documents.each do |document|
-      short_name = "%12.12s" % document.short_name
+      short_name = SHORT_NAME_FORMAT_STRING % document.short_name
       lines << center("#{short_name} -- #{document.title}")
     end
     lines << banner_line
@@ -53,7 +53,7 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
 
     output = [
         entry.date.to_s,
-        "%-12s" % document_short_name,
+        SHORT_NAME_FORMAT_STRING % document_short_name,
         format_amount(total_amount),
         format_acct_amount(acct_amounts[1]),
     ].join('   ') << "\n"

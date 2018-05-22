@@ -3,6 +3,10 @@ module Reporter
 
   module_function
 
+  SHORT_NAME_MAX_LENGTH = 16
+
+  SHORT_NAME_FORMAT_STRING = "%#{SHORT_NAME_MAX_LENGTH}.#{SHORT_NAME_MAX_LENGTH}s"
+
   def format_account_code(code)
     "%*.*s" % [max_account_code_length, max_account_code_length, code]
   end

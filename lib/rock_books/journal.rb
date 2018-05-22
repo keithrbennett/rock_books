@@ -62,6 +62,8 @@ class Journal
       end
     when /^@title:/
       @title = line.split(/^@title:/).last.strip
+    when /^@short_name:/
+      @short_name = line.split(/^@short_name:/).last.strip
     when /^@date_prefix:/
       @date_prefix = line.split(/^@date_prefix:/).last.strip
     when /^@debit_or_credit:/
@@ -74,6 +76,9 @@ class Journal
     when /^\d/  # a date/acct/amount line starting with a number
       entries << JournalEntryBuilder.new(line, self).build
     else # Text line(s) to be attached to the most recently parsed transaction
+      unless entries.last
+        raise Error.new("Entry for this description cannot be found: #{line}")
+      end
       entries.last.description ||= ''
       entries.last.description << line << "\n"
     end

@@ -114,7 +114,13 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
     # this is an account line in the form: yyyy-mm-dd 101 blah blah blah
     tokens = line.split
     acct_amount_tokens = tokens[1..-1]
-    date = Date.iso8601(journal.date_prefix + tokens[0])
+    date_string = journal.date_prefix + tokens[0]
+    begin
+      date = Date.iso8601(date_string)
+    rescue ArgumentError => error
+      raise Error.new("Bad date string: [#{date_string}]")
+    end
+
     acct_entries = build_acct_amount_array(date, acct_amount_tokens)
     JournalEntry.new(date, acct_entries, nil)
   end
