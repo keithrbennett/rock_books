@@ -33,44 +33,6 @@ module Reporter
   end
 
 
-  # Formats an entry like this, with entry description added on additional line(s) if it exists:
-  # 2018-05-21   $120.00   701  Office Supplies
-  def format_entry_no_split(entry)
-    acct_amounts = entry.acct_amounts
-    total_amount = acct_amounts.first.amount
-
-    output = [
-        entry.date.to_s,
-        format_amount(total_amount),
-        format_acct_amount(acct_amounts[1]),
-        chart_of_accounts.name_for_code(acct_amounts[1].code)
-    ].join('   ') << "\n"
-
-    if entry.description && entry.description.length > 0
-      output << entry.description
-    end
-    output
-  end
-
-
-  # Formats an entry like this, with entry description added on additional line(s) if it exists::
-  # 2018-05-21   $120.00   95.00     701  Office Supplies
-  #                        25.00     751  Gift to Customer
-  def format_entry_with_split(entry)
-    acct_amounts = entry.acct_amounts
-
-    output = entry.date.to_s + '  '
-    indent = ' ' * output.length
-    output << format_acct_amount(acct_amounts.first) << "\n"
-
-    acct_amounts[1..-1].each do |acct_amount|
-      output << indent << format_acct_amount(acct_amount) << "\n"
-    end
-
-    if entry.description && entry.description.length > 0
-      output << entry.description
-    end
-  end
 end
 end
 
