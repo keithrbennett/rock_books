@@ -25,22 +25,51 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
   end
 
 
-  def format_entry(entry)
+  # Formats an entry like this:
+  # 2018-05-21   $120.00   701  Office Supplies
+  #
+  # or:
+  # 2018-05-21   $120.00
+  #                        95.00     701  Office Supplies
+  #                        25.00     751  Gift to Customer
+  def format_entry_no_split(entry)
     acct_amounts = entry.acct_amounts
     total_amount = acct_amounts.first.amount
 
-    fragments = [
+    output = [
         entry.date.to_s,
         format_amount(total_amount),
         format_acct_amount(acct_amounts[1]),
         chart_of_accounts.name_for_code(acct_amounts[1].code)
-    ]
+    ].join('   ')
 
-    s = fragments.join('   ')
     if entry.description && entry.description.length > 0
-      s << "\n" << entry.description
+      output << "\n" << entry.description
     end
-    s
+    output
+  end
+
+
+  def format_entry_with_split(entry)
+    acct_amounts = entry.acct_amounts
+
+    output = entry.date.to_s + '  '
+    indent = ' ' * output.length
+    output << format_acct_amount(acct_amounts.first) << "\n"
+
+    acct_amounts[1..-1].each do |acct_amount|
+      output << indent << format_acct_amount(acct_amount) << "\n"
+    end
+    output << "\n"
+  end
+
+
+  def format_entry(entry)
+    if entry.acct_amounts.size > 2
+      format_entry_with_split(entry)
+    else
+      format_entry_no_split(entry)
+    end
   end
 
 

@@ -19,7 +19,7 @@ class Journal
 
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
-  attr_reader :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
+  attr_reader :short_name, :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
 
   def to_h
     {
@@ -37,8 +37,10 @@ class Journal
   def to_yaml; to_h.to_yaml; end
 
 
-  def initialize(chart_of_accounts, input_string)
+  # short_name is a name that will appear on reports identifying the journal from which a transaction comes
+  def initialize(chart_of_accounts, input_string, short_name = nil)
     @chart_of_accounts = chart_of_accounts
+    @short_name = short_name
     @entries = []
     @date_prefix = ''
     lines = input_string.split("\n")
