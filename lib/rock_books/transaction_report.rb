@@ -7,21 +7,14 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
   include Reporter
 
 
-  def initialize(document, chart_of_accounts, page_width)
-    super
-  end
-
-
   def format_header
-    subtitle = "Account: #{document.account_code} -- #{chart_of_accounts.name_for_code(document.account_code)}"
 
-    <<~HEREDOC
-    #{banner_line}
-    #{center(document.title)}
-    #{center(subtitle)}
-    #{banner_line}
-
-    HEREDOC
+    lines = [banner_line, center(document.title)]
+    if document.account_code
+      lines << "Account: #{document.account_code} -- #{chart_of_accounts.name_for_code(document.account_code)}"
+    end
+    lines << banner_line << "\n"
+    lines.join("\n")
   end
 
 
