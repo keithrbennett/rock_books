@@ -30,7 +30,19 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
       lines << center("#{short_name} -- #{document.title}")
     end
     lines << banner_line
+    lines << ''
+    lines << '   Date     Document           Amount      Account'
+    lines << '   ----     --------           ------      -------'
     lines.join("\n") << "\n\n"
+  end
+
+
+  def format_acct_amount(acct_amount)
+    "%s  %s  %s" % [
+        format_amount(acct_amount.amount),
+        format_account_code(acct_amount.code),
+        chart_of_accounts.name_for_code(acct_amount.code)
+    ]
   end
 
 
@@ -45,7 +57,6 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
         "%-12s" % document_short_name,
         format_amount(total_amount),
         format_acct_amount(acct_amounts[1]),
-        chart_of_accounts.name_for_code(acct_amounts[1].code)
     ].join('   ') << "\n"
 
     if entry.description && entry.description.length > 0
@@ -58,11 +69,11 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
   # Formats an entry like this, with entry description added on additional line(s) if it exists::
   # 2018-05-21   $120.00   95.00     701  Office Supplies
   #                        25.00     751  Gift to Customer
-  def format_line_item_with_split(entry, document_short_name)
-    puts "entry should be a JournalEntry but is a #{entry.class}" unless entry.is_a?(JournalEntry)
+  def format_line_item(line_item)
+    entry = line_item.entry
     acct_amounts = entry.acct_amounts
 
-    output = entry.date.to_s << '  ' << ("%-12s" % document_short_name)
+    output = entry.date.to_s << '  ' << ("%-16s" % line_item.document_short_name)
     indent = ' ' * output.length
 
     output << format_acct_amount(acct_amounts.first) << "\n"
@@ -74,15 +85,8 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
     if entry.description && entry.description.length > 0
       output << entry.description
     end
-  end
 
-
-  def format_line_item(line_item)
-    if line_item.entry.acct_amounts.size > 2
-      format_line_item_with_split(line_item.entry, line_item.document_short_name)
-    else
-      format_line_item_no_split(line_item.entry, line_item.document_short_name)
-    end
+    output
   end
 
 

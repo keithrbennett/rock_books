@@ -13,11 +13,6 @@ module Reporter
   end
 
 
-  def format_acct_amount(acct_amount)
-    "%s  %s" % [format_account_code(acct_amount.code), format_amount(acct_amount.amount)]
-  end
-
-
   def banner_line
     @banner_line ||= '-' * page_width
   end
