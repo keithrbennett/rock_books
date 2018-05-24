@@ -2,18 +2,19 @@ require_relative 'reporter'
 
 module RockBooks
 
-class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
+class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
 
   include Reporter
 
 
   def format_header
-    lines = [banner_line, center(document.title)]
-    if document.account_code
-      lines << "Account: #{document.account_code} -- #{chart_of_accounts.name_for_code(document.account_code)}"
-    end
-    lines << banner_line
-    lines.join("\n") << "\n\n"
+    <<~HEREDOC
+    #{banner_line}
+    #{center(document.title)}
+    #{banner_line}
+
+
+    HEREDOC
   end
 
 

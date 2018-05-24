@@ -8,7 +8,14 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
     acct_amounts = []
 
     tokens[0..-1].each_slice(2).each do |(account_code, amount)|
-      acct_amount = AcctAmount.create_with_chart_validation(date, account_code, amount, chart_of_accounts)
+      begin
+        acct_amount = AcctAmount.create_with_chart_validation(date, account_code, amount, chart_of_accounts)
+      rescue AccountNotFoundError => error
+        error.document_name = journal.short_name
+        error.line = line
+        raise
+      end
+
       acct_amounts << acct_amount
     end
 
@@ -97,7 +104,11 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
     validate_acct_amount_token_array_size(tokens)
 
     # Tokens in the odd numbered positions are dollar amounts that need to be converted from string to float.
-    convert_amounts_to_floats(tokens)
+    begin
+      convert_amounts_to_floats(tokens)
+    rescue ArgumentError
+      raise Error.new("Float conversion or other parse error for #{date}, #{tokens}.")
+    end
 
     unless general_journal?
       # As a convenience, all normal journal amounts are entered as positive numbers.
@@ -117,8 +128,8 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
     date_string = journal.date_prefix + tokens[0]
     begin
       date = Date.iso8601(date_string)
-    rescue ArgumentError => error
-      raise Error.new("Bad date string: [#{date_string}]")
+    rescue ArgumentError
+      raise Error.new("Bad date string: [#{date_string}] in line: #{line} of journal #{journal.short_name}")
     end
 
     acct_entries = build_acct_amount_array(date, acct_amount_tokens)
