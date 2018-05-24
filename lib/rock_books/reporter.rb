@@ -1,3 +1,5 @@
+require_relative 'line_item'
+
 module RockBooks
 module Reporter
 
@@ -43,6 +45,19 @@ module Reporter
     output << "%12.2f\n" % totals.values.sum.round(2)
     output
   end
+
+
+  def line_items_in_documents(documents)
+    line_items = []
+    documents.each do |document|
+      document.entries.each do |entry|
+        line_items << LineItem.new(document.short_name, entry)
+      end
+    end
+    line_items
+  end
+
 end
 end
+
 

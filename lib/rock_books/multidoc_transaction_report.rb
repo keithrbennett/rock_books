@@ -6,18 +6,12 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
 
   include Reporter
 
-  class LineItem < Struct.new(:document_short_name, :entry); end
-
 
   def collate_entries
 
-    line_items = []
-    documents.each do |document|
-      document.entries.each do |entry|
-        line_items << LineItem.new(document.short_name, entry)
-      end
+    line_items = Reporter.line_items_in_documents(documents).sort_by do |line_item|
+      [line_item.entry.date, line_item.document_short_name]
     end
-    line_items = line_items.sort_by! { |line_item| [line_item.entry.date, line_item.document_short_name] }
     line_items
   end
 
