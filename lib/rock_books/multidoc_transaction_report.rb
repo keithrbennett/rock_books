@@ -90,6 +90,7 @@ class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :pa
 
 
   def generate_report
+    self.page_width ||= 80
     data = collate_entries
     sio = StringIO.new
     sio << format_header

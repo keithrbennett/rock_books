@@ -76,6 +76,7 @@ class TransactionReport < Struct.new(:document, :chart_of_accounts, :page_width)
 
 
   def generate_report
+    self.page_width ||= 80
     sio = StringIO.new
     sio << format_header
     document.entries.each { |entry| sio << format_entry(entry) << "\n" }

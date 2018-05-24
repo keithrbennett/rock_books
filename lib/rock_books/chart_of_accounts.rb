@@ -8,6 +8,12 @@ class ChartOfAccounts
   attr_reader :doc_type, :title, :accounts
 
 
+  def self.from_file(file)
+    self.new(File.read(file))
+  end
+
+
+
   def initialize(input_string)
     @accounts = []
     lines = input_string.split("\n")

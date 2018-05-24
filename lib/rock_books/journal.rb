@@ -17,25 +17,14 @@ module RockBooks
 # so descriptions cannot begin with a number.
 class Journal
 
-  class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
-
-  attr_reader :short_name, :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
-
-  def to_h
-    {
-        title:           title,
-        account_code:    account_code,
-        debit_or_credit: debit_or_credit,
-        doc_type:        doc_type,
-        date_prefix:     date_prefix,
-        entries:         entries
-    }
+  def self.from_file(chart_of_accounts, file)
+    self.new(chart_of_accounts, File.read(file))
   end
 
 
-  def to_json; to_h.to_json; end
-  def to_yaml; to_h.to_yaml; end
+  class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
+  attr_reader :short_name, :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
 
   # short_name is a name that will appear on reports identifying the journal from which a transaction comes
   def initialize(chart_of_accounts, input_string, short_name = nil)
@@ -109,5 +98,21 @@ class Journal
         title: title
     }.to_s
   end
+
+
+  def to_h
+    {
+        title:           title,
+        account_code:    account_code,
+        debit_or_credit: debit_or_credit,
+        doc_type:        doc_type,
+        date_prefix:     date_prefix,
+        entries:         entries
+    }
+  end
+
+
+  def to_json; to_h.to_json; end
+  def to_yaml; to_h.to_yaml; end
 end
 end
