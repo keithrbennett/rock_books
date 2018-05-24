@@ -2,4 +2,8 @@
 
 require_relative '../lib/rock_books/main'
 
+unless [1,2].include?(ARGV.length)
+  raise "Syntax is #{File.basename(__FILE__)} data_file_input_directory [report_output_directory]."
+end
+
 RockBooks::Main.new.call
