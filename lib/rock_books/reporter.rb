@@ -1,4 +1,4 @@
-require_relative 'line_item'
+require_relative 'journal_entry'
 
 module RockBooks
 module Reporter
@@ -50,14 +50,10 @@ module Reporter
   end
 
 
-  def line_items_in_documents(documents)
-    line_items = []
-    documents.each do |document|
-      document.entries.each do |entry|
-        line_items << LineItem.new(document.short_name, entry)
-      end
-    end
-    line_items
+  def entries_in_documents(documents)
+    documents.each_with_object([]) do |document, entries|
+      entries << document.entries
+    end.flatten
   end
 
 end

@@ -66,21 +66,21 @@ module RockBooks
     end
 
 
-    def transaction_report
-      MultidocTransactionReport.new(journals, chart_of_accounts).call
+    def transaction_report(filter)
+      MultidocTransactionReport.new(journals, chart_of_accounts).call(filter)
     end
 
 
-    def all_reports
+    def all_reports(filter = nil)
       report_hash = journals.each_with_object({}) do |journal, report_hash|
-        report_hash[journal.short_name] = TransactionReport.new(chart_of_accounts, journal).call
+        report_hash[journal.short_name] = TransactionReport.new(chart_of_accounts, journal).call(filter)
       end
-      report_hash['all'] = transaction_report
+      report_hash['all'] = transaction_report(filter)
       report_hash
     end
 
-    def all_reports_to_files(directory = '.')
-      reports = all_reports
+    def all_reports_to_files(directory = '.', filter = nil)
+      reports = all_reports(filter)
       reports.each do |short_name, report_text|
         filespec = File.join(directory, "#{short_name}.rpt")
         puts "Created report for #{short_name} at #{filespec}."

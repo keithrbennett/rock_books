@@ -76,12 +76,18 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
   end
 
 
-  def generate_report
+  def generate_report(filter = nil)
     self.page_width ||= 80
     sio = StringIO.new
     sio << format_header
-    document.entries.each { |entry| sio << format_entry(entry) << "\n" }
-    sio << generate_and_format_totals(document.acct_amounts, chart_of_accounts)
+
+    entries = document.entries
+    if filter
+      entries = entries.select { |entry| filter.(entry) }
+    end
+
+    entries.each { |entry| sio << format_entry(entry) << "\n" }
+    sio << generate_and_format_totals(JournalEntry.entries_acct_amounts(entries), chart_of_accounts)
     sio.string
   end
 
