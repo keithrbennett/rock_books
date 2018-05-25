@@ -2,12 +2,15 @@ require 'awesome_print'
 
 require_relative 'chart_of_accounts'
 require_relative 'journal'
+require_relative 'journal_entry_filters'  # for shell mode
 require_relative 'multidoc_transaction_report'
 require_relative 'transaction_report'
 
 module RockBooks
 
   class BookSet < Struct.new(:chart_of_accounts, :journals)
+
+    FILTERS = JournalEntryFilters
 
     # Uses all *.rbt files in the specified directory; uses @doc_type to determine which
     # is the chart of accounts and which are journals.
@@ -24,7 +27,7 @@ module RockBooks
         end
       end
 
-      files = Dir[File.join(directory, '**/*.rbt')]
+      files = Dir[File.join(directory, '*.rbt')]
       files_with_types = files.each_with_object({}) do |filespec, files_with_types|
         files_with_types[filespec] = find_doc_type.(filespec)
       end
@@ -87,6 +90,12 @@ module RockBooks
         File.write(filespec, report_text)
       end
     end
+
+
+    def journal_names
+      journals.map(&:short_name)
+    end
+    alias_method :jnames, :journal_names
   end
 
 end
