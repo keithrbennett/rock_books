@@ -26,7 +26,8 @@ Commands:
 
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
-r[eport_hash]             - generates a hash of journal names as keys, report text strings as values
+rel[oad_data]             - reload data from input files
+rep[ort_hash]             - generates a hash of journal names as keys, report text strings as values
 w[rite_reports]           - writes reports to files in the specified input directory
 q[uit]                    - exits this program (interactive shell mode only) (see also 'x')
 x[it]                     - exits this program (interactive shell mode only) (see also 'q')
@@ -42,12 +43,6 @@ When in interactive shell mode:
       @interactive_mode = !!(options.interactive_mode)
       load_data
     end
-
-
-    def load_data
-      @book_set = BookSet.from_directory(options.input_dir)
-    end
-    alias_method :reload, :load_data
 
 
     # Until command line option parsing is added, the only way to specify
@@ -163,8 +158,22 @@ When in interactive shell mode:
     end
 
 
-    def cmd_r
-      book_set.all_reports
+    def cmd_rel
+      @book_set = BookSet.from_directory(options.input_dir)
+      :ok
+    end
+
+
+    def cmd_rep
+      if interactive_mode
+        book_set.all_reports
+      else
+        book_set.all_reports.each do |short_name, report_text|
+          puts "#{short_name}:\n\n"
+          puts report_text
+          puts "\n\n\n"
+        end
+      end
     end
 
 
@@ -184,7 +193,8 @@ When in interactive shell mode:
           Command.new('jo',  'journals',      -> (*_options) { cmd_j             }),
           Command.new('h',   'help',          -> (*_options) { cmd_h             }),
           Command.new('q',   'quit',          -> (*_options) { cmd_x             }),
-          Command.new('r',   'report_hash',   -> (*_options) { cmd_r             }),
+          Command.new('r',   'reload_data',   -> (*_options) { cmd_rel           }),
+          Command.new('r',   'report_hash',   -> (*_options) { cmd_rep           }),
           Command.new('w',   'write_reports', -> (*_options) { cmd_w             }),
           Command.new('x',   'xit',           -> (*_options) { cmd_x             })
       ]
