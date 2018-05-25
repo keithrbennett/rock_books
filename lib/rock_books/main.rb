@@ -15,11 +15,11 @@ class Main
 
     OptionParser.new do |parser|
       parser.on("-i", "--input_dir DIR", "Input directory containing source data files") do |v|
-        options.input_dir = v
+        options.input_dir = File.expand_path(v)
       end
 
       parser.on("-o", "--output_dir DIR", "Output directory to which report files will be written") do |v|
-        options.output_dir = v
+        options.output_dir = File.expand_path(v)
       end
 
       parser.on("-s", "--shell", "Start interactive shell") do |v|

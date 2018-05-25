@@ -87,8 +87,8 @@ module RockBooks
       reports = all_reports(filter)
       reports.each do |short_name, report_text|
         filespec = File.join(directory, "#{short_name}.rpt")
-        puts "Created report for #{short_name} at #{filespec}."
         File.write(filespec, report_text)
+        puts "Created report for #{short_name} at #{filespec}."
       end
     end
 

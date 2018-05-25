@@ -24,11 +24,10 @@ Command Line Switches:                    [rock-books version #{RockBooks::VERSI
 
 Commands:
 
+a[ll_reports]             - generate all reports; options: 'p': print, 'w': write to files
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
 rel[oad_data]             - reload data from input files
-rep[ort_hash]             - generates a hash of journal names as keys, report text strings as values
-w[rite_reports]           - writes reports to files in the specified input directory
 q[uit]                    - exits this program (interactive shell mode only) (see also 'x')
 x[it]                     - exits this program (interactive shell mode only) (see also 'q')
 
@@ -158,28 +157,39 @@ When in interactive shell mode:
     end
 
 
-    def cmd_rel
+    def load_data
       @book_set = BookSet.from_directory(options.input_dir)
-      :ok
+    end
+    alias_method :reload_data, :load_data
+
+
+    def cmd_rel
+      reload_data
+      nil
     end
 
 
-    def cmd_rep
-      if interactive_mode
-        book_set.all_reports
-      else
+    def cmd_a(args)
+      choice = args&.first&.chars&.first
+
+      case choice
+      when 'p'
         book_set.all_reports.each do |short_name, report_text|
           puts "#{short_name}:\n\n"
           puts report_text
           puts "\n\n\n"
         end
+        nil
+      when 'w'
+        book_set.all_reports_to_files(options.output_dir)
+        nil
+      when nil
+        os = OpenStruct.new(book_set.all_reports)
+        def os.keys; to_h.keys; end
+        os
+      else
+        raise Error.new("Invalid option '#{choice} for all_reports; must be in #{%w(p w)} or nil.")
       end
-    end
-
-
-    def cmd_w
-      book_set.all_reports_to_files(options.output_dir)
-      nil
     end
 
 
@@ -190,12 +200,11 @@ When in interactive shell mode:
 
     def commands
       @commands_ ||= [
+          Command.new('a',   'all_reports',   -> (*options)  { cmd_a(options)    }),
           Command.new('jo',  'journals',      -> (*_options) { cmd_j             }),
           Command.new('h',   'help',          -> (*_options) { cmd_h             }),
           Command.new('q',   'quit',          -> (*_options) { cmd_x             }),
           Command.new('r',   'reload_data',   -> (*_options) { cmd_rel           }),
-          Command.new('r',   'report_hash',   -> (*_options) { cmd_rep           }),
-          Command.new('w',   'write_reports', -> (*_options) { cmd_w             }),
           Command.new('x',   'xit',           -> (*_options) { cmd_x             })
       ]
     end
