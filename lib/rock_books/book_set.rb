@@ -82,6 +82,7 @@ module RockBooks
       report_hash
     end
 
+
     def all_reports_to_files(directory = '.', filter = nil)
       reports = all_reports(filter)
       reports.each do |short_name, report_text|

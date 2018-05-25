@@ -1,6 +1,8 @@
 require 'optparse'
 require 'pry'
+
 require_relative 'book_set'
+require_relative 'command_line_interface'
 
 module RockBooks
 
@@ -33,14 +35,7 @@ class Main
   # and reports (*.rpt) will be output to this directory as well.
   def call
     options = parse_command_line
-puts options
-    book_set = BookSet.from_directory(options.input_dir)
-
-    if options.interactive_mode
-      book_set.pry
-    else
-      book_set.all_reports_to_files(options.output_dir)
-    end
+    CommandLineInterface.new(options).call
   end
 end
 end
