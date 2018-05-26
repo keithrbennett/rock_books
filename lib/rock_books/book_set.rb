@@ -53,14 +53,14 @@ module RockBooks
         end
       end
 
-      select_files_of_type = ->(target_doc_type) do
-        files_with_types.select { |filespec, doc_type| doc_type == target_doc_type }.keys
+      select_files_of_type = ->(target_doc_type_regex) do
+        files_with_types.select { |filespec, doc_type| target_doc_type_regex === doc_type }.keys
       end
 
       chart_of_account_files = select_files_of_type.('chart_of_accounts')
       validate_chart_of_account_count.(chart_of_account_files)
 
-      journal_files = select_files_of_type.('journal')
+      journal_files = select_files_of_type.(/journal/) # include 'journal' and 'general_journal'
       validate_journal_file_count.(journal_files)
 
       chart_of_accounts = ChartOfAccounts.from_file(chart_of_account_files.first)
@@ -69,16 +69,21 @@ module RockBooks
     end
 
 
-    def transaction_report(filter)
-      MultidocTransactionReport.new(journals, chart_of_accounts).call(filter)
+    def multidoc_transaction_report(filter)
+      MultidocTransactionReport.new(chart_of_accounts, journals).call(filter)
+    end
+
+
+    def singledoc_transaction_report(journal, filter)
+      TransactionReport.new(chart_of_accounts, journal).call(filter)
     end
 
 
     def all_reports(filter = nil)
       report_hash = journals.each_with_object({}) do |journal, report_hash|
-        report_hash[journal.short_name] = TransactionReport.new(chart_of_accounts, journal).call(filter)
+        report_hash[journal.short_name] = singledoc_transaction_report(journal, filter)
       end
-      report_hash['all'] = transaction_report(filter)
+      report_hash['all'] = multidoc_transaction_report(filter)
       report_hash
     end
 

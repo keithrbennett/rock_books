@@ -5,6 +5,10 @@ module RockBooks
 
   class CommandLineInterface
 
+    # Enable users to type methods of this class more conveniently:
+    include JournalEntryFilters
+
+
     attr_reader :book_set, :interactive_mode, :options
 
 
@@ -25,6 +29,7 @@ Command Line Switches:                    [rock-books version #{RockBooks::VERSI
 Commands:
 
 a[ll_reports]             - generate all reports; options: 'p': print, 'w': write to files
+c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
 rel[oad_data]             - reload data from input files
@@ -34,6 +39,7 @@ x[it]                     - exits this program (interactive shell mode only) (se
 When in interactive shell mode:
   * use quotes for string parameters such as method names.
   * for pry commands, use prefix `%`.
+  * you can use the global variable $filter to filter reports
 
 "
 
@@ -142,6 +148,11 @@ When in interactive shell mode:
     end
 
 
+    def cmd_c
+      puts book_set.chart_of_accounts.report_string
+    end
+
+
     def cmd_h
       print_help
     end
@@ -174,18 +185,19 @@ When in interactive shell mode:
 
       case choice
       when 'p'
-        book_set.all_reports.each do |short_name, report_text|
+        book_set.all_reports($filter).each do |short_name, report_text|
           puts "#{short_name}:\n\n"
           puts report_text
           puts "\n\n\n"
         end
         nil
       when 'w'
-        book_set.all_reports_to_files(options.output_dir)
+        book_set.all_reports_to_files(options.output_dir, $filter)
         nil
       when nil
-        os = OpenStruct.new(book_set.all_reports)
-        def os.keys; to_h.keys; end
+        os = OpenStruct.new(book_set.all_reports($filter))
+        def os.keys; to_h.keys;     end  # add hash methods for convenience
+        def os.values; to_h.values; end
         os
       else
         raise Error.new("Invalid option '#{choice} for all_reports; must be in #{%w(p w)} or nil.")
@@ -200,12 +212,13 @@ When in interactive shell mode:
 
     def commands
       @commands_ ||= [
-          Command.new('a',   'all_reports',   -> (*options)  { cmd_a(options)    }),
-          Command.new('jo',  'journals',      -> (*_options) { cmd_j             }),
-          Command.new('h',   'help',          -> (*_options) { cmd_h             }),
-          Command.new('q',   'quit',          -> (*_options) { cmd_x             }),
-          Command.new('r',   'reload_data',   -> (*_options) { cmd_rel           }),
-          Command.new('x',   'xit',           -> (*_options) { cmd_x             })
+          Command.new('a',   'all_reports',       -> (*options)  { cmd_a(options)    }),
+          Command.new('c',   'chart_of_accounts', -> (*options)  { cmd_c             }),
+          Command.new('jo',  'journals',          -> (*_options) { cmd_j             }),
+          Command.new('h',   'help',              -> (*_options) { cmd_h             }),
+          Command.new('q',   'quit',              -> (*_options) { cmd_x             }),
+          Command.new('r',   'reload_data',       -> (*_options) { cmd_rel           }),
+          Command.new('x',   'xit',               -> (*_options) { cmd_x             })
       ]
     end
 

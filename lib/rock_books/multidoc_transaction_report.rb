@@ -2,7 +2,7 @@ require_relative 'reporter'
 
 module RockBooks
 
-class MultidocTransactionReport < Struct.new(:documents, :chart_of_accounts, :page_width)
+class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :page_width)
 
   include Reporter
 

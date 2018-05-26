@@ -13,7 +13,6 @@ class ChartOfAccounts
   end
 
 
-
   def initialize(input_string)
     @accounts = []
     lines = input_string.split("\n")
@@ -71,7 +70,7 @@ class ChartOfAccounts
     end
 
     code_width = @accounts.inject(0) { |width, a| width = [width, a.code.length].max }
-    format_string = "%#{code_width}s  %s\n"
+    format_string = "%-#{code_width}s  %s\n"
     accounts.each { |a| result << format_string % [a.code, a.name] }
 
     result
