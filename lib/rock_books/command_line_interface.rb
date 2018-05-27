@@ -245,6 +245,14 @@ When in interactive shell mode:
     end
 
 
+    # Convenience Method(s)
+
+    # Easier than remembering and typing Date.iso8601.
+    def td(date_string)
+      Date.iso8601(date_string)
+    end
+
+
     def call
       begin
         # By this time, the Main class has removed the command line options, and all that is left

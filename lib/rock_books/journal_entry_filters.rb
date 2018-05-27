@@ -24,6 +24,27 @@ module JournalEntryFilters
   end
 
 
+  def year(target_year)
+    ->(entry) { entry.date.year == target_year }
+  end
+
+
+  def month(target_year, target_month)
+    ->(entry) do
+      entry.date.year == target_year && entry.date.month == target_month
+    end
+  end
+
+
+  def day(target_year, target_month, target_day)
+    ->(entry) do
+      entry.date.year == target_year && entry.date.month == target_month && entry.date.day == target_day
+    end
+  end
+
+
+
+
   def account_code_filter(account_code)
     ->(entry) do
       entry.acct_amounts.map(&:code).detect { |code| code == account_code }
