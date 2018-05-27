@@ -37,11 +37,11 @@ module Reporter
   def generate_and_format_totals(acct_amounts, chart_of_accounts)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     output = "Totals by Account\n-----------------\n\n"
-
+    format_string = "%12.2f   %-#{chart_of_accounts.max_account_code_length}s   %s\n"
     totals.keys.sort.each do |account_code|
       account_name = chart_of_accounts.name_for_code(account_code)
       account_total = totals[account_code]
-      output << "%12.2f   %12s   %s\n" % [account_total, account_code, account_name]
+      output << format_string % [account_total, account_code, account_name]
     end
 
     output << "------------\n"
