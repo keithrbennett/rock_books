@@ -32,7 +32,7 @@ module RockBooks
     end
 
     it 'correctly parses a journal entry without a split and without a description' do
-      chart_of_accounts = ChartOfAccounts.new("101 D Cash in Bank\n201 C Accounts Payable")
+      chart_of_accounts = ChartOfAccounts.new("101 A Cash in Bank\n201 L Accounts Payable")
       data = "@account_code: 101\n#{TEST_DATE} 333.33  201"
       journal_entry = Journal.new(chart_of_accounts, data).entries.first
       expect(journal_entry.date).to eq(TEST_DATE)
@@ -46,7 +46,7 @@ module RockBooks
     it 'correctly determines the main journal account' do
       acct_code = '101'
       data = '@account_code: ' + acct_code
-      chart_of_accounts = ChartOfAccounts.new(acct_code + ' D Cash in Bank')
+      chart_of_accounts = ChartOfAccounts.new(acct_code + ' A Cash in Bank')
       expect(Journal.new(chart_of_accounts, data).account_code).to eq(acct_code)
     end
 
@@ -130,10 +130,24 @@ module RockBooks
       expect(journal.total_amount).to eq(0)
     end
 
-    it 'returns the correct transaction total of non-zero' do
+    it 'returns the correct transaction total of non-zero when debit/credit is specified in journal' do
+      data = "@account_code: 101\n@date_prefix: 2018-05-\n@debit_or_credit: debit\n01  100.00  701  10.00\n"
+      journal = Journal.new(Samples.chart_of_accounts, data)
+      expect(journal.total_amount).to eq(-90.0)
+    end
+
+    it 'returns the correct transaction total of non-zero when debit/credit is specified in chart of accounts' do
       data = "@account_code: 101\n@date_prefix: 2018-05-\n01  100.00  701  10.00\n"
       journal = Journal.new(Samples.chart_of_accounts, data)
       expect(journal.total_amount).to eq(-90.0)
     end
+
+    it 'inherits the debit/credit state of the main account when not specified in the journal' do
+      data = "@account_code: 101\n2018-05-01  100.00  701  10.00\n"
+      journal = Journal.new(Samples.chart_of_accounts, data)
+      expect(journal.debit_or_credit).to eq(:debit)
+    end
+
+
   end
 end

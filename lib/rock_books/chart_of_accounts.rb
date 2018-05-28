@@ -1,9 +1,10 @@
+require_relative 'account_type'
 require_relative 'error'
 
 module RockBooks
 class ChartOfAccounts
 
-  class Account < Struct.new(:code, :debit_or_credit, :name); end
+  class Account < Struct.new(:code, :type, :name); end
 
   attr_reader :doc_type, :title, :accounts
 
@@ -26,33 +27,24 @@ class ChartOfAccounts
       @doc_type = line.split('doc_type:').last.strip
     when /^@title:/
       @title = line.split('title:').last.strip
-    when /^@debit_or_credit:/
-      @debit_or_credit = line.split('debit_or_credit:').last.strip
     when /^$/
       # ignore empty line
     when /^#/
       # ignore comment line
     else
-      # this is an account line in the form: 101 D First National City Bank
+      # this is an account line in the form: 101 Asset First National City Bank
       # The regex below gets everything before the first whitespace in token 1, and the rest in token 2.
       matcher = line.match(/^(\S+)\s+(.*)$/)
       code = matcher[1]
       rest = matcher[2]
 
       matcher = rest.match(/^(\S+)\s+(.*)$/)
-      debit_or_credit_token = matcher[1]
+      account_type_token = matcher[1]
+      account_type = AccountType.to_type(account_type_token).symbol
+
       name = matcher[2]
 
-      debit_or_credit = case debit_or_credit_token[0].upcase
-        when 'D'
-          :debit
-        when 'C'
-          :credit
-        else
-          raise Error.new("Debit or credit type must begin with d, D, c, or C. Was #{debit_or_credit_token}.")
-        end
-
-      accounts << Account.new(code, debit_or_credit, name)
+      accounts << Account.new(code, account_type, name)
     end
   end
 
@@ -82,20 +74,31 @@ class ChartOfAccounts
   end
 
 
+  def type_for_code(code)
+    found = account_for_code(code)
+    found ? found.type : nil
+  end
+
   def name_for_code(code)
     found = account_for_code(code)
     found ? found.name : nil
   end
 
 
-  def debit_or_credit_for_code(code)
-    found = account_for_code(code)
-    found ? found.debit_or_credit.to_sym : nil
+  def max_account_code_length
+    @max_account_code_length ||= accounts.map { |a| a.code.length }.max
   end
 
 
-  def max_account_code_length
-    @max_account_code_length ||= accounts.map { |a| a.code.length }.max
+  def debit_or_credit_for_code(code)
+    type = type_for_code(code)
+    if %i(asset  expense).include?(type)
+      :debit
+    elsif %i(liability  owners_equity  income).include?(type)
+      :credit
+    else
+      raise "Unexpected type #{type} for code #{code}."
+    end
   end
 end
 end

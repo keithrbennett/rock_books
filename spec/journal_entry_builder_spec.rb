@@ -1,3 +1,6 @@
+require 'date'
+
+require_relative '../lib/rock_books/journal_entry_builder'
 require_relative '../lib/rock_books/journal_entry_builder'
 require_relative 'samples'
 

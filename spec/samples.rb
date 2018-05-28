@@ -7,15 +7,15 @@ module RockBooks
     def chart_of_accounts
       ChartOfAccounts.new(
         <<~HEREDOC
-          101 D Cash in Bank
-          141 D Computer Equipment
-          142 D Computer Equipment - Accumulated Depreciation
-          201 C Accounts Payable
-          301 C Owners Equity
-          401 C Sales
-          701 D Office Supplies
-          702 D Rent
-          703 D Professional Fees
+          101 A Cash in Bank
+          141 A Computer Equipment
+          142 A Computer Equipment - Accumulated Depreciation
+          201 L Accounts Payable
+          301 O Owners Equity
+          401 I Sales
+          701 E Office Supplies
+          702 E Rent
+          703 E Professional Fees
         HEREDOC
       )
     end

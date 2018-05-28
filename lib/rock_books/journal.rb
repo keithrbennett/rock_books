@@ -43,12 +43,16 @@ class Journal
       @doc_type = line.split(/^@doc_type:/).last.strip
     when  /^@account_code:/
       @account_code = line.split(/^@account_code:/).last.strip
+
       unless chart_of_accounts.include?(@account_code)
         raise AccountNotFoundError.new(@account_code)
       end
-      if @debit_or_credit.nil?  # has not yet been explicitly specified
-        @debit_or_credit = chart_of_accounts.debit_or_credit_for_code(account_code)
+
+      # if debit or credit has not yet been specified, inherit the setting from the account:
+      unless @debit_or_credit
+        @debit_or_credit = chart_of_accounts.debit_or_credit_for_code(@account_code)
       end
+
     when /^@title:/
       @title = line.split(/^@title:/).last.strip
     when /^@short_name:/

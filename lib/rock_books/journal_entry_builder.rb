@@ -1,5 +1,6 @@
 require_relative 'acct_amount'
 require_relative 'chart_of_accounts'
+require_relative 'journal'
 
 module RockBooks
 class JournalEntryBuilder < Struct.new(:line, :journal)
