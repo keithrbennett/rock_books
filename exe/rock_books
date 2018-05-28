@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/rock_books/main'
+require_relative '../lib/rock_books/cmd_line/main'
 
 RockBooks::Main.new.call

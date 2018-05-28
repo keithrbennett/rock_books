@@ -1,7 +1,7 @@
 require 'optparse'
 require 'pry'
 
-require_relative 'book_set'
+require_relative '../documents/book_set'
 require_relative 'command_line_interface'
 
 module RockBooks

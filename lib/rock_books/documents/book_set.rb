@@ -2,9 +2,9 @@ require 'awesome_print'
 
 require_relative 'chart_of_accounts'
 require_relative 'journal'
-require_relative 'journal_entry_filters'  # for shell mode
-require_relative 'multidoc_transaction_report'
-require_relative 'transaction_report'
+require_relative '../filters/journal_entry_filters'  # for shell mode
+require_relative '../reports/multidoc_transaction_report'
+require_relative '../reports/transaction_report'
 
 module RockBooks
 

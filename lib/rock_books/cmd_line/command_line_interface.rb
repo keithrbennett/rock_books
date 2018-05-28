@@ -1,5 +1,6 @@
 require 'ostruct'
-require_relative 'version'
+
+require_relative '../version'
 
 module RockBooks
 
