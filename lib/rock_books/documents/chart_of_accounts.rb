@@ -1,5 +1,5 @@
-require_relative 'account_type'
-require_relative 'error'
+require_relative '../types/account_type'
+require_relative '../errors/error'
 
 module RockBooks
 class ChartOfAccounts

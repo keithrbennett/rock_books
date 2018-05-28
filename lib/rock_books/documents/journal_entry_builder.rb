@@ -1,4 +1,4 @@
-require_relative 'acct_amount'
+require_relative '../types/acct_amount'
 require_relative 'chart_of_accounts'
 require_relative 'journal'
 

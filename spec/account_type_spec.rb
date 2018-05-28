@@ -1,4 +1,4 @@
-require_relative '../lib/rock_books/account_type'
+require_relative '../lib/rock_books/types/account_type'
 
 module RockBooks
 

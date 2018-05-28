@@ -1,4 +1,4 @@
-require_relative 'error'
+require_relative '../errors/error'
 
 module RockBooks
 

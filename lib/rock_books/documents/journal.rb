@@ -2,11 +2,11 @@ require 'date'
 require 'json'
 require 'yaml'
 
-require_relative 'account_not_found_error'
-require_relative 'acct_amount'
+require_relative '../errors/account_not_found_error'
+require_relative '../types/acct_amount'
 require_relative 'journal_entry'
 require_relative 'journal_entry_builder'
-require_relative 'reporter'
+require_relative '../reports/reporter'
 
 module RockBooks
 

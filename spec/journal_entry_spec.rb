@@ -1,6 +1,8 @@
 require 'rspec'
-require_relative '../lib/rock_books/journal'
-require_relative '../lib/rock_books/journal_entry'
+
+require_relative 'samples'
+require_relative '../lib/rock_books/documents/journal'
+require_relative '../lib/rock_books/documents/journal_entry'
 
 module RockBooks
 

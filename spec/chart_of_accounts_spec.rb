@@ -1,4 +1,4 @@
-require_relative '../lib/rock_books/chart_of_accounts'
+require_relative '../lib/rock_books/documents/chart_of_accounts'
 
 module RockBooks
 

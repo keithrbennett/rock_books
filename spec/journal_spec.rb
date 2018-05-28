@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 require_relative 'samples'
-require_relative '../lib/rock_books/journal'
+require_relative '../lib/rock_books/documents/journal'
 require 'awesome_print'
 
 module RockBooks
