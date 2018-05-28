@@ -29,33 +29,10 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   end
 
 
-  # Formats an entry like this, with entry description added on additional line(s) if it exists:
-  # 2018-05-21   $120.00   701  Office Supplies
-  def format_entry_no_split(entry)
-    acct_amounts = entry.acct_amounts
-    total_amount = acct_amounts.first.amount
-
-    output = [
-        entry.date.to_s,
-        SHORT_NAME_FORMAT_STRING % entry.document_short_name,
-        format_amount(total_amount),
-        format_acct_amount(acct_amounts[1]),
-    ].join('   ') << "\n"
-
-    if entry.description && entry.description.length > 0
-      output << entry.description
-    end
-    output
-  end
-
-
-  # Formats an entry like this, with entry description added on additional line(s) if it exists::
-  # 2018-05-21   $120.00   95.00     701  Office Supplies
-  #                        25.00     751  Gift to Customer
   def format_entry(entry)
     acct_amounts = entry.acct_amounts
 
-    output = entry.date.to_s << '  ' << ("%-16s" % entry.doc_short_name)
+    output = entry.date.to_s << '  ' << (SHORT_NAME_FORMAT_STRING % entry.doc_short_name) # "2017-10-29  hsbc_visa"
     indent = ' ' * output.length
 
     output << format_acct_amount(acct_amounts.first) << "\n"
