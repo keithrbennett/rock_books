@@ -29,15 +29,6 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   end
 
 
-  def format_acct_amount(acct_amount)
-    "%s  %s  %s" % [
-        format_amount(acct_amount.amount),
-        format_account_code(acct_amount.code),
-        chart_of_accounts.name_for_code(acct_amount.code)
-    ]
-  end
-
-
   # Formats an entry like this, with entry description added on additional line(s) if it exists:
   # 2018-05-21   $120.00   701  Office Supplies
   def format_entry_no_split(entry)

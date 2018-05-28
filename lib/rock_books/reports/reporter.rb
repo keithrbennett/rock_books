@@ -19,6 +19,16 @@ module Reporter
   end
 
 
+  # e.g. "    117.70     tr.mileage  Travel - Mileage Allowance"
+  def format_acct_amount(acct_amount)
+    "%s  %s  %s" % [
+        format_amount(acct_amount.amount),
+        format_account_code(acct_amount.code),
+        chart_of_accounts.name_for_code(acct_amount.code)
+    ]
+  end
+
+
   def banner_line
     @banner_line ||= '-' * page_width
   end
@@ -55,6 +65,7 @@ module Reporter
       entries << document.entries
     end.flatten
   end
+
 
 end
 end
