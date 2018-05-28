@@ -18,17 +18,18 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
   end
 
 
+  def format_entry_first_acct_amount(entry)
+    entry.date.to_s \
+        << '  ' \
+        << format_acct_amount(entry.acct_amounts.first) \
+         << "\n"
+  end
+
+
   # Formats an entry like this, with entry description added on additional line(s) if it exists:
   # 2018-05-21   $120.00   701  Office Supplies
   def format_entry_no_split(entry)
-    acct_amounts = entry.acct_amounts
-    total_amount = acct_amounts.first.amount
-
-    output = [
-        entry.date.to_s,
-        format_amount(total_amount),
-        format_acct_amount(acct_amounts[1]),
-    ].join('   ') << "\n"
+    output = format_entry_first_acct_amount(entry)
 
     if entry.description && entry.description.length > 0
       output << entry.description
@@ -41,14 +42,10 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
   # 2018-05-21   $120.00   95.00     701  Office Supplies
   #                        25.00     751  Gift to Customer
   def format_entry_with_split(entry)
-    acct_amounts = entry.acct_amounts
+    output = format_entry_first_acct_amount(entry)
+    indent = ' ' * 12
 
-    output = entry.date.to_s + '  '
-    indent = ' ' * output.length
-
-    output << format_acct_amount(acct_amounts.first) << "\n"
-
-    acct_amounts[1..-1].each do |acct_amount|
+    entry.acct_amounts[1..-1].each do |acct_amount|
       output << indent << format_acct_amount(acct_amount) << "\n"
     end
 
