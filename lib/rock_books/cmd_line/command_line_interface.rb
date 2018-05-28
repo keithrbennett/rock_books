@@ -255,6 +255,12 @@ When in interactive shell mode:
     end
 
 
+    def chart_of_accounts
+      book_set.chart_of_accounts
+    end
+    alias_method :chart, :chart_of_accounts
+
+
     def call
       begin
         # By this time, the Main class has removed the command line options, and all that is left

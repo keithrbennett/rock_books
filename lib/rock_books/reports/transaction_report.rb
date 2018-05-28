@@ -13,7 +13,6 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
     #{center(document.title)}
     #{banner_line}
 
-
     HEREDOC
   end
 

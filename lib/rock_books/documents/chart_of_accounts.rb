@@ -49,6 +49,13 @@ class ChartOfAccounts
   end
 
 
+  def assets;        accounts.select { |account| account.type == :asset }         end
+  def liabilities;   accounts.select { |account| account.type == :liabilities }   end
+  def owners_equity; accounts.select { |account| account.type == :owners_equity } end
+  def income;        accounts.select { |account| account.type == :income }        end
+  def expenses;      accounts.select { |account| account.type == :expenses }      end
+
+
   def include?(candidate_code)
     accounts.any? { |account| account.code == candidate_code }
   end
