@@ -7,14 +7,6 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   include Reporter
 
 
-  def collate_entries
-
-    Reporter.entries_in_documents(documents).sort_by do |entry|
-      [entry.date, entry.doc_short_name]
-    end
-  end
-
-
   def format_header
     lines = [banner_line, center('Multi Document Transaction Report'), center('Source Documents:'), '']
     documents.each do |document|
@@ -53,7 +45,7 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   def generate_report(filter = nil)
     self.page_width ||= 80
 
-    entries = collate_entries
+    entries = Reporter.entries_in_documents(documents)
 
     if filter
       entries = entries.select { |entry| filter.(entry) }
@@ -63,7 +55,9 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
     sio << format_header
     entries.each { |entry| sio << format_entry(entry) << "\n" }
 
-    sio << generate_and_format_totals(JournalEntry.entries_acct_amounts(entries), chart_of_accounts)
+    totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
+    sio << generate_and_format_totals(totals, chart_of_accounts)
+
     sio << "\n"
     sio.string
   end

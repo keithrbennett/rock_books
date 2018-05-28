@@ -44,8 +44,7 @@ module Reporter
   end
 
 
-  def generate_and_format_totals(acct_amounts, chart_of_accounts)
-    totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
+  def generate_and_format_totals(totals, chart_of_accounts)
     output = "Totals by Account\n-----------------\n\n"
     format_string = "%12.2f   %-#{chart_of_accounts.max_account_code_length}s   %s\n"
     totals.keys.sort.each do |account_code|
@@ -60,13 +59,37 @@ module Reporter
   end
 
 
-  def entries_in_documents(documents)
-    documents.each_with_object([]) do |document, entries|
+  # Returns the entries in the specified documents, sorted by date and document short name,
+  # optionally filtered with the specified filter.
+  def entries_in_documents(documents, filter = nil)
+
+    entries = documents.each_with_object([]) do |document, entries|
       entries << document.entries
     end.flatten
+
+    if filter
+      entries = entries.select {|entry| filter.(entry) }
+    end
+
+    entries.sort_by do |entry|
+      [entry.date, entry.doc_short_name]
+    end
   end
 
 
+  def acct_amounts_in_documents(documents, entries_filter = nil, acct_amounts_filter = nil)
+    entries = entries_in_documents(documents, entries_filter)
+
+    acct_amounts = entries.each_with_object([]) do |entry, acct_amounts|
+      acct_amounts << entry.acct_amounts
+    end.flatten
+
+    if acct_amounts_filter
+      acct_amounts.select! { |aa| acct_amounts_filter.(aa) }
+    end
+
+    acct_amounts
+  end
 end
 end
 

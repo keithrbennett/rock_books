@@ -74,7 +74,8 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
     end
 
     entries.each { |entry| sio << format_entry(entry) << "\n" }
-    sio << generate_and_format_totals(JournalEntry.entries_acct_amounts(entries), chart_of_accounts)
+    totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
+    sio << generate_and_format_totals(totals, chart_of_accounts)
     sio.string
   end
 

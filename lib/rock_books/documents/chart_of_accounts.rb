@@ -48,12 +48,13 @@ class ChartOfAccounts
     end
   end
 
+  def accounts_of_type(type)
+    accounts.select { |account| account.type == type }
+  end
 
-  def assets;        accounts.select { |account| account.type == :asset }         end
-  def liabilities;   accounts.select { |account| account.type == :liabilities }   end
-  def owners_equity; accounts.select { |account| account.type == :owners_equity } end
-  def income;        accounts.select { |account| account.type == :income }        end
-  def expenses;      accounts.select { |account| account.type == :expenses }      end
+  def account_codes_of_type(type)
+    accounts_of_type(type).map(&:code)
+  end
 
 
   def include?(candidate_code)
