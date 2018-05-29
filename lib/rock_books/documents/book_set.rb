@@ -4,6 +4,7 @@ require_relative 'chart_of_accounts'
 require_relative 'journal'
 require_relative '../filters/journal_entry_filters'  # for shell mode
 require_relative '../reports/balance_sheet'
+require_relative '../reports/income_statement'
 require_relative '../reports/multidoc_transaction_report'
 require_relative '../reports/transaction_report'
 
@@ -80,8 +81,13 @@ module RockBooks
     end
 
 
-    def balance_sheet_report(journals)
-      BalanceSheet.new(chart_of_accounts, journals, end_date = Time.now.to_date).call
+    def balance_sheet_report(journals)    # TODO: date params
+      BalanceSheet.new(chart_of_accounts, journals).call
+    end
+
+
+    def income_statement_report(journals)   # TODO: date params
+      IncomeStatement.new(chart_of_accounts, journals).call
     end
 
 
@@ -91,6 +97,7 @@ module RockBooks
       end
       report_hash['all'] = multidoc_transaction_report(filter)
       report_hash['balance_sheet'] = balance_sheet_report(journals)
+      report_hash['income_statement'] = income_statement_report(journals)
       report_hash
     end
 

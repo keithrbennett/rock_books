@@ -40,8 +40,6 @@ module JournalEntryFilters
   end
 
 
-
-
   def account_code_filter(account_code)
     ->(entry) do
       entry.acct_amounts.map(&:code).detect { |code| code == account_code }

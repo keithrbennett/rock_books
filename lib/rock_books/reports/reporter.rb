@@ -59,10 +59,15 @@ module Reporter
   end
 
 
-  def generate_account_type_section(totals, section_type)
+  def generate_account_type_section(totals, section_type, need_to_reverse_sign)
     account_codes_this_section = chart_of_accounts.account_codes_of_type(section_type)
+
     totals_this_section = totals.select do |account_code, _amount|
       account_codes_this_section.include?(account_code)
+    end
+
+    if need_to_reverse_sign
+      totals_this_section.each { |code, amount| totals_this_section[code] = -amount }
     end
 
     section_total_amount = totals_this_section.map { |aa| aa.last }.sum
@@ -76,7 +81,6 @@ module Reporter
   # Returns the entries in the specified documents, sorted by date and document short name,
   # optionally filtered with the specified filter.
   def entries_in_documents(documents, filter = nil)
-
     entries = documents.each_with_object([]) do |document, entries|
       entries << document.entries
     end.flatten

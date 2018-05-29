@@ -25,18 +25,20 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
 
 
  def generate_report
-    self.page_width ||= 80
     filter = RockBooks::JournalEntryFilters.date_on_or_before(end_date)
     acct_amounts = acct_amounts_in_documents(journals, filter)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     output = format_header
-    total_amount = 0
-    %i(asset  liability  equity).each do |section_type|
-      section_output, section_total_amount = generate_account_type_section(totals, section_type)
-      output << section_output << "\n\n"
-      total_amount += section_total_amount
-    end
-    output << "\n#{"%12.2f    Sum of Assets, Liabilities, and Equity" % total_amount}\n============\n"
+
+    asset_output,  asset_total  = generate_account_type_section(totals, :asset,     false)
+    liab_output,   liab_total   = generate_account_type_section(totals, :liability, true)
+    equity_output, equity_total = generate_account_type_section(totals, :equity,    true)
+
+    output << [asset_output, liab_output, equity_output].join("\n\n")
+
+    grand_total = asset_total - (liab_total + equity_total)
+
+    output << "\n#{"%12.2f    Assets - (Liabilities + Equity)" % grand_total}\n============\n"
     output
   end
 
