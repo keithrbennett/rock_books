@@ -1,4 +1,5 @@
 require_relative '../lib/rock_books/documents/chart_of_accounts'
+require_relative '../lib/rock_books/types/account'
 
 module RockBooks
 
@@ -20,7 +21,7 @@ RSpec.describe RockBooks::ChartOfAccounts do
 
   it 'can read an account code and name' do
     data = '101 A My Bank Checking Account'
-    expect(ChartOfAccounts.new(data).accounts).to eq([ChartOfAccounts::Account.new('101', :asset, 'My Bank Checking Account')])
+    expect(ChartOfAccounts.new(data).accounts).to eq([Account.new('101', :asset, 'My Bank Checking Account')])
   end
 
   it 'can produce a report string' do

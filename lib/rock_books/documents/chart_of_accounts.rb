@@ -1,10 +1,9 @@
+require_relative '../types/account'
 require_relative '../types/account_type'
 require_relative '../errors/error'
 
 module RockBooks
 class ChartOfAccounts
-
-  class Account < Struct.new(:code, :type, :name); end
 
   attr_reader :doc_type, :title, :accounts
 
