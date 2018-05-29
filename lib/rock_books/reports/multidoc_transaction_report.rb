@@ -56,7 +56,7 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
     entries.each { |entry| sio << format_entry(entry) << "\n" }
 
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
-    sio << generate_and_format_totals(totals, chart_of_accounts)
+    sio << generate_and_format_totals('Totals', totals, chart_of_accounts)
 
     sio << "\n"
     sio.string

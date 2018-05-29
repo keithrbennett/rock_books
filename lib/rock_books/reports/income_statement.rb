@@ -27,8 +27,8 @@ class IncomeStatement < Struct.new(:chart_of_accounts, :journals, :start_date, :
     totals.each { |aa| aa[1] = -aa[1] } # income statement shows credits as positive, debits as negative
     output = format_header
 
-    income_output,  income_total  = generate_account_type_section(totals, :income,  true)
-    expense_output, expense_total = generate_account_type_section(totals, :expense, false)
+    income_output,  income_total  = generate_account_type_section('Income',   totals, :income,  true)
+    expense_output, expense_total = generate_account_type_section('Expenses', totals, :expense, false)
 
     grand_total = income_total - expense_total
 

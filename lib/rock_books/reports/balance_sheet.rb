@@ -30,9 +30,9 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     output = format_header
 
-    asset_output,  asset_total  = generate_account_type_section(totals, :asset,     false)
-    liab_output,   liab_total   = generate_account_type_section(totals, :liability, true)
-    equity_output, equity_total = generate_account_type_section(totals, :equity,    true)
+    asset_output,  asset_total  = generate_account_type_section('Assets',      totals, :asset,     false)
+    liab_output,   liab_total   = generate_account_type_section('Liabilities', totals, :liability, true)
+    equity_output, equity_total = generate_account_type_section('Equity',      totals, :equity,    true)
 
     output << [asset_output, liab_output, equity_output].join("\n\n")
 

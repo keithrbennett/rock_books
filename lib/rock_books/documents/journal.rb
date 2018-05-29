@@ -32,6 +32,7 @@ class Journal
     @short_name = short_name
     @entries = []
     @date_prefix = ''
+    @title = ''
     lines = input_string.split("\n")
     lines.each { |line| parse_line(line) }
   end

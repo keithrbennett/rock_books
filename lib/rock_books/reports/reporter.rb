@@ -35,7 +35,9 @@ module Reporter
 
 
   def center(string)
-    (' ' * ((page_width - string.length) / 2)) + string
+    indent = (page_width - string.length) / 2
+    indent = 0 if indent < 0
+    (' ' * indent) + string
   end
 
 
@@ -44,8 +46,9 @@ module Reporter
   end
 
 
-  def generate_and_format_totals(totals, chart_of_accounts)
-    output = "Totals by Account\n-----------------\n\n"
+  def generate_and_format_totals(section_caption, totals, chart_of_accounts)
+    output = section_caption
+    output << "\n#{'-' * section_caption.length}\n\n"
     format_string = "%12.2f   %-#{chart_of_accounts.max_account_code_length}s   %s\n"
     totals.keys.sort.each do |account_code|
       account_name = chart_of_accounts.name_for_code(account_code)
@@ -59,7 +62,7 @@ module Reporter
   end
 
 
-  def generate_account_type_section(totals, section_type, need_to_reverse_sign)
+  def generate_account_type_section(section_caption, totals, section_type, need_to_reverse_sign)
     account_codes_this_section = chart_of_accounts.account_codes_of_type(section_type)
 
     totals_this_section = totals.select do |account_code, _amount|
@@ -72,8 +75,7 @@ module Reporter
 
     section_total_amount = totals_this_section.map { |aa| aa.last }.sum
 
-    output = "\n\nAccount Type: #{section_type}\n"
-    output << generate_and_format_totals(totals_this_section, chart_of_accounts)
+    output = generate_and_format_totals(section_caption, totals_this_section, chart_of_accounts)
     [ output, section_total_amount ]
   end
 
