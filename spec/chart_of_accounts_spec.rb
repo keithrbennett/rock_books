@@ -51,7 +51,7 @@ RSpec.describe RockBooks::ChartOfAccounts do
     chart = ChartOfAccounts.new(data)
     expect(chart.type_for_code('101')).to eq(:asset)
     expect(chart.type_for_code('201')).to eq(:liability)
-    expect(chart.type_for_code('301')).to eq(:owners_equity)
+    expect(chart.type_for_code('301')).to eq(:equity)
   end
 
   it 'correctly determines whether or not an account code is included' do

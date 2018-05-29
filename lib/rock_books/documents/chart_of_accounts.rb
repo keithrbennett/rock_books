@@ -102,7 +102,7 @@ class ChartOfAccounts
     type = type_for_code(code)
     if %i(asset  expense).include?(type)
       :debit
-    elsif %i(liability  owners_equity  income).include?(type)
+    elsif %i(liability  equity  income).include?(type)
       :credit
     else
       raise "Unexpected type #{type} for code #{code}."

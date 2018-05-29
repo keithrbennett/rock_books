@@ -25,9 +25,8 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
 
 
   def process_section(totals, section_type)
-    section_total_amount = 0
     account_codes_this_section = chart_of_accounts.account_codes_of_type(section_type)
-    totals_this_section = totals.select do |account_code, amount|
+    totals_this_section = totals.select do |account_code, _amount|
       account_codes_this_section.include?(account_code)
     end
 
@@ -46,7 +45,7 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     output = format_header
     total_amount = 0
-    %i(asset  liability  owners_equity).each do |section_type|
+    %i(asset  liability  equity).each do |section_type|
       section_output, section_total_amount = process_section(totals, section_type)
       output << section_output << "\n\n"
       total_amount += section_total_amount

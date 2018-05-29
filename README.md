@@ -8,7 +8,7 @@ Want to serialize it to YAML, JSON, CSV, or manipulate it in your custom code?
 No problem! 
 
 It assumes the traditional double entry bookkeeping system, with debits and credits.
-In general, assets and expenses are debit balance accounts, and liabilities and equity
+In general, assets and expenses are debit balance accounts, and income, liabilities and equity
 are credit balance accounts.
 
 So, to really have this software make sense to you, you should probably understand
@@ -19,7 +19,8 @@ the double entry bookkeeping paradigm pretty well.
 * document - a RockBooks logical document such as a chart of accounts, a journal, etc.,
 usually containing information parsed from a data file
 
-* data file - a RockBooks data file, which is a text file, with the extension `.rdt`
+* data file - a RockBooks data file, which is a text file, which
+ by convention has the extension `.rbt`
 
 
 ## Data File Format
@@ -47,39 +48,53 @@ Data lines will contain fields that an be separated with an arbitrary number of 
 In journals, all entries will begin with dates, and all dates begin with numerals, so the
 presence of a numeral in the first column will be interpreted as the beginning of a new
 transaction (entry). Any lines following it not beginning with a `#` or number will be
-assumed to be the textual description of the transaction.
+assumed to be the textual description of the transaction, and will be saved along with
+its other data.
 
 In order to make the entry of dates more convenient, many documents will support
 a `@date_prefix` property that will be prepended to dates. For example, if this prefix
 contains `2018-`, then subsequent dates must exclude that prefix since it will be
-automatically prepended. So, for example, the date 2018-05-18 would need to be entered
-as `05-18`.
+automatically prepended. So, for example, a journal might contain the following lines:
+
+```
+@date_prefix: 2018-
+# ...more lines...
+05-29   37.50   ofc.spls
+05-30   22.20   tr.taxi
+```
+
+All date strings must use the format `YYYY-MM-DD`, because that's what will be expected
+by the application when it converts the date strings into numeric dates.
+
 
 
 ### Chart of Accounts
 
 Pretty much everything in this application assumes the presence of a chart of accounts
-listing the accounts; their codes and their names.
+listing the accounts, including their codes, types, and names.
 
+You'll need to provide a chart of accounts file that includes the following line in the header:
 
-You'll need a chart of accounts file named `chart_of_accounts.rdt`, containing the accounts
+`@document_type: chart_of_accounts`
+
+This file should contain the accounts
 that will be used. Each account should contain the following fields:
 
 | Property Name | Description |
 | ------------- | ------------- |
-| code          | a short string with which to identify an account, e.g. `ret_earn` for retained earnings
+| code          | a short string with which to identify an account, e.g. `ret.earn` for retained earnings
+| type          | 'A' for asset, 'L' for liability, 'O' for (owners) equity, 'I' for income, and 'E' for expenses.
 | name          | a longer more descriptive name, used in reports, so no more than 30 or so characters long is recommended
-| debit_or_credit | which side of debit/credit will be increased when value is added to this account; debit for assets and expenses, credit for income, liabilities, and equity.
   
 
 So, the chart of accounts data might include something like this:
 
 ```
-ck.xyz       D   XYZ Bank Checking Account
-loan.owner   C   Loan Payable to Owner
-o.equity     C   Owner's Equity
-sls.cons     C   Consulting Sales
-tr.airfare   D   Travel - Air Fare
+ck.xyz       A   XYZ Bank Checking Account
+loan.owner   L   Loan Payable to Owner
+o.equity     O   Owner's Equity
+sls.cons     I   Consulting Sales
+tr.airfare   E   Travel - Air Fare
 ```
 
 Although hyphens and underscores are typically used to logically separate string fragments,
@@ -91,7 +106,8 @@ and they will consume space in reports.
 
 ### Journals
 
-Journals are used to record transactions of, for example:
+Journals (also referred to as _documents_ by this application)
+are used to record transactions of, for example:
 
 * cash disbursements (expenditures for a single checking account)
 * cash receipts (funds coming into a single checking account)
@@ -110,27 +126,42 @@ account's code is `paypal`, then you'll need a line like this in your journal fi
 
 `@account_code: paypal`
 
-In addition, the debit or credit nature of the journal needs to be specified.
-As an example, in the case of a checking account, each entry would credit the
-cash account and debit whatever account(s) the money was spent on,
-e.g. `tr.airfare Travel - Air Fare`. In this case, the `@debit_or_credit` property should be set to
-`credit`. This is arbitrary, but the way I remember it is whichever direction
-(debit or credit) the money will go in an entry to/from the journal's primary
-account.
+For your convenience, when entering transactions in a journal (but _not_ a _general_ journal),
+you may enter all numbers going in the direction natural for that journal as positive numbers.
 
-So if the primary account is a checking account, then each positive entry in the 
-journal will result in a credit to the checking account.
+For example, a _Cash Disbursements Journal_ (something like a
+check register) may contain a transaction like this:
 
-Here's what it looks like:
+```
+05-29   37.50   ofc.spls
+```
 
-`@debit_or_credit: credit`
+There may be many transactions in your journal, and it would be cumbersome to have to
+type minus signs in front of all of them if they were credits.
+
+Because of this, the program allows you to configure each journal as to the direction
+(debit or credit) of the transaction. This is done with the `@debit_or_credit` property.
+
+For an asset journal whose numbers will be crediting the main account
+(e.g. a cash disbursements journal whose entries will primarily be crediting
+the cash account), you would set the property to `debit`:
+
+```
+@debit_or_credit: debit
+```
+
 
 #### General Journal
 
 The general journal is a special form of journal that does not have a primary account.
 
 In this journal, debits and credits need to be specified literally as account code/amount
-pairs, where positive numbers will result in debits, and negative numbers will result in credits.
+pairs, where positive numbers will result in debits, and negative numbers will result in credits, e.g.:
+
+```
+03-10   tr.perdiem.mi   495.00   loan.to.sh  -495.00
+Per Diem allowance for conference trip
+```
 
 
 
