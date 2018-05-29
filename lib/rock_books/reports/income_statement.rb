@@ -10,7 +10,7 @@ class IncomeStatement < Struct.new(:chart_of_accounts, :journals, :start_date, :
   end
 
 
-  def format_header
+  def generate_header
     <<~HEREDOC
     #{banner_line}
     #{center("Income Statement -- #{start_date} to #{end_date}")}
@@ -25,7 +25,7 @@ class IncomeStatement < Struct.new(:chart_of_accounts, :journals, :start_date, :
     acct_amounts = acct_amounts_in_documents(journals, filter)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     totals.each { |aa| aa[1] = -aa[1] } # income statement shows credits as positive, debits as negative
-    output = format_header
+    output = generate_header
 
     income_output,  income_total  = generate_account_type_section('Income',   totals, :income,  true)
     expense_output, expense_total = generate_account_type_section('Expenses', totals, :expense, false)

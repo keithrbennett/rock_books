@@ -7,7 +7,7 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
   include Reporter
 
 
-  def format_header
+  def generate_header
     <<~HEREDOC
     #{banner_line}
     #{center(document.title)}
@@ -66,7 +66,7 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
   def generate_report(filter = nil)
     self.page_width ||= 80
     sio = StringIO.new
-    sio << format_header
+    sio << generate_header
 
     entries = document.entries
     if filter

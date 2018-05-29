@@ -7,7 +7,7 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   include Reporter
 
 
-  def format_header
+  def generate_header
     lines = [banner_line, center('Multi Document Transaction Report'), center('Source Documents:'), '']
     documents.each do |document|
       short_name = SHORT_NAME_FORMAT_STRING % document.short_name
@@ -52,7 +52,7 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
     end
 
     sio = StringIO.new
-    sio << format_header
+    sio << generate_header
     entries.each { |entry| sio << format_entry(entry) << "\n" }
 
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))

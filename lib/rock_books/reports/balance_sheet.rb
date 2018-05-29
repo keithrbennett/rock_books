@@ -14,7 +14,7 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
   end
 
 
-  def format_header
+  def generate_header
     <<~HEREDOC
     #{banner_line}
     #{center("Balance Sheet -- #{end_date}")}
@@ -28,7 +28,7 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
     filter = RockBooks::JournalEntryFilters.date_on_or_before(end_date)
     acct_amounts = acct_amounts_in_documents(journals, filter)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
-    output = format_header
+    output = generate_header
 
     asset_output,  asset_total  = generate_account_type_section('Assets',      totals, :asset,     false)
     liab_output,   liab_total   = generate_account_type_section('Liabilities', totals, :liability, true)

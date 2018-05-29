@@ -21,7 +21,7 @@ module RockBooks
     end
 
 
-    def format_header
+    def generate_header
       code = document.account_code
       name = document.chart_of_accounts.name_for_code(code)
       title = "Summary of Transactions for Account ##{code} -- #{name}"
@@ -37,7 +37,7 @@ module RockBooks
 
     def generate_report
       sio = StringIO.new
-      sio << format_header
+      sio << generate_header
 
       totals_by_account = AcctAmount.aggregate_amounts_by_account(document.acct_amounts)
 
