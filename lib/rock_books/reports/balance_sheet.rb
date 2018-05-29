@@ -24,21 +24,7 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
   end
 
 
-  def process_section(totals, section_type)
-    account_codes_this_section = chart_of_accounts.account_codes_of_type(section_type)
-    totals_this_section = totals.select do |account_code, _amount|
-      account_codes_this_section.include?(account_code)
-    end
-
-    section_total_amount = totals_this_section.map { |aa| aa.last }.sum
-
-    output = "\n\nAccount Type: #{section_type}\n"
-    output << generate_and_format_totals(totals_this_section, chart_of_accounts)
-    [ output, section_total_amount ]
-  end
-
-
-  def generate_report
+ def generate_report
     self.page_width ||= 80
     filter = RockBooks::JournalEntryFilters.date_on_or_before(end_date)
     acct_amounts = acct_amounts_in_documents(journals, filter)
@@ -46,7 +32,7 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
     output = format_header
     total_amount = 0
     %i(asset  liability  equity).each do |section_type|
-      section_output, section_total_amount = process_section(totals, section_type)
+      section_output, section_total_amount = generate_account_type_section(totals, section_type)
       output << section_output << "\n\n"
       total_amount += section_total_amount
     end

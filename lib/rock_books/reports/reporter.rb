@@ -59,6 +59,20 @@ module Reporter
   end
 
 
+  def generate_account_type_section(totals, section_type)
+    account_codes_this_section = chart_of_accounts.account_codes_of_type(section_type)
+    totals_this_section = totals.select do |account_code, _amount|
+      account_codes_this_section.include?(account_code)
+    end
+
+    section_total_amount = totals_this_section.map { |aa| aa.last }.sum
+
+    output = "\n\nAccount Type: #{section_type}\n"
+    output << generate_and_format_totals(totals_this_section, chart_of_accounts)
+    [ output, section_total_amount ]
+  end
+
+
   # Returns the entries in the specified documents, sorted by date and document short name,
   # optionally filtered with the specified filter.
   def entries_in_documents(documents, filter = nil)
