@@ -17,25 +17,6 @@ module RockBooks
     FILTERS = JournalEntryFilters
 
 
-    def multidoc_transaction_report(filter)
-      MultidocTransactionReport.new(chart_of_accounts, journals).call(filter)
-    end
-
-
-    def singledoc_transaction_report(journal, filter)
-      TransactionReport.new(chart_of_accounts, journal).call(filter)
-    end
-
-
-    def balance_sheet_report(journals)    # TODO: date params
-      BalanceSheet.new(chart_of_accounts, journals).call
-    end
-
-
-    def income_statement_report(journals)   # TODO: date params
-      IncomeStatement.new(chart_of_accounts, journals).call
-    end
-
     def all_txns_by_account(chart_of_accounts, journals)
 
     end
@@ -43,12 +24,12 @@ module RockBooks
 
     def all_reports(filter = nil)
       report_hash = journals.each_with_object({}) do |journal, report_hash|
-        report_hash[journal.short_name] = singledoc_transaction_report(journal, filter)
+        report_hash[journal.short_name] = TransactionReport.new(chart_of_accounts, journal).call(filter)
       end
-      report_hash['all'] = multidoc_transaction_report(filter)
+      report_hash['all'] = MultidocTransactionReport.new(chart_of_accounts, journals).call(filter)
       report_hash['tx_by_account'] = TxByAccount.new(chart_of_accounts, journals)
-      report_hash['balance_sheet'] = balance_sheet_report(journals)
-      report_hash['income_statement'] = income_statement_report(journals)
+      report_hash['balance_sheet'] = BalanceSheet.new(chart_of_accounts, journals).call
+      report_hash['income_statement'] = IncomeStatement.new(chart_of_accounts, journals).call
       report_hash['all_txns_by_acct'] = all_txns_by_account(chart_of_accounts, journals)
 
       report_hash
