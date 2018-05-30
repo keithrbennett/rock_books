@@ -1,6 +1,7 @@
 require 'ostruct'
 
 require_relative '../version'
+require_relative '../helpers/book_set_loader'
 
 module RockBooks
 
@@ -139,7 +140,6 @@ When in interactive shell mode:
     end
 
 
-
     def quit
       if interactive_mode
         exit(0)
@@ -170,7 +170,7 @@ When in interactive shell mode:
 
 
     def load_data
-      @book_set = BookSet.from_directory(options.input_dir)
+      @book_set = BookSetLoader.load(options.input_dir)
     end
     alias_method :reload_data, :load_data
 

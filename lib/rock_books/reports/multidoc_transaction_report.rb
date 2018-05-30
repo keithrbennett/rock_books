@@ -24,11 +24,7 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   def generate_report(filter = nil)
     self.page_width ||= 80
 
-    entries = Reporter.entries_in_documents(documents)
-
-    if filter
-      entries = entries.select { |entry| filter.(entry) }
-    end
+    entries = Reporter.entries_in_documents(documents, filter)
 
     sio = StringIO.new
     sio << generate_header
