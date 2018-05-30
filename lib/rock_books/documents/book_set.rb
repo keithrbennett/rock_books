@@ -3,10 +3,12 @@ require 'awesome_print'
 require_relative 'chart_of_accounts'
 require_relative 'journal'
 require_relative '../filters/journal_entry_filters'  # for shell mode
+require_relative '../helpers/parse_helper'
 require_relative '../reports/balance_sheet'
 require_relative '../reports/income_statement'
 require_relative '../reports/multidoc_transaction_report'
 require_relative '../reports/transaction_report'
+require_relative '../reports/tx_by_account'
 
 module RockBooks
 
@@ -19,19 +21,9 @@ module RockBooks
     # To exclude a file, make the extension other than .rdt.
     def self.from_directory(directory)
 
-      find_doc_type = ->(filespec) do
-        lines = File.readlines(filespec)
-        doc_type_line = lines.detect { |line| /^@doc_type: /.match(line) }
-        if doc_type_line.nil?
-          nil
-        else
-          doc_type_line.split(/^@doc_type: /).last.strip
-        end
-      end
-
       files = Dir[File.join(directory, '*.rbt')]
       files_with_types = files.each_with_object({}) do |filespec, files_with_types|
-        files_with_types[filespec] = find_doc_type.(filespec)
+        files_with_types[filespec] = ParseHelper.find_document_type_in_file(filespec)
       end
 
 
@@ -90,14 +82,21 @@ module RockBooks
       IncomeStatement.new(chart_of_accounts, journals).call
     end
 
+    def all_txns_by_account(chart_of_accounts, journals)
+
+    end
+
 
     def all_reports(filter = nil)
       report_hash = journals.each_with_object({}) do |journal, report_hash|
         report_hash[journal.short_name] = singledoc_transaction_report(journal, filter)
       end
       report_hash['all'] = multidoc_transaction_report(filter)
+      report_hash['tx_by_account'] = TxByAccount.new(chart_of_accounts, journals)
       report_hash['balance_sheet'] = balance_sheet_report(journals)
       report_hash['income_statement'] = income_statement_report(journals)
+      report_hash['all_txns_by_acct'] = all_txns_by_account(chart_of_accounts, journals)
+
       report_hash
     end
 

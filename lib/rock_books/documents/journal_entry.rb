@@ -19,6 +19,11 @@ class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_n
   def balanced?
     total_amount == 0.0
   end
+
+
+  def contains_account?(account_code)
+    acct_amounts.any? { |acct_amount| acct_amount.code == account_code }
+  end
 end
 
 end

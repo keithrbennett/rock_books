@@ -21,27 +21,6 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   end
 
 
-  def format_entry(entry)
-    acct_amounts = entry.acct_amounts
-
-    output = entry.date.to_s << '  ' << (SHORT_NAME_FORMAT_STRING % entry.doc_short_name) # "2017-10-29  hsbc_visa"
-    indent = ' ' * output.length
-
-    output << format_acct_amount(acct_amounts.first) << "\n"
-
-    acct_amounts[1..-1].each do |acct_amount|
-      output << indent << format_acct_amount(acct_amount) << "\n"
-    end
-
-    if entry.description && entry.description.length > 0
-      output << entry.description
-    end
-
-    output
-  end
-
-
-
   def generate_report(filter = nil)
     self.page_width ||= 80
 
@@ -53,7 +32,7 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
 
     sio = StringIO.new
     sio << generate_header
-    entries.each { |entry| sio << format_entry(entry) << "\n" }
+    entries.each { |entry| sio << format_multidoc_entry(entry) << "\n" }
 
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
     sio << generate_and_format_totals('Totals', totals, chart_of_accounts)
