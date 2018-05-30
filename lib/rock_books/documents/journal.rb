@@ -15,7 +15,8 @@ module RockBooks
 #
 # Warning: Any line beginning with a number will be assumed to be the date of a data line for an entry,
 # so descriptions cannot begin with a number.
-class Journal
+class Journal < Struct.new(:chart_of_accounts, :input_string, :short_name, :account_code,
+    :date_prefix, :debit_or_credit, :doc_type, :title, :entries)
 
   def self.from_file(chart_of_accounts, file)
     self.new(chart_of_accounts, File.read(file))
@@ -24,45 +25,49 @@ class Journal
 
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
-  attr_reader :short_name, :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
-
   # short_name is a name that will appear on reports identifying the journal from which a transaction comes
   def initialize(chart_of_accounts, input_string, short_name = nil)
-    @chart_of_accounts = chart_of_accounts
-    @short_name = short_name
-    @entries = []
-    @date_prefix = ''
-    @title = ''
+    super
+    self.entries = []
+    self.date_prefix = ''
+    self.title = ''
     lines = input_string.split("\n")
-    lines.each { |line| parse_line(line) }
+    lines.each_with_index do |line, index|
+      begin
+        parse_line(line)
+      rescue => e
+        puts "Error occurred parsing line ##{index}: #{line}"
+        raise
+      end
+    end
   end
 
 
   def parse_line(line)
     case line.strip
     when /^@doc_type:/
-      @doc_type = line.split(/^@doc_type:/).last.strip
+      self.doc_type = line.split(/^@doc_type:/).last.strip
     when  /^@account_code:/
-      @account_code = line.split(/^@account_code:/).last.strip
+      self.account_code = line.split(/^@account_code:/).last.strip
 
-      unless chart_of_accounts.include?(@account_code)
-        raise AccountNotFoundError.new(@account_code)
+      unless chart_of_accounts.include?(account_code)
+        raise AccountNotFoundError.new(account_code)
       end
 
       # if debit or credit has not yet been specified, inherit the setting from the account:
-      unless @debit_or_credit
-        @debit_or_credit = chart_of_accounts.debit_or_credit_for_code(@account_code)
+      unless debit_or_credit
+        self.debit_or_credit = chart_of_accounts.debit_or_credit_for_code(account_code)
       end
 
     when /^@title:/
-      @title = line.split(/^@title:/).last.strip
+      self.title = line.split(/^@title:/).last.strip
     when /^@short_name:/
-      @short_name = line.split(/^@short_name:/).last.strip
+      self.short_name = line.split(/^@short_name:/).last.strip
     when /^@date_prefix:/
-      @date_prefix = line.split(/^@date_prefix:/).last.strip
+      self.date_prefix = line.split(/^@date_prefix:/).last.strip
     when /^@debit_or_credit:/
       data = line.split(/^@debit_or_credit:/).last.strip
-      @debit_or_credit = data.to_sym
+      self.debit_or_credit = data.to_sym
     when /^$/
       # ignore empty line
     when /^#/
