@@ -17,11 +17,6 @@ module RockBooks
     FILTERS = JournalEntryFilters
 
 
-    def all_txns_by_account(chart_of_accounts, journals)
-
-    end
-
-
     def all_reports(filter = nil)
       report_hash = journals.each_with_object({}) do |journal, report_hash|
         report_hash[journal.short_name] = TransactionReport.new(chart_of_accounts, journal).call(filter)
@@ -30,7 +25,7 @@ module RockBooks
       report_hash['tx_by_account'] = TxByAccount.new(chart_of_accounts, journals)
       report_hash['balance_sheet'] = BalanceSheet.new(chart_of_accounts, journals).call
       report_hash['income_statement'] = IncomeStatement.new(chart_of_accounts, journals).call
-      report_hash['all_txns_by_acct'] = all_txns_by_account(chart_of_accounts, journals)
+      report_hash['all_txns_by_acct'] = TxByAccount.new(chart_of_accounts, journals).call
 
       report_hash
     end

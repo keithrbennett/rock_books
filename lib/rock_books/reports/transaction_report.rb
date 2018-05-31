@@ -21,7 +21,7 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
     entry.date.to_s \
         << '  ' \
         << format_acct_amount(entry.acct_amounts.first) \
-         << "\n"
+        << "\n"
   end
 
 
