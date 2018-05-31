@@ -11,6 +11,21 @@ class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_n
   end
 
 
+  def self.total_for_code(entries, account_code)
+    entries.map { |entry| entry.total_for_code(account_code)}.sum
+  end
+
+
+  def total_for_code(account_code)
+    acct_amounts_with_code(account_code).map(&:amount).sum
+  end
+
+
+  def acct_amounts_with_code(account_code)
+    acct_amounts.select { |acct_amount| acct_amount.code == account_code }
+  end
+
+
   def total_amount
     acct_amounts.inject(0) { |sum, aa| sum + aa.amount }
   end
