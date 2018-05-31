@@ -1,3 +1,4 @@
+require_relative '../documents/journal'
 require_relative 'reporter'
 
 module RockBooks
@@ -24,7 +25,7 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
   def generate_report(filter = nil)
     self.page_width ||= 80
 
-    entries = Reporter.entries_in_documents(documents, filter)
+    entries = Journal.entries_in_documents(documents, filter)
 
     sio = StringIO.new
     sio << generate_header

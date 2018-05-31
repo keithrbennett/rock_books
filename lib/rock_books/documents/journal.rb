@@ -22,6 +22,40 @@ class Journal
   end
 
 
+  # Returns the entries in the specified documents, sorted by date and document short name,
+  # optionally filtered with the specified filter.
+  def self.entries_in_documents(documents, filter = nil)
+    entries = documents.each_with_object([]) do |document, entries|
+      entries << document.entries
+    end.flatten
+
+    if filter
+      entries = entries.select {|entry| filter.(entry) }
+    end
+
+    entries.sort_by do |entry|
+      [entry.date, entry.doc_short_name]
+    end
+  end
+
+
+
+
+    def self.acct_amounts_in_documents(documents, entries_filter = nil, acct_amounts_filter = nil)
+    entries = entries_in_documents(documents, entries_filter)
+
+    acct_amounts = entries.each_with_object([]) do |entry, acct_amounts|
+      acct_amounts << entry.acct_amounts
+    end.flatten
+
+    if acct_amounts_filter
+      acct_amounts.select! { |aa| acct_amounts_filter.(aa) }
+    end
+
+    acct_amounts
+  end
+
+
   class Entry < Struct.new(:date, :amount, :acct_amounts, :description); end
 
   attr_reader :short_name, :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries

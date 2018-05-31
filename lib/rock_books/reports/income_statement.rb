@@ -1,3 +1,4 @@
+require_relative '../documents/journal'
 module RockBooks
 
   # Reports the income statement for the specified date range.
@@ -22,7 +23,7 @@ class IncomeStatement < Struct.new(:chart_of_accounts, :journals, :start_date, :
 
   def generate_report
     filter = RockBooks::JournalEntryFilters.date_in_range(start_date, end_date)
-    acct_amounts = acct_amounts_in_documents(journals, filter)
+    acct_amounts = Journal.acct_amounts_in_documents(journals, filter)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     totals.each { |aa| aa[1] = -aa[1] } # income statement shows credits as positive, debits as negative
     output = generate_header

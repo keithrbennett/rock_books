@@ -28,5 +28,19 @@ class AcctAmount < Struct.new(:date, :code, :amount)
       totals[code] = amount.round(2)
     end
   end
+
+
+  # Returns the subset of the passed array of acct_amount's that contain the specified account code
+  def self.containing_code(acct_amounts, account_code)
+    acct_amounts.select { |acct_amount| acct_amount.code == account_code }
+  end
+
+
+  # For the passed array of AcctAmount's, calculate the total for a single account.
+  def self.total_amount_for_code(acct_amounts, account_code)
+    containing_code(acct_amounts, account_code) \
+        .map(&:amount) \
+        .sum
+  end
 end
 end

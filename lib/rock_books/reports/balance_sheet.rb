@@ -1,4 +1,5 @@
 require_relative '../filters/journal_entry_filters'
+require_relative '../documents/journal'
 
 module RockBooks
 
@@ -26,7 +27,7 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
 
  def generate_report
     filter = RockBooks::JournalEntryFilters.date_on_or_before(end_date)
-    acct_amounts = acct_amounts_in_documents(journals, filter)
+    acct_amounts = Journal.acct_amounts_in_documents(journals, filter)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     output = generate_header
 
