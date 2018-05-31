@@ -11,6 +11,11 @@ class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_n
   end
 
 
+  def self.entries_containing_account_code(entries, account_code)
+    entries.select { |entry| entry.contains_account?(account_code) }
+  end
+
+
   def self.total_for_code(entries, account_code)
     entries.map { |entry| entry.total_for_code(account_code)}.sum
   end

@@ -48,7 +48,7 @@ class TxByAccount < Struct.new(:chart_of_accounts, :journals, :page_width)
 
     chart_of_accounts.accounts.each do |account|
       code = account.code
-      account_entries = all_entries.select { |entry| entry.contains_account?(code) }
+      account_entries = JournalEntry.entries_containing_account_code(all_entries, code)
       account_total = JournalEntry.total_for_code(account_entries, code)
       output << account_header(account, account_total)
 
