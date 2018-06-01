@@ -24,6 +24,14 @@ class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_n
   end
 
 
+  def self.sort_entries_by_amount_descending!(entries)
+    entries.sort_by! do |entry|
+      [entry.total_absolute_value, entry.doc_short_name]
+      end
+    entries.reverse!
+  end
+
+
   def total_for_code(account_code)
     acct_amounts_with_code(account_code).map(&:amount).sum
   end
@@ -36,6 +44,13 @@ class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_n
 
   def total_amount
     acct_amounts.inject(0) { |sum, aa| sum + aa.amount }
+  end
+
+
+  # Gets the absolute value of the positive (or negative) amounts in this entry.
+  # This is used to sort by transaction amount, since total of all amounts will always be zero.
+  def total_absolute_value
+    acct_amounts.map(&:amount).select { |n| n.positive? }.sum
   end
 
 

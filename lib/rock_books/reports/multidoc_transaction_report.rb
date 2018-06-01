@@ -10,15 +10,18 @@ class MultidocTransactionReport
 
   attr_accessor :context
 
+  SORT_BY_VALID_OPTIONS = %i(date_and_account  amount)
+
   def initialize(report_context)
     @context = report_context
   end
 
 
-  def generate_header
+  def generate_header(sort_by)
     lines = [banner_line]
     lines << center(context.entity_name) if context.entity_name
     lines << center('Multi Document Transaction Report')
+    lines << center('Sorted by Amount Descending') if sort_by == :amount
     lines << ''
     lines << center('Source Documents:')
     lines << ''
@@ -34,12 +37,19 @@ class MultidocTransactionReport
   end
 
 
-  def generate_report(filter = nil)
+  def generate_report(filter = nil, sort_by = :date_and_account)
+    unless SORT_BY_VALID_OPTIONS.include?(sort_by)
+      raise Error.new("sort_by option '#{sort_by}' not in valid choices of #{SORT_BY_VALID_OPTIONS}.")
+    end
 
     entries = Journal.entries_in_documents(context.journals, filter)
 
+    if sort_by == :amount
+      JournalEntry.sort_entries_by_amount_descending!(entries)
+    end
+
     sio = StringIO.new
-    sio << generate_header
+    sio << generate_header(sort_by)
     entries.each { |entry| sio << format_multidoc_entry(entry) << "\n" }
 
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))

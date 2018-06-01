@@ -29,6 +29,7 @@ module RockBooks
         report_hash[journal.short_name] = TransactionReport.new(journal, context).call(filter)
       end
       report_hash['all_txns_by_date'] = MultidocTransactionReport.new(context).call(filter)
+      report_hash['all_txns_by_amount'] = MultidocTransactionReport.new(context).call(filter, :amount)
       report_hash['all_txns_by_acct'] = TxByAccount.new(context).call
       report_hash['balance_sheet'] = BalanceSheet.new(context).call
       report_hash['income_statement'] = IncomeStatement.new(context).call
