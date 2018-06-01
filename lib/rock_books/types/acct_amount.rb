@@ -13,6 +13,7 @@ class AcctAmount < Struct.new(:date, :code, :amount)
     self.new(date, code, amount)
   end
 
+
   def self.total_amount(acct_amounts)
     acct_amounts.inject(0) { |sum, acct_amount| sum += acct_amount.amount }
   end
@@ -41,6 +42,11 @@ class AcctAmount < Struct.new(:date, :code, :amount)
     containing_code(acct_amounts, account_code) \
         .map(&:amount) \
         .sum
+  end
+
+
+  def self.filter(acct_amounts, filter)
+    acct_amounts.select { |acct_amount| filter.(acct_amount)}
   end
 end
 end

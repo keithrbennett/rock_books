@@ -1,3 +1,6 @@
+require_relative '../types/acct_amount'
+require_relative '../filters/acct_amount_filters'
+
 module RockBooks
 
 class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_name)
@@ -27,7 +30,7 @@ class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_n
 
 
   def acct_amounts_with_code(account_code)
-    acct_amounts.select { |acct_amount| acct_amount.code == account_code }
+    AcctAmount.filter(acct_amounts, AcctAmountFilters.account_code(account_code))
   end
 
 

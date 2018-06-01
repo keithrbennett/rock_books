@@ -49,7 +49,7 @@ class Journal
     end.flatten
 
     if acct_amounts_filter
-      acct_amounts.select! { |aa| acct_amounts_filter.(aa) }
+      acct_amounts = AcctAmount.filter(acct_amounts, filter)
     end
 
     acct_amounts

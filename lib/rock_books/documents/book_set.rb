@@ -56,6 +56,15 @@ module RockBooks
       journals.map(&:short_name)
     end
     alias_method :jnames, :journal_names
-  end
 
+
+    # Note: Unfiltered!
+    def all_acct_amounts
+      @all_acct_amounts ||= Journal.acct_amounts_in_documents(journals)
+    end
+
+    def all_entries
+      @all_entries ||= Journal.entries_in_documents(journals)
+    end
+end
 end

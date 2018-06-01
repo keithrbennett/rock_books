@@ -1,3 +1,4 @@
+require 'forwardable'
 require 'ostruct'
 
 require_relative '../version'
@@ -9,7 +10,7 @@ module RockBooks
 
     # Enable users to type methods of this class more conveniently:
     include JournalEntryFilters
-
+    extend Forwardable
 
     attr_reader :book_set, :entity_name, :interactive_mode, :options
 
@@ -18,6 +19,18 @@ module RockBooks
 
 
     class BadCommandError < RuntimeError; end
+
+
+    # Enable use of some BookSet methods in shell with long and short names aaa, ae:
+
+    def_delegator :book_set, :all_acct_amounts
+    def_delegator :book_set, :all_acct_amounts, :aaa
+
+    def_delegator :book_set, :all_entries
+    def_delegator :book_set, :all_entries, :ae
+
+    def_delegator :book_set, :chart_of_accounts
+    def_delegator :book_set, :chart_of_accounts, :chart
 
 
     # Help text to be used when requested by 'h' command, in case of unrecognized or nonexistent command, etc.
@@ -152,7 +165,7 @@ When in interactive shell mode:
 
 
     def cmd_c
-      puts book_set.chart_of_accounts.report_string
+      puts chart_of_accounts.report_string
     end
 
 
@@ -261,12 +274,6 @@ When in interactive shell mode:
     def td(date_string)
       Date.iso8601(date_string)
     end
-
-
-    def chart_of_accounts
-      book_set.chart_of_accounts
-    end
-    alias_method :chart, :chart_of_accounts
 
 
     def call
