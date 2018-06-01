@@ -11,7 +11,7 @@ module RockBooks
     include JournalEntryFilters
 
 
-    attr_reader :book_set, :interactive_mode, :options
+    attr_reader :book_set, :entity_name, :interactive_mode, :options
 
 
     class Command < Struct.new(:min_string, :max_string, :action); end
@@ -31,6 +31,7 @@ Command Line Switches:                    [rock-books version #{RockBooks::VERSI
 Commands:
 
 a[ll_reports]             - generate all reports; options: 'p': print, 'w': write to files
+e[ntity_name]             - entity name for reports
 c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
@@ -170,7 +171,7 @@ When in interactive shell mode:
 
 
     def load_data
-      @book_set = BookSetLoader.load(options.input_dir)
+      @book_set = BookSetLoader.load(entity_name, options.input_dir)
     end
     alias_method :reload_data, :load_data
 
@@ -207,6 +208,11 @@ When in interactive shell mode:
     end
 
 
+    def cmd_e(args)
+      self.entity_name = args.first
+    end
+
+
     def cmd_x
       quit
     end
@@ -216,6 +222,7 @@ When in interactive shell mode:
       @commands_ ||= [
           Command.new('a',   'all_reports',       -> (*options)  { cmd_a(options)    }),
           Command.new('c',   'chart_of_accounts', -> (*options)  { cmd_c             }),
+          Command.new('e',   'entity_name',       -> (*options)  { cmd_e             }),
           Command.new('jo',  'journals',          -> (*_options) { cmd_j             }),
           Command.new('h',   'help',              -> (*_options) { cmd_h             }),
           Command.new('q',   'quit',              -> (*_options) { cmd_x             }),

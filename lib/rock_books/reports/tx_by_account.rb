@@ -1,16 +1,21 @@
 require_relative '../documents/chart_of_accounts'
 require_relative '../documents/journal'
 require_relative 'reporter'
+require_relative 'report_context'
 
 module RockBooks
 
-class TxByAccount < Struct.new(:chart_of_accounts, :journals, :page_width)
+class TxByAccount
 
   include Reporter
 
-  def initialize(chart_of_accounts, journals, page_width = 80)
-    super
+  attr_accessor :context
+
+
+  def initialize(report_context)
+    @context = report_context
   end
+
 
   def generate_header
     <<~HEREDOC
@@ -32,21 +37,21 @@ class TxByAccount < Struct.new(:chart_of_accounts, :journals, :page_width)
     #{banner_line}
 
     HEREDOC
-
   end
 
 
-  def account_total_line(entries, account_code, account_total)
-    "%.2f  Total for account: %s - %s" % [account_total, account_code, chart_of_accounts.name_for_code(account_code)]
+  def account_total_line(account_code, account_total)
+    account_name = context.chart_of_accounts.name_for_code(account_code)
+    "%.2f  Total for account: %s - %s" % [account_total, account_code, account_name]
   end
 
 
   def generate_report
     output = generate_header
 
-    all_entries = Journal.entries_in_documents(journals)
+    all_entries = Journal.entries_in_documents(context.journals)
 
-    chart_of_accounts.accounts.each do |account|
+    context.chart_of_accounts.accounts.each do |account|
       code = account.code
       account_entries = JournalEntry.entries_containing_account_code(all_entries, code)
       account_total = JournalEntry.total_for_code(account_entries, code)
@@ -56,7 +61,7 @@ class TxByAccount < Struct.new(:chart_of_accounts, :journals, :page_width)
         output << format_multidoc_entry(entry) << "\n"
         output << "\n" if entry.description && entry.description.length > 0
       end
-      output << account_total_line(account_entries, code, account_total) << "\n"
+      output << account_total_line(code, account_total) << "\n"
       output  << "\n\n\n"
     end
 

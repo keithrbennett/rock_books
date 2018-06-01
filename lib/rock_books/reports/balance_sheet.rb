@@ -1,17 +1,25 @@
 require_relative '../filters/journal_entry_filters'
 require_relative '../documents/journal'
+require_relative 'report_context'
 
 module RockBooks
 
 # Reports the balance sheet as of the specified date.
 # Unlike other reports, we need to process transactions from the beginning of time
 # in order to calculate the correct balances, so we ignore the global $filter.
-class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_width)
+class BalanceSheet
 
   include Reporter
 
-  def initialize(chart_of_accounts, journals, end_date = Time.now.to_date, page_width = 80)
-    super
+  attr_accessor :context
+
+  def initialize(report_context)
+    @context = report_context
+  end
+
+
+  def end_date
+    context.end_date || Time.new.to_date
   end
 
 
@@ -27,7 +35,7 @@ class BalanceSheet < Struct.new(:chart_of_accounts, :journals, :end_date, :page_
 
  def generate_report
     filter = RockBooks::JournalEntryFilters.date_on_or_before(end_date)
-    acct_amounts = Journal.acct_amounts_in_documents(journals, filter)
+    acct_amounts = Journal.acct_amounts_in_documents(context.journals, filter)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     output = generate_header
 

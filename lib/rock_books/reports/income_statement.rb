@@ -1,13 +1,28 @@
 require_relative '../documents/journal'
+require_relative 'report_context'
+
 module RockBooks
 
-  # Reports the income statement for the specified date range.
-class IncomeStatement < Struct.new(:chart_of_accounts, :journals, :start_date, :end_date, :page_width)
+
+  class IncomeStatement
 
   include Reporter
 
-  def initialize(chart_of_accounts, journals, start_date = Date.new, end_date = Time.now.to_date, page_width = 80)
-    super
+  attr_accessor :context
+
+
+  def initialize(report_context)
+    @context = report_context
+  end
+
+
+  def start_date
+    context.start_date || Date.new(1900, 1, 1)
+  end
+
+
+  def end_date
+    context.end_date || Date.new(2100, 1, 1)
   end
 
 
@@ -23,7 +38,7 @@ class IncomeStatement < Struct.new(:chart_of_accounts, :journals, :start_date, :
 
   def generate_report
     filter = RockBooks::JournalEntryFilters.date_in_range(start_date, end_date)
-    acct_amounts = Journal.acct_amounts_in_documents(journals, filter)
+    acct_amounts = Journal.acct_amounts_in_documents(context.journals, filter)
     totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
     totals.each { |aa| aa[1] = -aa[1] } # income statement shows credits as positive, debits as negative
     output = generate_header

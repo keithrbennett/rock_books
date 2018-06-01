@@ -1,16 +1,25 @@
 require_relative 'reporter'
+require_relative 'report_context'
 
 module RockBooks
 
-class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
+class TransactionReport
 
   include Reporter
+
+  attr_accessor :journal, :context
+
+
+  def initialize(journal, report_context)
+    @journal = journal
+    @context = report_context
+  end
 
 
   def generate_header
     <<~HEREDOC
     #{banner_line}
-    #{center(document.title)}
+    #{center(journal.title)}
     #{banner_line}
 
     HEREDOC
@@ -64,18 +73,17 @@ class TransactionReport < Struct.new(:chart_of_accounts, :document, :page_width)
 
 
   def generate_report(filter = nil)
-    self.page_width ||= 80
     sio = StringIO.new
     sio << generate_header
 
-    entries = document.entries
+    entries = journal.entries
     if filter
       entries = entries.select { |entry| filter.(entry) }
     end
 
     entries.each { |entry| sio << format_entry(entry) << "\n" }
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
-    sio << generate_and_format_totals('Totals', totals, chart_of_accounts)
+    sio << generate_and_format_totals('Totals', totals, context.chart_of_accounts)
     sio.string
   end
 

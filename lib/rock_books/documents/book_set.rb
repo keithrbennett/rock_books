@@ -7,25 +7,30 @@ require_relative '../helpers/parse_helper'
 require_relative '../reports/balance_sheet'
 require_relative '../reports/income_statement'
 require_relative '../reports/multidoc_transaction_report'
+require_relative '../reports/report_context'
 require_relative '../reports/transaction_report'
 require_relative '../reports/tx_by_account'
 
 module RockBooks
 
-  class BookSet < Struct.new(:chart_of_accounts, :journals)
+  class BookSet < Struct.new(:entity_name, :chart_of_accounts, :journals)
 
     FILTERS = JournalEntryFilters
 
+    def report_context
+      ReportContext.new(entity_name, chart_of_accounts, journals, nil, nil, 80)
+    end
+
 
     def all_reports(filter = nil)
-      report_hash = journals.each_with_object({}) do |journal, report_hash|
-        report_hash[journal.short_name] = TransactionReport.new(chart_of_accounts, journal).call(filter)
+      context = report_context
+      report_hash = context.journals.each_with_object({}) do |journal, report_hash|
+        report_hash[journal.short_name] = TransactionReport.new(journal, context).call(filter)
       end
-      report_hash['all'] = MultidocTransactionReport.new(chart_of_accounts, journals).call(filter)
-      report_hash['tx_by_account'] = TxByAccount.new(chart_of_accounts, journals)
-      report_hash['balance_sheet'] = BalanceSheet.new(chart_of_accounts, journals).call
-      report_hash['income_statement'] = IncomeStatement.new(chart_of_accounts, journals).call
-      report_hash['all_txns_by_acct'] = TxByAccount.new(chart_of_accounts, journals).call
+      report_hash['all_txns_by_date'] = MultidocTransactionReport.new(context).call(filter)
+      report_hash['all_txns_by_acct'] = TxByAccount.new(context).call
+      report_hash['balance_sheet'] = BalanceSheet.new(context).call
+      report_hash['income_statement'] = IncomeStatement.new(context).call
 
       report_hash
     end

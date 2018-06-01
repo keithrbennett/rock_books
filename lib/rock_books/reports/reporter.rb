@@ -9,6 +9,12 @@ module Reporter
 
   SHORT_NAME_FORMAT_STRING = "%#{SHORT_NAME_MAX_LENGTH}.#{SHORT_NAME_MAX_LENGTH}s"
 
+
+  def page_width
+    context.page_width || 80
+  end
+
+
   def format_account_code(code)
     "%*.*s" % [max_account_code_length, max_account_code_length, code]
   end
@@ -24,7 +30,7 @@ module Reporter
     "%s  %s  %s" % [
         format_amount(acct_amount.amount),
         format_account_code(acct_amount.code),
-        chart_of_accounts.name_for_code(acct_amount.code)
+        context.chart_of_accounts.name_for_code(acct_amount.code)
     ]
   end
 
@@ -42,7 +48,7 @@ module Reporter
 
 
   def max_account_code_length
-    @max_account_code_length ||= chart_of_accounts.max_account_code_length
+    @max_account_code_length ||= context.chart_of_accounts.max_account_code_length
   end
 
 
@@ -63,7 +69,7 @@ module Reporter
 
 
   def generate_account_type_section(section_caption, totals, section_type, need_to_reverse_sign)
-    account_codes_this_section = chart_of_accounts.account_codes_of_type(section_type)
+    account_codes_this_section = context.chart_of_accounts.account_codes_of_type(section_type)
 
     totals_this_section = totals.select do |account_code, _amount|
       account_codes_this_section.include?(account_code)
@@ -75,7 +81,7 @@ module Reporter
 
     section_total_amount = totals_this_section.map { |aa| aa.last }.sum
 
-    output = generate_and_format_totals(section_caption, totals_this_section, chart_of_accounts)
+    output = generate_and_format_totals(section_caption, totals_this_section, context.chart_of_accounts)
     [ output, section_total_amount ]
   end
 

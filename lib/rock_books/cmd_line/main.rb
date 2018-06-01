@@ -14,6 +14,11 @@ class Main
     options = OpenStruct.new
 
     OptionParser.new do |parser|
+
+      parser.on("-e", "--entity_name NAME", "Entity name, for reports.") do |v|
+        options.entity_name = v
+      end
+
       parser.on("-i", "--input_dir DIR", "Input directory containing source data files") do |v|
         options.input_dir = File.expand_path(v)
       end

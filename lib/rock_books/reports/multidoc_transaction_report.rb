@@ -1,16 +1,23 @@
 require_relative '../documents/journal'
 require_relative 'reporter'
+require_relative 'report_context'
 
 module RockBooks
 
-class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :page_width)
+class MultidocTransactionReport
 
   include Reporter
+
+  attr_accessor :context
+
+  def initialize(report_context)
+    @context = report_context
+  end
 
 
   def generate_header
     lines = [banner_line, center('Multi Document Transaction Report'), center('Source Documents:'), '']
-    documents.each do |document|
+    context.journals.each do |document|
       short_name = SHORT_NAME_FORMAT_STRING % document.short_name
       lines << center("#{short_name} -- #{document.title}")
     end
@@ -23,16 +30,15 @@ class MultidocTransactionReport < Struct.new(:chart_of_accounts, :documents, :pa
 
 
   def generate_report(filter = nil)
-    self.page_width ||= 80
 
-    entries = Journal.entries_in_documents(documents, filter)
+    entries = Journal.entries_in_documents(context.journals, filter)
 
     sio = StringIO.new
     sio << generate_header
     entries.each { |entry| sio << format_multidoc_entry(entry) << "\n" }
 
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
-    sio << generate_and_format_totals('Totals', totals, chart_of_accounts)
+    sio << generate_and_format_totals('Totals', totals, context.chart_of_accounts)
 
     sio << "\n"
     sio.string
