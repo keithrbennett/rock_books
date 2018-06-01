@@ -67,6 +67,9 @@ class TxByAccount
       output  << "\n\n\n"
     end
 
+    totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(all_entries))
+    output << generate_and_format_totals('Totals', totals, context.chart_of_accounts)
+
     output
   end
 

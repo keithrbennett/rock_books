@@ -45,6 +45,10 @@ module RockBooks
       account_total = JournalEntry.total_for_code(entries, account_code)
       output = generate_header(account_total)
       output << process_account(entries, account)
+
+      totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
+      output << generate_and_format_totals('Totals', totals, context.chart_of_accounts)
+
       output
     end
 
