@@ -27,12 +27,14 @@ module RockBooks
 
 
   def generate_header
-    <<~HEREDOC
-    #{banner_line}
-    #{center("Income Statement -- #{start_date} to #{end_date}")}
-    #{banner_line}
-
-    HEREDOC
+    lines = [banner_line]
+    lines << center(context.entity_name) if context.entity_name
+    lines << "#{center("Income Statement -- #{start_date} to #{end_date}")}"
+    lines << banner_line
+    lines << ''
+    lines << ''
+    lines << ''
+    lines.join("\n")
   end
 
 

@@ -17,12 +17,14 @@ class TransactionReport
 
 
   def generate_header
-    <<~HEREDOC
-    #{banner_line}
-    #{center(journal.title)}
-    #{banner_line}
-
-    HEREDOC
+    lines = [banner_line]
+    lines << center(context.entity_name) if context.entity_name
+    lines << center(journal.title)
+    lines << banner_line
+    lines << ''
+    lines << ''
+    lines << ''
+    lines.join("\n")
   end
 
 

@@ -18,12 +18,14 @@ class TxByAccount
 
 
   def generate_header
-    <<~HEREDOC
-    #{banner_line}
-    #{center("Transactions by Account")}
-    #{banner_line}
-
-    HEREDOC
+    lines = [banner_line]
+    lines << center(context.entity_name) if context.entity_name
+    lines << center("Transactions by Account")
+    lines << banner_line
+    lines << ''
+    lines << ''
+    lines << ''
+    lines.join("\n")
   end
 
 

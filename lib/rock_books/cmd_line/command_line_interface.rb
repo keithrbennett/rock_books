@@ -49,6 +49,7 @@ When in interactive shell mode:
     def initialize(options)
       @options = options
       @interactive_mode = !!(options.interactive_mode)
+      @entity_name = options.entity_name
       load_data
     end
 

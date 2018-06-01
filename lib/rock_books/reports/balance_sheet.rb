@@ -24,12 +24,14 @@ class BalanceSheet
 
 
   def generate_header
-    <<~HEREDOC
-    #{banner_line}
-    #{center("Balance Sheet -- #{end_date}")}
-    #{banner_line}
-
-    HEREDOC
+    lines = [banner_line]
+    lines << center(context.entity_name) if context.entity_name
+    lines << center("Balance Sheet -- #{end_date}")
+    lines << banner_line
+    lines << ''
+    lines << ''
+    lines << ''
+    lines.join("\n")
   end
 
 

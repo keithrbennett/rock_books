@@ -16,7 +16,12 @@ class MultidocTransactionReport
 
 
   def generate_header
-    lines = [banner_line, center('Multi Document Transaction Report'), center('Source Documents:'), '']
+    lines = [banner_line]
+    lines << center(context.entity_name) if context.entity_name
+    lines << center('Multi Document Transaction Report')
+    lines << ''
+    lines << center('Source Documents:')
+    lines << ''
     context.journals.each do |document|
       short_name = SHORT_NAME_FORMAT_STRING % document.short_name
       lines << center("#{short_name} -- #{document.title}")

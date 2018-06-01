@@ -29,12 +29,14 @@ module RockBooks
       name = journal.chart_of_accounts.name_for_code(code)
       title = "Summary of Transactions for Account ##{code} -- #{name}"
 
-      <<~HEREDOC
-      #{banner_line}
-      #{center(title)}
-      #{banner_line}
-
-      HEREDOC
+      lines = [banner_line]
+      lines << center(context.entity_name) if context.entity_name
+      lines << center(title)
+      lines << banner_line
+      lines << ''
+      lines << ''
+      lines << ''
+      lines.join("\n")
     end
 
 
