@@ -57,12 +57,12 @@ module Reporter
   end
 
 
-  def generate_and_format_totals(section_caption, totals, chart_of_accounts)
+  def generate_and_format_totals(section_caption, totals)
     output = section_caption
     output << "\n#{'-' * section_caption.length}\n\n"
-    format_string = "%12.2f   %-#{chart_of_accounts.max_account_code_length}s   %s\n"
+    format_string = "%12.2f   %-#{context.chart_of_accounts.max_account_code_length}s   %s\n"
     totals.keys.sort.each do |account_code|
-      account_name = chart_of_accounts.name_for_code(account_code)
+      account_name = context.chart_of_accounts.name_for_code(account_code)
       account_total = totals[account_code]
       output << format_string % [account_total, account_code, account_name]
     end
@@ -86,7 +86,7 @@ module Reporter
 
     section_total_amount = totals_this_section.map { |aa| aa.last }.sum
 
-    output = generate_and_format_totals(section_caption, totals_this_section, context.chart_of_accounts)
+    output = generate_and_format_totals(section_caption, totals_this_section)
     [ output, section_total_amount ]
   end
 
