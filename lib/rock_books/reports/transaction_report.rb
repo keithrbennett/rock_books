@@ -17,9 +17,15 @@ class TransactionReport
 
 
   def generate_header
+
+    code = journal.account_code
+    name = journal.chart_of_accounts.name_for_code(code)
+    title = "Transactions for Account ##{code} -- #{name}"
+
     lines = [banner_line]
     lines << center(context.entity_name) if context.entity_name
-    lines << center(journal.title)
+    lines << center(journal.title) if journal.title && journal.title.length > 0
+    lines << center(title)
     lines << banner_line
     lines << ''
     lines << ''

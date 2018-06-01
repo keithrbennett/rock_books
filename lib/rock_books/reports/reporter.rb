@@ -20,6 +20,11 @@ module Reporter
   end
 
 
+  def account_code_name_type_string(account)
+    "#{account.code} -- #{account.name}  (#{account.type.to_s.capitalize})"
+  end
+
+
   def format_amount(amount)
     "%9.2f" % amount
   end

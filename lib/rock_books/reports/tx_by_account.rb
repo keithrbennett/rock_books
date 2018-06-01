@@ -31,7 +31,7 @@ class TxByAccount
 
   def account_header(account, account_total)
     total_string = "%.2f" % account_total
-    title =  "Total: #{total_string} -- #{account.code} -- #{account.name}  (#{account.type.to_s.capitalize})"
+    title =  "Total: #{total_string} -- #{account_code_name_type_string(account)})"
 
     <<~HEREDOC
     #{banner_line}

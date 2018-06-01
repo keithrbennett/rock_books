@@ -10,6 +10,7 @@ require_relative '../reports/multidoc_transaction_report'
 require_relative '../reports/report_context'
 require_relative '../reports/transaction_report'
 require_relative '../reports/tx_by_account'
+require_relative '../reports/tx_one_account'
 
 module RockBooks
 
@@ -18,7 +19,7 @@ module RockBooks
     FILTERS = JournalEntryFilters
 
     def report_context
-      ReportContext.new(entity_name, chart_of_accounts, journals, nil, nil, 80)
+      @report_context ||= ReportContext.new(entity_name, chart_of_accounts, journals, nil, nil, 80)
     end
 
 
@@ -32,6 +33,11 @@ module RockBooks
       report_hash['balance_sheet'] = BalanceSheet.new(context).call
       report_hash['income_statement'] = IncomeStatement.new(context).call
 
+      chart_of_accounts.accounts.each do |account|
+        key = 'acct_' + account.code
+        report = TxOneAccount.new(context, account.code)
+        report_hash[key] = report
+      end
       report_hash
     end
 
