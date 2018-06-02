@@ -12,7 +12,7 @@ module RockBooks
     include JournalEntryFilters
     extend Forwardable
 
-    attr_reader :book_set, :entity_name, :interactive_mode, :options
+    attr_reader :book_set, :entity_name, :interactive_mode, :options, :verbose_mode
 
 
     class Command < Struct.new(:min_string, :max_string, :action); end
@@ -39,9 +39,10 @@ module RockBooks
     HELP_TEXT = "
 Command Line Switches:                    [rock-books version #{RockBooks::VERSION} at https://github.com/keithrbennett/rock_books]
 
--o {i,j,k,p,y}            - outputs data in inspect, JSON, pretty JSON, puts, or YAML format when not in shell mode
--s                        - run in shell mode
--v                        - verbose mode
+-e   entity name for reports, default: '' (empty)
+-i   input directory specification, default: '.' (current directory)
+-o   output (reports) directory specification, default: '.' (current directory)
+-s   run in shell mode
 
 Commands:
 
@@ -65,14 +66,8 @@ When in interactive shell mode:
       @options = options
       @interactive_mode = !!(options.interactive_mode)
       @entity_name = options.entity_name
+      @verbose_mode = options.verbose
       # book_set is set with a lazy initializer
-    end
-
-
-    # Until command line option parsing is added, the only way to specify
-    # verbose mode is in the environment variable MAC_WIFI_OPTS.
-    def verbose_mode
-      options.verbose
     end
 
 

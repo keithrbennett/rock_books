@@ -1,3 +1,4 @@
+require 'awesome_print'
 require 'optparse'
 require 'pry'
 
@@ -15,22 +16,37 @@ class Main
 
     OptionParser.new do |parser|
 
-      parser.on("-e", "--entity_name NAME", "Entity name, for reports.") do |v|
+      parser.on('-e', '--entity_name NAME', "Entity name, for reports, default: '' (empty)") do |v|
         options.entity_name = v
       end
 
-      parser.on("-i", "--input_dir DIR", "Input directory containing source data files") do |v|
+      parser.on('-i', '--input_dir DIR',
+          "Input directory containing source data files, default: '.' (current directory)") do |v|
         options.input_dir = File.expand_path(v)
       end
 
-      parser.on("-o", "--output_dir DIR", "Output directory to which report files will be written") do |v|
+      parser.on('-o', '--output_dir DIR',
+          "Output directory to which report files will be written, default: '.' (current directory)") do |v|
         options.output_dir = File.expand_path(v)
       end
 
-      parser.on("-s", "--shell", "Start interactive shell") do |v|
+      parser.on('-s', '--shell', 'Start interactive shell') do |v|
         options.interactive_mode = true
       end
+
+      parser.on('-v', '--[no-]verbose', 'Verbose mode') do |v|
+        options.verbose_mode = v
+      end
     end.parse!
+
+    options.entity_name ||= ''
+    options.input_dir ||= '.'
+    options.output_dir ||= '.'
+
+    if options.verbose_mode
+      puts "Run Options:"
+      ap options.to_h
+    end
 
     options
   end
