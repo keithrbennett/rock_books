@@ -32,6 +32,8 @@ module RockBooks
     def_delegator :book_set, :chart_of_accounts
     def_delegator :book_set, :chart_of_accounts, :chart
 
+    # For conveniently finding the project on Github from the shell
+    PROJECT_URL = 'https://github.com/keithrbennett/rock_books'
 
     # Help text to be used when requested by 'h' command, in case of unrecognized or nonexistent command, etc.
     HELP_TEXT = "
@@ -63,7 +65,7 @@ When in interactive shell mode:
       @options = options
       @interactive_mode = !!(options.interactive_mode)
       @entity_name = options.entity_name
-      load_data
+      # book_set is set with a lazy initializer
     end
 
 
@@ -119,6 +121,8 @@ When in interactive shell mode:
 
     # Look up the command name and, if found, run it. If not, execute the passed block.
     def attempt_command_action(command, *args, &error_handler_block)
+      command = 'help' if command.nil?
+
       action = find_command_action(command)
 
       if action
@@ -184,8 +188,13 @@ When in interactive shell mode:
     end
 
 
+    def book_set
+      @book_set ||= load_data
+    end
+
+
     def load_data
-      @book_set = BookSetLoader.load(entity_name, options.input_dir)
+      self.book_set = BookSetLoader.load(entity_name, options.input_dir)
     end
     alias_method :reload_data, :load_data
 
