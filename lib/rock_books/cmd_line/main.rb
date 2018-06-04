@@ -31,8 +31,8 @@ class Main
   end
 
 
-    # Parses the command line with Ruby's internal 'optparse'.
-  # optparse removes what it processes from ARGV, which simplifies our command parsing.
+  # Parses the command line with Ruby's internal 'optparse'.
+  # OptionParser#parse! removes what it processes from ARGV, which simplifies our command parsing.
   def parse_command_line
     prepend_environment_options
     options = options_with_defaults
