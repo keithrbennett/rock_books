@@ -56,10 +56,6 @@ class Main
   # and reports (*.rpt) will be output to this directory as well.
   def call
     options = parse_command_line
-
-    if (! options.interactive_mode) && ARGV.empty?
-      puts "!!! No operations specified on the command line in non-interactive mode. !!!"
-    end
     CommandLineInterface.new(options).call
   end
 end

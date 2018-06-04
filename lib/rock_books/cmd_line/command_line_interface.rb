@@ -2,6 +2,7 @@ require 'forwardable'
 require 'ostruct'
 
 require_relative '../version'
+require_relative '../reports/reporter'
 require_relative '../helpers/book_set_loader'
 
 module RockBooks
@@ -76,6 +77,10 @@ When in interactive shell mode:
     end
 
 
+    def enclose_in_hyphen_lines(string)
+      hyphen_line = "#{'-' * 80}\n"
+      hyphen_line + string + "\n" + hyphen_line
+    end
     # Pry will output the content of the method from which it was called.
     # This small method exists solely to reduce the amount of pry's output
     # that is not needed here.
@@ -116,7 +121,8 @@ When in interactive shell mode:
 
     # Look up the command name and, if found, run it. If not, execute the passed block.
     def attempt_command_action(command, *args, &error_handler_block)
-      command = 'help' if command.nil?
+      no_command_specified = command.nil?
+      command = 'help' if no_command_specified
 
       action = find_command_action(command)
 
@@ -125,6 +131,10 @@ When in interactive shell mode:
       else
         error_handler_block.call
         nil
+      end
+
+      if no_command_specified
+        puts enclose_in_hyphen_lines('! No operations specified !')
       end
     end
 
