@@ -47,7 +47,9 @@ Command Line Switches:                    [rock-books version #{RockBooks::VERSI
 
 Commands:
 
-a[ll_reports]             - generate all reports; options: 'p': print, 'w': write to files
+rep[orts]                 - return an OpenStruct containing all reports (interactive shell mode only)
+d[isplay_reports]         - display all reports on stdout
+w[rite_reports]           - write all reports to the output directory (see -o option)
 e[ntity_name]             - entity name for reports
 c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
@@ -125,9 +127,10 @@ When in interactive shell mode:
       command = 'help' if no_command_specified
 
       action = find_command_action(command)
+      result = nil
 
       if action
-        action.(*args)
+        result = action.(*args)
       else
         error_handler_block.call
         nil
@@ -136,6 +139,7 @@ When in interactive shell mode:
       if no_command_specified
         puts enclose_in_hyphen_lines('! No operations specified !')
       end
+      result
     end
 
 
@@ -159,7 +163,7 @@ When in interactive shell mode:
       attempt_command_action(ARGV[0], *ARGV[1..-1]) do
         print_help
         raise BadCommandError.new(
-            %Q{! Unrecognized command. Command was "#{ARGV.first.inspect}" and options were #{ARGV[1..-1].inspect}.})
+            %Q{! Unrecognized command. Command was #{ARGV.first.inspect} and options were #{ARGV[1..-1].inspect}.})
       end
     end
 
@@ -199,7 +203,7 @@ When in interactive shell mode:
 
 
     def load_data
-      self.book_set = BookSetLoader.load(entity_name, options.input_dir)
+      @book_set = BookSetLoader.load(entity_name, options.input_dir)
     end
     alias_method :reload_data, :load_data
 
@@ -210,28 +214,25 @@ When in interactive shell mode:
     end
 
 
-    def cmd_a(args)
-      choice = args&.first&.chars&.first
+    # All reports as Ruby objects; only makes sense in shell mode.
+    def cmd_rep
+      unless options.interactive_mode
+        raise Error.new("Option 'all_reports' is only available in shell mode. Try 'display_reports' or 'write_reports'.")
+      end
 
-      case choice
-      when 'p'
-        book_set.all_reports($filter).each do |short_name, report_text|
-          puts "#{short_name}:\n\n"
-          puts report_text
-          puts "\n\n\n"
-        end
-        nil
-      when 'w'
-        book_set.all_reports_to_files(options.output_dir, $filter)
-        nil
-      when nil
-        os = OpenStruct.new(book_set.all_reports($filter))
-        def os.keys; to_h.keys;     end  # add hash methods for convenience
-        def os.values; to_h.values; end
-        def os.at(index); self.public_send(keys[index]); end # to access as array, e.g. `a.at(1)`
-        os
-      else
-        raise Error.new("Invalid option '#{choice} for all_reports; must be in #{%w(p w)} or nil.")
+      os = OpenStruct.new(book_set.all_reports($filter))
+      def os.keys; to_h.keys;     end  # add hash methods for convenience
+      def os.values; to_h.values; end
+      def os.at(index); self.public_send(keys[index]); end # to access as array, e.g. `a.at(1)`
+      os
+    end
+
+
+    def cmd_d
+      book_set.all_reports($filter).each do |short_name, report_text|
+        puts "#{short_name}:\n\n"
+        puts report_text
+        puts "\n\n\n"
       end
     end
 
@@ -246,6 +247,11 @@ When in interactive shell mode:
     end
 
 
+    def cmd_w
+      book_set.all_reports_to_files(options.output_dir, $filter)
+    end
+
+
     def cmd_x
       quit
     end
@@ -253,14 +259,16 @@ When in interactive shell mode:
 
     def commands
       @commands_ ||= [
-          Command.new('a',   'all_reports',       -> (*options)  { cmd_a(options)    }),
+          Command.new('rep', 'reports',           -> (*_options) { cmd_rep           }),
+          Command.new('d',   'display_reports',   -> (*_options) { cmd_d             }),
+          Command.new('w',   'write_reports',     -> (*_options) { cmd_w             }),
           Command.new('c',   'chart_of_accounts', -> (*_options) { cmd_c             }),
           Command.new('e',   'entity_name',       -> (*options)  { cmd_e(options)    }),
           Command.new('jo',  'journals',          -> (*_options) { cmd_j             }),
           Command.new('h',   'help',              -> (*_options) { cmd_h             }),
           Command.new('proj','project_page',      -> (*_options) { cmd_proj          }),
           Command.new('q',   'quit',              -> (*_options) { cmd_x             }),
-          Command.new('r',   'reload_data',       -> (*_options) { cmd_rel           }),
+          Command.new('rel', 'reload_data',       -> (*_options) { cmd_rel           }),
           Command.new('x',   'xit',               -> (*_options) { cmd_x             })
       ]
     end
