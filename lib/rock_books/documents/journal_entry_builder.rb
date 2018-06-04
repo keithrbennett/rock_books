@@ -127,10 +127,17 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
     tokens = line.split
     acct_amount_tokens = tokens[1..-1]
     date_string = journal.date_prefix + tokens[0]
+    raise_error = -> do
+      raise Error.new("In journal '#{journal.short_name}', date string was '#{date_string}'" +
+          " but should be a valid date in the form YYYY-MM-DD.")
+    end
+
+    raise_error.() if date_string.length != 10
+
     begin
       date = Date.iso8601(date_string)
     rescue ArgumentError
-      raise Error.new("Bad date string: [#{date_string}] in line: #{line} of journal #{journal.short_name}")
+      raise_error.()
     end
 
     acct_entries = build_acct_amount_array(date, acct_amount_tokens)
