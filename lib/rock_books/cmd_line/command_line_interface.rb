@@ -85,8 +85,13 @@ When in interactive shell mode:
     end
 
     # Look for the output directory and attempt to create it if it doesn't exist.
-    if (! File.directory?(options.output_dir)) && FileUtils.mkdir_p(options.output_dir).nil?
-      output << "Output directory '#{options.output_dir}' does not exist. "
+    dir = options.output_dir
+    subdir = File.join(dir, SINGLE_ACCT_SUBDIR)
+
+    # We need to create the reports directory and its single-account subdirectory.
+    # We can accomplish both by creating just the subdirectory.
+    if FileUtils.mkdir_p(subdir).nil?
+      output << "Output directory '#{dir}' and/or #{subdir} does not exist and could not be created. "
     end
 
     if run_options.do_receipts
