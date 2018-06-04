@@ -32,7 +32,7 @@ module RockBooks
     end
 
 
-    def process_account(entries, account)
+    def process_account(entries)
       entries.each_with_object('') do |entry, output|
         output << format_multidoc_entry(entry) << "\n"
         output << "\n" if entry.description && entry.description.length > 0
@@ -48,7 +48,7 @@ module RockBooks
       if entries.empty?
         output << "There were no transactions for this account.\n"
       else
-        output << process_account(entries, account)
+        output << process_account(entries)
         totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
         output << generate_and_format_totals('Totals', totals)
       end
