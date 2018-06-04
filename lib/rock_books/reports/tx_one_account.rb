@@ -44,10 +44,14 @@ module RockBooks
       entries = Journal.entries_in_documents(context.journals, JournalEntryFilters.account_code_filter(account_code))
       account_total = JournalEntry.total_for_code(entries, account_code)
       output = generate_header(account_total)
-      output << process_account(entries, account)
 
-      totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
-      output << generate_and_format_totals('Totals', totals)
+      if entries.empty?
+        output << "There were no transactions for this account.\n"
+      else
+        output << process_account(entries, account)
+        totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
+        output << generate_and_format_totals('Totals', totals)
+      end
 
       output
     end
