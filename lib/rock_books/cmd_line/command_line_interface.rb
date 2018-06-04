@@ -231,6 +231,11 @@ When in interactive shell mode:
     end
 
 
+    def cmd_proj
+      `open https://github.com/keithrbennett/rock_books`
+    end
+
+
     def cmd_x
       quit
     end
@@ -239,10 +244,11 @@ When in interactive shell mode:
     def commands
       @commands_ ||= [
           Command.new('a',   'all_reports',       -> (*options)  { cmd_a(options)    }),
-          Command.new('c',   'chart_of_accounts', -> (*options)  { cmd_c             }),
-          Command.new('e',   'entity_name',       -> (*options)  { cmd_e             }),
+          Command.new('c',   'chart_of_accounts', -> (*_options) { cmd_c             }),
+          Command.new('e',   'entity_name',       -> (*options)  { cmd_e(options)    }),
           Command.new('jo',  'journals',          -> (*_options) { cmd_j             }),
           Command.new('h',   'help',              -> (*_options) { cmd_h             }),
+          Command.new('proj','project_page',      -> (*_options) { cmd_proj          }),
           Command.new('q',   'quit',              -> (*_options) { cmd_x             }),
           Command.new('r',   'reload_data',       -> (*_options) { cmd_rel           }),
           Command.new('x',   'xit',               -> (*_options) { cmd_x             })
