@@ -9,7 +9,7 @@ module RockBooks
 
     def get_files_with_types(directory)
       files = Dir[File.join(directory, '*.rbt')]
-      files_with_types = files.each_with_object({}) do |filespec, files_with_types|
+      files.each_with_object({}) do |filespec, files_with_types|
         files_with_types[filespec] = ParseHelper.find_document_type_in_file(filespec)
       end
     end
@@ -19,10 +19,8 @@ module RockBooks
       size = chart_of_account_files.size
 
       if size == 0
-        raise Error.new("Chart of accounts file not found in directory #{directory}.\n" +
-                            " Does it have a '@doc_type: chart_of_accounts' line?" +
-                            " Files found were:\n" +
-                            files_with_types.ai)
+        raise Error.new("Chart of accounts file not found in input directory.\n" +
+                            " Does it have a '@doc_type: chart_of_accounts' line?")
       elsif size > 1
         raise Error.new("Expected only 1 chart of accounts file but found: #{chart_of_account_files}.")
       end
