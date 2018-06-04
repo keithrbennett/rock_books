@@ -9,26 +9,36 @@ module RockBooks
 
 class Main
 
+
+  def options_with_defaults
+    options = OpenStruct.new
+    options.input_dir   = './inputs'
+    options.output_dir  = './reports'
+    options.receipt_dir = './receipts'
+    options
+  end
+
+
   # Parses the command line with Ruby's internal 'optparse'.
   # optparse removes what it processes from ARGV, which simplifies our command parsing.
   def parse_command_line
-    options = OpenStruct.new
+    options = options_with_defaults
 
     OptionParser.new do |parser|
 
       parser.on('-i', '--input_dir DIR',
-          "Input directory containing source data files, default: '.' (current directory)") do |v|
+          "Input directory containing source data files, default: './inputs'") do |v|
         options.input_dir = File.expand_path(v)
       end
 
       parser.on('-o', '--output_dir DIR',
-          "Output directory to which report files will be written, default: '.' (current directory)") do |v|
+          "Output directory to which report files will be written, default: './reports'") do |v|
         options.output_dir = File.expand_path(v)
       end
 
-      parser.on('-r', '--receipts_dir DIR',
-          "Directory root from which to find receipt filespecs, default: '.' (current directory)") do |v|
-        options.receipts_dir = File.expand_path(v)
+      parser.on('-r', '--receipt_dir DIR',
+          "Directory root from which to find receipt filespecs, default: './receipts'") do |v|
+        options.receipt_dir = File.expand_path(v)
       end
 
       parser.on('-s', '--shell', 'Start interactive shell') do |v|

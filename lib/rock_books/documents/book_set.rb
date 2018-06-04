@@ -7,6 +7,7 @@ require_relative '../helpers/parse_helper'
 require_relative '../reports/balance_sheet'
 require_relative '../reports/income_statement'
 require_relative '../reports/multidoc_transaction_report'
+require_relative '../reports/receipts_report'
 require_relative '../reports/report_context'
 require_relative '../reports/transaction_report'
 require_relative '../reports/tx_by_account'
@@ -14,12 +15,12 @@ require_relative '../reports/tx_one_account'
 
 module RockBooks
 
-  class BookSet < Struct.new(:chart_of_accounts, :journals, :receipts_dir)
+  class BookSet < Struct.new(:chart_of_accounts, :journals, :receipt_dir)
 
     FILTERS = JournalEntryFilters
 
 
-    def initialize(chart_of_accounts, journals, receipts_dir = '.')
+    def initialize(chart_of_accounts, journals, receipt_dir)
       super
     end
 
@@ -39,6 +40,7 @@ module RockBooks
       report_hash['all_txns_by_acct'] = TxByAccount.new(context).call
       report_hash['balance_sheet'] = BalanceSheet.new(context).call
       report_hash['income_statement'] = IncomeStatement.new(context).call
+      report_hash['receipts'] = ReceiptsReport.new(context, *missing_and_existing_receipts).call
 
       chart_of_accounts.accounts.each do |account|
         key = 'acct_' + account.code
@@ -77,7 +79,7 @@ module RockBooks
 
 
     def receipt_full_filespec(receipt_filespec)
-      File.join(receipts_dir, receipt_filespec)
+      File.join(receipt_dir, receipt_filespec)
     end
 
 
@@ -87,7 +89,7 @@ module RockBooks
         entry.receipts.each do |receipt|
           file_exists = File.file?(receipt_full_filespec(receipt))
           list = (file_exists ? existing : missing)
-          list << receipt
+          list << { receipt: receipt, journal: entry.doc_short_name }
         end
       end
       [missing, existing]

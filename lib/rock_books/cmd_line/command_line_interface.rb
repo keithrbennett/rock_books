@@ -40,8 +40,9 @@ class CommandLineInterface
   HELP_TEXT = "
 Command Line Switches:                    [rock-books version #{RockBooks::VERSION} at https://github.com/keithrbennett/rock_books]
 
--i   input directory specification, default: '.' (current directory)
--o   output (reports) directory specification, default: '.' (current directory)
+-i   input directory specification, default: './inputs'
+-o   output (reports) directory specification, default: './reports'
+-r   receipts directory, default: './receipts'
 -s   run in shell mode
 
 Commands:

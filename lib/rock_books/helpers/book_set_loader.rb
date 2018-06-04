@@ -55,7 +55,7 @@ module RockBooks
 
       chart_of_accounts = ChartOfAccounts.from_file(chart_of_account_files.first)
       journals = journal_files.map { |fs| Journal.from_file(chart_of_accounts, fs) }
-      BookSet.new(chart_of_accounts, journals, options.receipts_dir)
+      BookSet.new(chart_of_accounts, journals, options.receipt_dir)
     end
 
   end
