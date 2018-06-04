@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'forwardable'
 require 'ostruct'
 
@@ -78,10 +79,13 @@ When in interactive shell mode:
 
   def validate_run_options(options)
     output = ''
+
     unless File.directory?(options.input_dir)
       output << "Input directory '#{options.input_dir}' does not exist. "
     end
-    unless File.directory?(options.output_dir)
+
+    # Look for the output directory and attempt to create it if it doesn't exist.
+    if (! File.directory?(options.output_dir)) && FileUtils.mkdir_p(options.output_dir).nil?
       output << "Output directory '#{options.output_dir}' does not exist. "
     end
 
