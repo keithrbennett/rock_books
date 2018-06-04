@@ -16,10 +16,6 @@ class Main
 
     OptionParser.new do |parser|
 
-      parser.on('-e', '--entity_name NAME', "Entity name, for reports, default: '' (empty)") do |v|
-        options.entity_name = v
-      end
-
       parser.on('-i', '--input_dir DIR',
           "Input directory containing source data files, default: '.' (current directory)") do |v|
         options.input_dir = File.expand_path(v)
@@ -39,7 +35,6 @@ class Main
       end
     end.parse!
 
-    options.entity_name ||= ''
     options.input_dir ||= '.'
     options.output_dir ||= '.'
 

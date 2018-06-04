@@ -19,7 +19,7 @@ class TxByAccount
 
   def generate_header
     lines = [banner_line]
-    lines << center(context.entity_name) if context.entity_name
+    lines << center(context.entity || 'Unspecified Entity')
     lines << center("Transactions by Account")
     lines << banner_line
     lines << ''

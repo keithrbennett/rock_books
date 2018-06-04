@@ -28,7 +28,7 @@ module RockBooks
 
   def generate_header
     lines = [banner_line]
-    lines << center(context.entity_name) if context.entity_name
+    lines << center(context.entity || 'Unspecified Entity')
     lines << "#{center("Income Statement -- #{start_date} to #{end_date}")}"
     lines << banner_line
     lines << ''

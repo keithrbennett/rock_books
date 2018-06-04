@@ -45,7 +45,7 @@ module RockBooks
     # Uses all *.rbt files in the specified directory; uses @doc_type to determine which
     # is the chart of accounts and which are journals.
     # To exclude a file, make the extension other than .rdt.
-    def load(entity_name, directory)
+    def load(directory)
 
       files_with_types = get_files_with_types(directory)
 
@@ -57,7 +57,7 @@ module RockBooks
 
       chart_of_accounts = ChartOfAccounts.from_file(chart_of_account_files.first)
       journals = journal_files.map { |fs| Journal.from_file(chart_of_accounts, fs) }
-      BookSet.new(entity_name, chart_of_accounts, journals)
+      BookSet.new(chart_of_accounts, journals)
     end
 
   end

@@ -5,7 +5,7 @@ require_relative '../errors/error'
 module RockBooks
 class ChartOfAccounts
 
-  attr_reader :doc_type, :title, :accounts
+  attr_reader :doc_type, :title, :accounts, :entity
 
 
   def self.from_file(file)
@@ -23,9 +23,11 @@ class ChartOfAccounts
   def parse_line(line)
     case line.strip
     when /^@doc_type:/
-      @doc_type = line.split('doc_type:').last.strip
+      @doc_type = line.split('@doc_type:').last.strip
+    when /^@entity:/
+      @entity ||= line.split('@entity:').last.strip
     when /^@title:/
-      @title = line.split('title:').last.strip
+      @title = line.split('@title:').last.strip
     when /^$/
       # ignore empty line
     when /^#/

@@ -21,7 +21,7 @@ module RockBooks
 
     def generate_header(account_total)
       lines = [banner_line]
-      lines << center(context.entity_name) if context.entity_name
+      lines << center(context.entity || 'Unspecified Entity')
       lines << center("Transactions for Account #{account_code_name_type_string(account)}")
       lines << center("Total: %.2f" % account_total)
       lines << banner_line

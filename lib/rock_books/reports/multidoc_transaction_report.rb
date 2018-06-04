@@ -19,7 +19,7 @@ class MultidocTransactionReport
 
   def generate_header(sort_by)
     lines = [banner_line]
-    lines << center(context.entity_name) if context.entity_name
+    lines << center(context.entity || 'Unspecified Entity')
     lines << center('Multi Document Transaction Report')
     lines << center('Sorted by Amount Descending') if sort_by == :amount
     lines << ''

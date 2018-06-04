@@ -13,7 +13,7 @@ module RockBooks
     include JournalEntryFilters
     extend Forwardable
 
-    attr_reader :book_set, :entity_name, :interactive_mode, :options, :verbose_mode
+    attr_reader :book_set, :interactive_mode, :options, :verbose_mode
 
 
     class Command < Struct.new(:min_string, :max_string, :action); end
@@ -40,7 +40,6 @@ module RockBooks
     HELP_TEXT = "
 Command Line Switches:                    [rock-books version #{RockBooks::VERSION} at https://github.com/keithrbennett/rock_books]
 
--e   entity name for reports, default: '' (empty)
 -i   input directory specification, default: '.' (current directory)
 -o   output (reports) directory specification, default: '.' (current directory)
 -s   run in shell mode
@@ -50,7 +49,6 @@ Commands:
 rep[orts]                 - return an OpenStruct containing all reports (interactive shell mode only)
 d[isplay_reports]         - display all reports on stdout
 w[rite_reports]           - write all reports to the output directory (see -o option)
-e[ntity_name]             - entity name for reports
 c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
@@ -68,7 +66,6 @@ When in interactive shell mode:
     def initialize(options)
       @options = options
       @interactive_mode = !!(options.interactive_mode)
-      @entity_name = options.entity_name
       @verbose_mode = options.verbose
       # book_set is set with a lazy initializer
     end
@@ -203,7 +200,7 @@ When in interactive shell mode:
 
 
     def load_data
-      @book_set = BookSetLoader.load(entity_name, options.input_dir)
+      @book_set = BookSetLoader.load(options.input_dir)
     end
     alias_method :reload_data, :load_data
 
@@ -237,11 +234,6 @@ When in interactive shell mode:
     end
 
 
-    def cmd_e(args)
-      self.entity_name = args.first
-    end
-
-
     def cmd_proj
       `open https://github.com/keithrbennett/rock_books`
     end
@@ -263,7 +255,6 @@ When in interactive shell mode:
           Command.new('d',   'display_reports',   -> (*_options) { cmd_d             }),
           Command.new('w',   'write_reports',     -> (*_options) { cmd_w             }),
           Command.new('c',   'chart_of_accounts', -> (*_options) { cmd_c             }),
-          Command.new('e',   'entity_name',       -> (*options)  { cmd_e(options)    }),
           Command.new('jo',  'journals',          -> (*_options) { cmd_j             }),
           Command.new('h',   'help',              -> (*_options) { cmd_h             }),
           Command.new('proj','project_page',      -> (*_options) { cmd_proj          }),
