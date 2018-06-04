@@ -3,7 +3,13 @@ require_relative '../filters/acct_amount_filters'
 
 module RockBooks
 
-class JournalEntry < Struct.new(:date, :acct_amounts, :description, :doc_short_name)
+class JournalEntry < Struct.new(:date, :acct_amounts, :doc_short_name, :description, :receipts)
+
+
+  def initialize(date, acct_amounts = [], doc_short_name = nil, description = '', receipts = [])
+    super
+  end
+
 
   def self.entries_acct_amounts(entries)
     acct_amounts = entries.each_with_object([]) do |entry, acct_amounts|

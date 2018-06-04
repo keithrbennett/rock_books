@@ -107,8 +107,12 @@ class Journal
       unless entries.last
         raise Error.new("Entry for this description cannot be found: #{line}")
       end
-      entries.last.description ||= ''
       entries.last.description << line << "\n"
+
+      if /^Receipt:/.match(line)
+        receipt_spec = line.split(/^Receipt:/).last.strip
+        entries.last.receipts << receipt_spec
+      end
     end
   end
 

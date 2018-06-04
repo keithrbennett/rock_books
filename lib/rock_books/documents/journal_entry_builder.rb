@@ -140,8 +140,8 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
       raise_error.()
     end
 
-    acct_entries = build_acct_amount_array(date, acct_amount_tokens)
-    JournalEntry.new(date, acct_entries, nil, journal.short_name)
+    acct_amounts = build_acct_amount_array(date, acct_amount_tokens)
+    JournalEntry.new(date, acct_amounts, journal.short_name)
   end
 
 end

@@ -13,7 +13,7 @@ module RockBooks
     include JournalEntryFilters
     extend Forwardable
 
-    attr_reader :book_set, :interactive_mode, :options, :verbose_mode
+    attr_reader :book_set, :interactive_mode, :run_options, :verbose_mode
 
 
     class Command < Struct.new(:min_string, :max_string, :action); end
@@ -46,6 +46,7 @@ Command Line Switches:                    [rock-books version #{RockBooks::VERSI
 
 Commands:
 
+rec[eipts]                - receipts: l/:l list, m/:m report missing receipts
 rep[orts]                 - return an OpenStruct containing all reports (interactive shell mode only)
 d[isplay_reports]         - display all reports on stdout
 w[rite_reports]           - write all reports to the output directory (see -o option)
@@ -63,10 +64,10 @@ When in interactive shell mode:
 
 "
 
-    def initialize(options)
-      @options = options
-      @interactive_mode = !!(options.interactive_mode)
-      @verbose_mode = options.verbose
+    def initialize(run_options)
+      @run_options = run_options
+      @interactive_mode = !!(run_options.interactive_mode)
+      @verbose_mode = run_options.verbose
       # book_set is set with a lazy initializer
     end
 
@@ -80,6 +81,13 @@ When in interactive shell mode:
       hyphen_line = "#{'-' * 80}\n"
       hyphen_line + string + "\n" + hyphen_line
     end
+
+
+    def receipt_full_filespec(receipt_filespec)
+      File.join(run_options.receipts_dir, receipt_filespec)
+    end
+
+
     # Pry will output the content of the method from which it was called.
     # This small method exists solely to reduce the amount of pry's output
     # that is not needed here.
@@ -200,7 +208,7 @@ When in interactive shell mode:
 
 
     def load_data
-      @book_set = BookSetLoader.load(options.input_dir)
+      @book_set = BookSetLoader.load(run_options.input_dir)
     end
     alias_method :reload_data, :load_data
 
@@ -213,7 +221,7 @@ When in interactive shell mode:
 
     # All reports as Ruby objects; only makes sense in shell mode.
     def cmd_rep
-      unless options.interactive_mode
+      unless run_options.interactive_mode
         raise Error.new("Option 'all_reports' is only available in shell mode. Try 'display_reports' or 'write_reports'.")
       end
 
@@ -239,8 +247,25 @@ When in interactive shell mode:
     end
 
 
+    def cmd_rec(options)
+      case options.first.to_s
+      when 'l'
+        receipts = all_entries.map(&:receipts).flatten.sort
+        run_options.interactive_mode ? receipts : ap(receipts)
+      when 'm'
+        missing_receipts = all_entries.each_with_object([]) do |entry, missing_receipts|
+          entry.receipts.each do |receipt|
+            unless File.file?(receipt_full_filespec(receipt))
+              missing_receipts << { journal: entry.doc_short_name, receipt: receipt }
+            end
+          end
+        end
+        run_options.interactive_mode ? missing_receipts : ap(missing_receipts)
+      end
+    end
+
     def cmd_w
-      book_set.all_reports_to_files(options.output_dir, $filter)
+      book_set.all_reports_to_files(run_options.output_dir, $filter)
     end
 
 
@@ -251,6 +276,7 @@ When in interactive shell mode:
 
     def commands
       @commands_ ||= [
+          Command.new('rec', 'receipts',          -> (*options)  { cmd_rec(options)  }),
           Command.new('rep', 'reports',           -> (*_options) { cmd_rep           }),
           Command.new('d',   'display_reports',   -> (*_options) { cmd_d             }),
           Command.new('w',   'write_reports',     -> (*_options) { cmd_w             }),
@@ -282,7 +308,7 @@ When in interactive shell mode:
 
 
     def post_processor
-      options.post_processor
+      run_options.post_processor
     end
 
 

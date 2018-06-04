@@ -14,9 +14,15 @@ require_relative '../reports/tx_one_account'
 
 module RockBooks
 
-  class BookSet < Struct.new(:chart_of_accounts, :journals)
+  class BookSet < Struct.new(:chart_of_accounts, :journals, :receipts_dir)
 
     FILTERS = JournalEntryFilters
+
+
+    def initialize(chart_of_accounts, journals, receipts_dir = '.')
+      super
+    end
+
 
     def report_context
       @report_context ||= ReportContext.new(chart_of_accounts, journals, nil, nil, 80)

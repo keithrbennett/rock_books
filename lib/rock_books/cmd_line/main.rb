@@ -26,6 +26,11 @@ class Main
         options.output_dir = File.expand_path(v)
       end
 
+      parser.on('-r', '--receipts_dir DIR',
+          "Directory root from which to find receipt filespecs, default: '.' (current directory)") do |v|
+        options.receipts_dir = File.expand_path(v)
+      end
+
       parser.on('-s', '--shell', 'Start interactive shell') do |v|
         options.interactive_mode = true
       end
