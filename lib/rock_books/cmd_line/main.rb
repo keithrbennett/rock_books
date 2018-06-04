@@ -2,6 +2,7 @@ require 'awesome_print'
 require 'optparse'
 require 'pry'
 
+require_relative '../../rock_books'
 require_relative '../documents/book_set'
 require_relative 'command_line_interface'
 
@@ -12,9 +13,9 @@ class Main
 
   def options_with_defaults
     options = OpenStruct.new
-    options.input_dir   = './inputs'
-    options.output_dir  = './reports'
-    options.receipt_dir = './receipts'
+    options.input_dir   = DEFAULT_INPUT_DIR
+    options.output_dir  = DEFAULT_OUTPUT_DIR
+    options.receipt_dir = DEFAULT_RECEIPT_DIR
     options
   end
 
@@ -27,17 +28,17 @@ class Main
     OptionParser.new do |parser|
 
       parser.on('-i', '--input_dir DIR',
-          "Input directory containing source data files, default: './inputs'") do |v|
+          "Input directory containing source data files, default: '#{DEFAULT_INPUT_DIR}'") do |v|
         options.input_dir = File.expand_path(v)
       end
 
       parser.on('-o', '--output_dir DIR',
-          "Output directory to which report files will be written, default: './reports'") do |v|
+          "Output directory to which report files will be written, default: '#{DEFAULT_OUTPUT_DIR}'") do |v|
         options.output_dir = File.expand_path(v)
       end
 
       parser.on('-r', '--receipt_dir DIR',
-          "Directory root from which to find receipt filespecs, default: './receipts'") do |v|
+          "Directory root from which to find receipt filespecs, default: '#{DEFAULT_RECEIPT_DIR}'") do |v|
         options.receipt_dir = File.expand_path(v)
       end
 

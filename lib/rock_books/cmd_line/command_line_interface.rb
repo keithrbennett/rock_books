@@ -1,6 +1,7 @@
 require 'forwardable'
 require 'ostruct'
 
+require_relative '../../rock_books'
 require_relative '../version'
 require_relative '../reports/reporter'
 require_relative '../helpers/book_set_loader'
@@ -40,9 +41,9 @@ class CommandLineInterface
   HELP_TEXT = "
 Command Line Switches:                    [rock-books version #{RockBooks::VERSION} at https://github.com/keithrbennett/rock_books]
 
--i   input directory specification, default: './inputs'
--o   output (reports) directory specification, default: './reports'
--r   receipts directory, default: './receipts'
+-i   input directory specification, default: '#{DEFAULT_INPUT_DIR}'
+-o   output (reports) directory specification, default: '#{DEFAULT_OUTPUT_DIR}'
+-r   receipts directory, default: '#{DEFAULT_RECEIPT_DIR}'
 -s   run in shell mode
 
 Commands:
@@ -69,7 +70,25 @@ When in interactive shell mode:
     @run_options = run_options
     @interactive_mode = !!(run_options.interactive_mode)
     @verbose_mode = run_options.verbose
+    validate_run_options(run_options)
     # book_set is set with a lazy initializer
+  end
+
+
+  def validate_run_options(options)
+    output = ''
+    unless File.directory?(options.input_dir)
+      output << "Input directory '#{options.input_dir}' does not exist. "
+    end
+    unless File.directory?(options.output_dir)
+      output << "Output directory '#{options.output_dir}' does not exist. "
+    end
+    unless File.directory?(options.receipt_dir)
+      output << "Receipts directory '#{options.receipt_dir}' does not exist. "
+    end
+    unless output.length == 0
+      raise Error.new(output)
+    end
   end
 
 
