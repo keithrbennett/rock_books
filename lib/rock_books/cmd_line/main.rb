@@ -1,6 +1,7 @@
 require 'awesome_print'
 require 'optparse'
 require 'pry'
+require 'shellwords'
 
 require_relative '../../rock_books'
 require_relative '../documents/book_set'
@@ -21,9 +22,19 @@ class Main
   end
 
 
-  # Parses the command line with Ruby's internal 'optparse'.
+  def prepend_environment_options
+    env_opt_string = ENV['ROCKBOOKS_OPTIONS']
+    if env_opt_string
+      args_to_prepend = Shellwords.shellsplit(env_opt_string)
+      ARGV.unshift(args_to_prepend).flatten!
+    end
+  end
+
+
+    # Parses the command line with Ruby's internal 'optparse'.
   # optparse removes what it processes from ARGV, which simplifies our command parsing.
   def parse_command_line
+    prepend_environment_options
     options = options_with_defaults
 
     OptionParser.new do |parser|
