@@ -257,7 +257,6 @@ When in interactive shell mode:
 
 
     def find_command_action(command_string)
-      # puts "command string: " + command_string
       result = commands.detect do |cmd|
         cmd.max_string.start_with?(command_string) \
       && \
