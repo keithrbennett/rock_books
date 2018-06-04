@@ -83,11 +83,6 @@ When in interactive shell mode:
   end
 
 
-  def receipt_full_filespec(receipt_filespec)
-    File.join(run_options.receipts_dir, receipt_filespec)
-  end
-
-
   # Pry will output the content of the method from which it was called.
   # This small method exists solely to reduce the amount of pry's output
   # that is not needed here.
@@ -194,11 +189,7 @@ When in interactive shell mode:
 
   def cmd_j
     journal_names = book_set.journals.map(&:short_name)
-    if interactive_mode
-      journal_names
-    else
-      ap journal_names
-    end
+    interactive_mode ? journal_names : ap(journal_names)
   end
 
 
@@ -208,7 +199,7 @@ When in interactive shell mode:
 
 
   def load_data
-    @book_set = BookSetLoader.load(run_options.input_dir)
+    @book_set = BookSetLoader.load(run_options)
   end
   alias_method :reload_data, :load_data
 
@@ -247,20 +238,8 @@ When in interactive shell mode:
   end
 
 
-  def missing_and_existing_receipts
-    missing = []; existing = []
-    all_entries.each do |entry|
-      entry.receipts.each do |receipt|
-        file_exists = File.file?(receipt_full_filespec(receipt))
-        list = (file_exists ? existing : missing)
-        list << receipt
-      end
-    end
-    [missing, existing]
-  end
-
   def cmd_rec(options)
-    missing, existing = missing_and_existing_receipts
+    missing, existing = book_set.missing_and_existing_receipts
 
     print_missing  = -> { puts "Missing Receipts:"; ap missing }
     print_existing = -> { puts "Existing Receipts:"; ap existing }

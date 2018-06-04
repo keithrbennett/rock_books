@@ -70,8 +70,27 @@ module RockBooks
       @all_acct_amounts ||= Journal.acct_amounts_in_documents(journals)
     end
 
+
     def all_entries
       @all_entries ||= Journal.entries_in_documents(journals)
     end
-end
+
+
+    def receipt_full_filespec(receipt_filespec)
+      File.join(receipts_dir, receipt_filespec)
+    end
+
+
+    def missing_and_existing_receipts
+      missing = []; existing = []
+      all_entries.each do |entry|
+        entry.receipts.each do |receipt|
+          file_exists = File.file?(receipt_full_filespec(receipt))
+          list = (file_exists ? existing : missing)
+          list << receipt
+        end
+      end
+      [missing, existing]
+    end
+  end
 end
