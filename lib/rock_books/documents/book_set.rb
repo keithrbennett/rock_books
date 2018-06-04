@@ -15,12 +15,12 @@ require_relative '../reports/tx_one_account'
 
 module RockBooks
 
-  class BookSet < Struct.new(:run_options, :chart_of_accounts, :journals, :receipt_dir)
+  class BookSet < Struct.new(:run_options, :chart_of_accounts, :journals)
 
     FILTERS = JournalEntryFilters
 
 
-    def initialize(run_options, chart_of_accounts, journals, receipt_dir)
+    def initialize(run_options, chart_of_accounts, journals)
       super
     end
 
@@ -82,7 +82,7 @@ module RockBooks
 
 
     def receipt_full_filespec(receipt_filespec)
-      File.join(receipt_dir, receipt_filespec)
+      File.join(run_options.receipt_dir, receipt_filespec)
     end
 
 

@@ -56,9 +56,6 @@ class Main
       end
     end.parse!
 
-    options.input_dir ||= '.'
-    options.output_dir ||= '.'
-
     if options.verbose_mode
       puts "Run Options:"
       ap options.to_h
@@ -71,8 +68,8 @@ class Main
   # Arg is a directory containing 'chart_of_accounts.rbd' and '*journal*.rbd' for input,
   # and reports (*.rpt) will be output to this directory as well.
   def call
-    options = parse_command_line
-    CommandLineInterface.new(options).call
+    run_options = parse_command_line
+    CommandLineInterface.new(run_options).call
   end
 end
 end
