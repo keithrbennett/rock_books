@@ -16,6 +16,7 @@ class Main
     options.input_dir   = DEFAULT_INPUT_DIR
     options.output_dir  = DEFAULT_OUTPUT_DIR
     options.receipt_dir = DEFAULT_RECEIPT_DIR
+    options.do_receipts = true
     options
   end
 
@@ -48,6 +49,10 @@ class Main
 
       parser.on('-v', '--[no-]verbose', 'Verbose mode') do |v|
         options.verbose_mode = v
+      end
+
+      parser.on('', '--[no-]receipts', 'Include report on existing and missing receipts.') do |v|
+        options.do_receipts = v
       end
     end.parse!
 

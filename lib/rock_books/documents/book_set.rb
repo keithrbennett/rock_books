@@ -15,12 +15,12 @@ require_relative '../reports/tx_one_account'
 
 module RockBooks
 
-  class BookSet < Struct.new(:chart_of_accounts, :journals, :receipt_dir)
+  class BookSet < Struct.new(:run_options, :chart_of_accounts, :journals, :receipt_dir)
 
     FILTERS = JournalEntryFilters
 
 
-    def initialize(chart_of_accounts, journals, receipt_dir)
+    def initialize(run_options, chart_of_accounts, journals, receipt_dir)
       super
     end
 
@@ -40,7 +40,10 @@ module RockBooks
       report_hash['all_txns_by_acct'] = TxByAccount.new(context).call
       report_hash['balance_sheet'] = BalanceSheet.new(context).call
       report_hash['income_statement'] = IncomeStatement.new(context).call
-      report_hash['receipts'] = ReceiptsReport.new(context, *missing_and_existing_receipts).call
+
+      if run_options.do_receipts
+        report_hash['receipts'] = ReceiptsReport.new(context, *missing_and_existing_receipts).call
+      end
 
       chart_of_accounts.accounts.each do |account|
         key = 'acct_' + account.code

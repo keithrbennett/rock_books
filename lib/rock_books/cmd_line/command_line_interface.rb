@@ -70,6 +70,7 @@ When in interactive shell mode:
     @run_options = run_options
     @interactive_mode = !!(run_options.interactive_mode)
     @verbose_mode = run_options.verbose
+
     validate_run_options(run_options)
     # book_set is set with a lazy initializer
   end
@@ -83,9 +84,13 @@ When in interactive shell mode:
     unless File.directory?(options.output_dir)
       output << "Output directory '#{options.output_dir}' does not exist. "
     end
-    unless File.directory?(options.receipt_dir)
-      output << "Receipts directory '#{options.receipt_dir}' does not exist. "
+
+    if run_options.do_receipts
+      unless File.directory?(options.receipt_dir)
+        output << "Receipts directory '#{options.receipt_dir}' does not exist. "
+      end
     end
+
     unless output.length == 0
       raise Error.new(output)
     end
@@ -259,6 +264,10 @@ When in interactive shell mode:
 
 
   def cmd_rec(options)
+    unless run_options.do_receipts
+      raise Error.new("Receipt processing was requested but has been disabled with --no-receipts.")
+    end
+
     missing, existing = book_set.missing_and_existing_receipts
 
     print_missing  = -> { puts "Missing Receipts:"; ap missing }
