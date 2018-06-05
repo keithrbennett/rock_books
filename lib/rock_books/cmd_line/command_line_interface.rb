@@ -251,7 +251,7 @@ When in interactive shell mode:
     end
 
     os = OpenStruct.new(book_set.all_reports($filter))
-    def os.keys; to_h.keys;     end  # add hash methods for convenience
+    def os.keys; to_h.keys.map(&:to_s); end  # add hash methods for convenience
     def os.values; to_h.values; end
     def os.at(index); self.public_send(keys[index]); end # to access as array, e.g. `a.at(1)`
     os
@@ -300,6 +300,7 @@ When in interactive shell mode:
 
   def cmd_w
     book_set.all_reports_to_files(run_options.output_dir, $filter)
+    nil
   end
 
 

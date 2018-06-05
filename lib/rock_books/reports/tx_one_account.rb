@@ -46,7 +46,7 @@ module RockBooks
       output = generate_header(account_total)
 
       if entries.empty?
-        output << "There were no transactions for this account.\n"
+        output << "There were no transactions for this account.\n\n\n\n"
       else
         output << process_account(entries)
         totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
