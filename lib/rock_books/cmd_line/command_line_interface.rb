@@ -285,7 +285,7 @@ When in interactive shell mode:
     case options.first.to_s
       when 'a'  # all
         if run_options.interactive_mode
-          [missing, existing]
+          { missing: missing, existing: existing }
         else
            print_missing.(); print_existing.()
         end
@@ -295,6 +295,14 @@ When in interactive shell mode:
 
       when 'e'
         run_options.interactive_mode ? existing : print_existing.()
+
+    else
+      message = "Invalid option for receipts. Must be 'a' for all, 'm' for missing, or 'e' for existing."
+      if run_options.interactive_mode
+        puts message
+      else
+        raise Error.new(message)
+      end
     end
   end
 
