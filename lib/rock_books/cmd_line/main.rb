@@ -62,6 +62,10 @@ class Main
         options.verbose_mode = v
       end
 
+      parser.on('-y', '--[no-]say', 'Say error messages.') do |v|
+        options.say = v
+      end
+
       parser.on('', '--[no-]receipts', 'Include report on existing and missing receipts.') do |v|
         options.do_receipts = v
       end
@@ -89,6 +93,10 @@ class Main
 
       #{error}
       HEREDOC
+
+      if run_options.say
+        `say #{error}`
+      end
 
       exit(-1)
       binding.pry
