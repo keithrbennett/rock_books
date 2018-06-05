@@ -1,0 +1,45 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+     Transactions for Account cc.hsbc.visa -- Visa Credit Card  (Liability)
+                                 Total: 250.00
+--------------------------------------------------------------------------------
+
+
+2017-01-02         hsbc_visa  -750.00   cc.hsbc.visa  Visa Credit Card
+                               750.00      insurance  Insurance
+Professional insurance for the year 2017, Hartford Insurance
+Receipt: 01/2017-01-02-hartford-insurance.pdf
+
+
+2017-01-02         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+                               100.00    cowork.fees  Coworking Fees
+New Work City coworking fee for the month of January
+Receipt: 01/2017-01-02-nwc.pdf
+
+
+2017-01-05           ck.hsbc -2000.00        ck.hsbc  HSBC Checking
+                              2000.00   cc.hsbc.visa  Visa Credit Card
+
+2017-01-06         hsbc_visa  -500.00   cc.hsbc.visa  Visa Credit Card
+                               500.00      conf.fees  Conference Fees
+Phoenix conference registration fee
+Receipt: 01/2017-01-06-phoenix-conference-registration.pdf
+
+
+2017-01-20         hsbc_visa  -400.00   cc.hsbc.visa  Visa Credit Card
+                               400.00     tr.lodging  Travel - Lodging
+Hampton Inn Phoenix (conference)
+Receipt: 01/2017-01-20-phoenix-hampton.pdf
+
+
+Totals
+------
+
+      250.00   cc.hsbc.visa    Visa Credit Card
+    -2000.00   ck.hsbc         HSBC Checking
+      500.00   conf.fees       Conference Fees
+      100.00   cowork.fees     Coworking Fees
+      750.00   insurance       Insurance
+      400.00   tr.lodging      Travel - Lodging
+------------
+        0.00

@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+  Transactions for Account tr.mileage -- Travel - Mileage Allowance  (Expense)
+                                 Total: 117.70
+--------------------------------------------------------------------------------
+
+
+2017-01-31           general   117.70     tr.mileage  Travel - Mileage Allowance
+                              -117.70     loan.to.sh  Loan Payable to Shareholder
+Mileage reimbursement for business travel of January 2017 (see worksheet)
+
+
+Totals
+------
+
+     -117.70   loan.to.sh      Loan Payable to Shareholder
+      117.70   tr.mileage      Travel - Mileage Allowance
+------------
+        0.00

@@ -1,0 +1,439 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+                            Transactions by Account
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+             Total: 13000.00 -- ck.hsbc -- HSBC Checking  (Asset))
+--------------------------------------------------------------------------------
+
+2017-01-01           ck.hsbc  5000.00        ck.hsbc  HSBC Checking
+                             -5000.00     own.equity  Owner's Equity
+Initial Deposit from Shareholder
+
+
+2017-01-05           ck.hsbc -2000.00        ck.hsbc  HSBC Checking
+                              2000.00   cc.hsbc.visa  Visa Credit Card
+
+2017-01-07           ck.hsbc 10000.00        ck.hsbc  HSBC Checking
+                            -10000.00       sls.cons  Sales - Consulting
+Invoice #437, Dec. 2016 work, ABC, Inc.
+
+
+13000.00  Total for account: ck.hsbc - HSBC Checking
+
+
+
+--------------------------------------------------------------------------------
+                   Total: 0.00 -- paypal -- Paypal  (Asset))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: paypal - Paypal
+
+
+
+--------------------------------------------------------------------------------
+           Total: 0.00 -- accts.rec -- Accounts Receivable  (Asset))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: accts.rec - Accounts Receivable
+
+
+
+--------------------------------------------------------------------------------
+        Total: 250.00 -- cc.hsbc.visa -- Visa Credit Card  (Liability))
+--------------------------------------------------------------------------------
+
+2017-01-02         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+                               100.00    cowork.fees  Coworking Fees
+New Work City coworking fee for the month of January
+Receipt: 01/2017-01-02-nwc.pdf
+
+
+2017-01-02         hsbc_visa  -750.00   cc.hsbc.visa  Visa Credit Card
+                               750.00      insurance  Insurance
+Professional insurance for the year 2017, Hartford Insurance
+Receipt: 01/2017-01-02-hartford-insurance.pdf
+
+
+2017-01-05           ck.hsbc -2000.00        ck.hsbc  HSBC Checking
+                              2000.00   cc.hsbc.visa  Visa Credit Card
+
+2017-01-06         hsbc_visa  -500.00   cc.hsbc.visa  Visa Credit Card
+                               500.00      conf.fees  Conference Fees
+Phoenix conference registration fee
+Receipt: 01/2017-01-06-phoenix-conference-registration.pdf
+
+
+2017-01-20         hsbc_visa  -400.00   cc.hsbc.visa  Visa Credit Card
+                               400.00     tr.lodging  Travel - Lodging
+Hampton Inn Phoenix (conference)
+Receipt: 01/2017-01-20-phoenix-hampton.pdf
+
+
+250.00  Total for account: cc.hsbc.visa - Visa Credit Card
+
+
+
+--------------------------------------------------------------------------------
+   Total: -912.70 -- loan.to.sh -- Loan Payable to Shareholder  (Liability))
+--------------------------------------------------------------------------------
+
+2017-01-08           general   300.00     tr.airfare  Travel - Air Fares
+                              -300.00     loan.to.sh  Loan Payable to Shareholder
+Phoenix conference air ticket paid on personal credit card
+
+
+2017-01-20           general   495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
+                              -495.00     loan.to.sh  Loan Payable to Shareholder
+Per diem allowance for Phoenix conference (see worksheet)
+
+
+2017-01-31           general   117.70     tr.mileage  Travel - Mileage Allowance
+                              -117.70     loan.to.sh  Loan Payable to Shareholder
+Mileage reimbursement for business travel of January 2017 (see worksheet)
+
+
+-912.70  Total for account: loan.to.sh - Loan Payable to Shareholder
+
+
+
+--------------------------------------------------------------------------------
+           Total: -5000.00 -- own.equity -- Owner's Equity  (Equity))
+--------------------------------------------------------------------------------
+
+2017-01-01           ck.hsbc  5000.00        ck.hsbc  HSBC Checking
+                             -5000.00     own.equity  Owner's Equity
+Initial Deposit from Shareholder
+
+
+-5000.00  Total for account: own.equity - Owner's Equity
+
+
+
+--------------------------------------------------------------------------------
+            Total: 0.00 -- ret.earn -- Retained Earnings  (Equity))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: ret.earn - Retained Earnings
+
+
+
+--------------------------------------------------------------------------------
+         Total: -10000.00 -- sls.cons -- Sales - Consulting  (Income))
+--------------------------------------------------------------------------------
+
+2017-01-07           ck.hsbc 10000.00        ck.hsbc  HSBC Checking
+                            -10000.00       sls.cons  Sales - Consulting
+Invoice #437, Dec. 2016 work, ABC, Inc.
+
+
+-10000.00  Total for account: sls.cons - Sales - Consulting
+
+
+
+--------------------------------------------------------------------------------
+              Total: 0.00 -- bank.fees -- Bank Charges  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: bank.fees - Bank Charges
+
+
+
+--------------------------------------------------------------------------------
+    Total: 0.00 -- books.refs -- Books, Screencasts, References  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: books.refs - Books, Screencasts, References
+
+
+
+--------------------------------------------------------------------------------
+           Total: 500.00 -- conf.fees -- Conference Fees  (Expense))
+--------------------------------------------------------------------------------
+
+2017-01-06         hsbc_visa  -500.00   cc.hsbc.visa  Visa Credit Card
+                               500.00      conf.fees  Conference Fees
+Phoenix conference registration fee
+Receipt: 01/2017-01-06-phoenix-conference-registration.pdf
+
+
+500.00  Total for account: conf.fees - Conference Fees
+
+
+
+--------------------------------------------------------------------------------
+           Total: 100.00 -- cowork.fees -- Coworking Fees  (Expense))
+--------------------------------------------------------------------------------
+
+2017-01-02         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+                               100.00    cowork.fees  Coworking Fees
+New Work City coworking fee for the month of January
+Receipt: 01/2017-01-02-nwc.pdf
+
+
+100.00  Total for account: cowork.fees - Coworking Fees
+
+
+
+--------------------------------------------------------------------------------
+            Total: 0.00 -- govt.fees -- Government Fees  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: govt.fees - Government Fees
+
+
+
+--------------------------------------------------------------------------------
+Total: 0.00 -- inet.fees -- Internet Service, Domain, and Hosting Fees  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: inet.fees - Internet Service, Domain, and Hosting Fees
+
+
+
+--------------------------------------------------------------------------------
+              Total: 750.00 -- insurance -- Insurance  (Expense))
+--------------------------------------------------------------------------------
+
+2017-01-02         hsbc_visa  -750.00   cc.hsbc.visa  Visa Credit Card
+                               750.00      insurance  Insurance
+Professional insurance for the year 2017, Hartford Insurance
+Receipt: 01/2017-01-02-hartford-insurance.pdf
+
+
+750.00  Total for account: insurance - Insurance
+
+
+
+--------------------------------------------------------------------------------
+             Total: 0.00 -- int.exp -- Interest Expense  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: int.exp - Interest Expense
+
+
+
+--------------------------------------------------------------------------------
+           Total: 0.00 -- mktng.exp -- Marketing Expenses  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: mktng.exp - Marketing Expenses
+
+
+
+--------------------------------------------------------------------------------
+         Total: 0.00 -- meals.ent -- Meals & Entertainment  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: meals.ent - Meals & Entertainment
+
+
+
+--------------------------------------------------------------------------------
+         Total: 0.00 -- misc.exp -- Miscellaneous Expenses  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: misc.exp - Miscellaneous Expenses
+
+
+
+--------------------------------------------------------------------------------
+           Total: 0.00 -- prof.fees -- Professional Fees  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: prof.fees - Professional Fees
+
+
+
+--------------------------------------------------------------------------------
+        Total: 0.00 -- repair.maint -- Repair & Maintenance  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: repair.maint - Repair & Maintenance
+
+
+
+--------------------------------------------------------------------------------
+      Total: 0.00 -- ship.exp -- Shipping and Mailing Expenses  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: ship.exp - Shipping and Mailing Expenses
+
+
+
+--------------------------------------------------------------------------------
+             Total: 0.00 -- sw.exp -- Software Expense  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: sw.exp - Software Expense
+
+
+
+--------------------------------------------------------------------------------
+                Total: 0.00 -- supplies -- Supplies  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: supplies - Supplies
+
+
+
+--------------------------------------------------------------------------------
+       Total: 0.00 -- cc.proc -- Credit Card Processing Fees  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: cc.proc - Credit Card Processing Fees
+
+
+
+--------------------------------------------------------------------------------
+         Total: 300.00 -- tr.airfare -- Travel - Air Fares  (Expense))
+--------------------------------------------------------------------------------
+
+2017-01-08           general   300.00     tr.airfare  Travel - Air Fares
+                              -300.00     loan.to.sh  Loan Payable to Shareholder
+Phoenix conference air ticket paid on personal credit card
+
+
+300.00  Total for account: tr.airfare - Travel - Air Fares
+
+
+
+--------------------------------------------------------------------------------
+         Total: 0.00 -- tr.autorent -- Travel - Auto Rental  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.autorent - Travel - Auto Rental
+
+
+
+--------------------------------------------------------------------------------
+    Total: 0.00 -- tr.gas.etc -- Travel - Gas, Oil, Tolls, etc.  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.gas.etc - Travel - Gas, Oil, Tolls, etc.
+
+
+
+--------------------------------------------------------------------------------
+         Total: 0.00 -- tr.govt -- Travel - Government Fees  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.govt - Travel - Government Fees
+
+
+
+--------------------------------------------------------------------------------
+          Total: 400.00 -- tr.lodging -- Travel - Lodging  (Expense))
+--------------------------------------------------------------------------------
+
+2017-01-20         hsbc_visa  -400.00   cc.hsbc.visa  Visa Credit Card
+                               400.00     tr.lodging  Travel - Lodging
+Hampton Inn Phoenix (conference)
+Receipt: 01/2017-01-20-phoenix-hampton.pdf
+
+
+400.00  Total for account: tr.lodging - Travel - Lodging
+
+
+
+--------------------------------------------------------------------------------
+       Total: 0.00 -- tr.m.i -- Travel - Meals & Incidentals  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.m.i - Travel - Meals & Incidentals
+
+
+
+--------------------------------------------------------------------------------
+     Total: 117.70 -- tr.mileage -- Travel - Mileage Allowance  (Expense))
+--------------------------------------------------------------------------------
+
+2017-01-31           general   117.70     tr.mileage  Travel - Mileage Allowance
+                              -117.70     loan.to.sh  Loan Payable to Shareholder
+Mileage reimbursement for business travel of January 2017 (see worksheet)
+
+
+117.70  Total for account: tr.mileage - Travel - Mileage Allowance
+
+
+
+--------------------------------------------------------------------------------
+          Total: 0.00 -- tr.misc -- Travel - Miscellaneous  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.misc - Travel - Miscellaneous
+
+
+
+--------------------------------------------------------------------------------
+           Total: 0.00 -- tr.parking -- Travel - Parking  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.parking - Travel - Parking
+
+
+
+--------------------------------------------------------------------------------
+Total: 495.00 -- tr.perdiem.mi -- Travel - Per Diem (Meals and Incidentals)  (Expense))
+--------------------------------------------------------------------------------
+
+2017-01-20           general   495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
+                              -495.00     loan.to.sh  Loan Payable to Shareholder
+Per diem allowance for Phoenix conference (see worksheet)
+
+
+495.00  Total for account: tr.perdiem.mi - Travel - Per Diem (Meals and Incidentals)
+
+
+
+--------------------------------------------------------------------------------
+              Total: 0.00 -- tr.taxi -- Travel - Taxi  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.taxi - Travel - Taxi
+
+
+
+--------------------------------------------------------------------------------
+         Total: 0.00 -- tr.trainfare -- Travel - Train Fare  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.trainfare - Travel - Train Fare
+
+
+
+--------------------------------------------------------------------------------
+          Total: 0.00 -- tr.m.e -- Meals and Entertainment  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.m.e - Meals and Entertainment
+
+
+
+--------------------------------------------------------------------------------
+      Total: 0.00 -- tr.unclass -- Expenses Not Yet Classified  (Expense))
+--------------------------------------------------------------------------------
+
+0.00  Total for account: tr.unclass - Expenses Not Yet Classified
+
+
+
+Totals
+------
+
+      250.00   cc.hsbc.visa    Visa Credit Card
+    13000.00   ck.hsbc         HSBC Checking
+      500.00   conf.fees       Conference Fees
+      100.00   cowork.fees     Coworking Fees
+      750.00   insurance       Insurance
+     -912.70   loan.to.sh      Loan Payable to Shareholder
+    -5000.00   own.equity      Owner's Equity
+   -10000.00   sls.cons        Sales - Consulting
+      300.00   tr.airfare      Travel - Air Fares
+      400.00   tr.lodging      Travel - Lodging
+      117.70   tr.mileage      Travel - Mileage Allowance
+      495.00   tr.perdiem.mi   Travel - Per Diem (Meals and Incidentals)
+------------
+        0.00

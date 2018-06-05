@@ -1,0 +1,11 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+ Transactions for Account ship.exp -- Shipping and Mailing Expenses  (Expense)
+                                  Total: 0.00
+--------------------------------------------------------------------------------
+
+
+There were no transactions for this account.
+
+
+

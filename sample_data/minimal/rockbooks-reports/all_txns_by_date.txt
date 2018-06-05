@@ -1,0 +1,75 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+                       Multi Document Transaction Report
+
+                               Source Documents:
+
+                         hsbc_visa -- HSBC Visa Journal - 2017
+                            general -- General Journal - 2017
+                  ck.hsbc -- HSBC Checking Disbursements Journal - 2017
+--------------------------------------------------------------------------------
+
+   Date     Document           Amount      Account
+   ----     --------           ------      -------
+
+2017-01-01           ck.hsbc  5000.00        ck.hsbc  HSBC Checking
+                             -5000.00     own.equity  Owner's Equity
+Initial Deposit from Shareholder
+
+2017-01-02         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+                               100.00    cowork.fees  Coworking Fees
+New Work City coworking fee for the month of January
+Receipt: 01/2017-01-02-nwc.pdf
+
+2017-01-02         hsbc_visa  -750.00   cc.hsbc.visa  Visa Credit Card
+                               750.00      insurance  Insurance
+Professional insurance for the year 2017, Hartford Insurance
+Receipt: 01/2017-01-02-hartford-insurance.pdf
+
+2017-01-05           ck.hsbc -2000.00        ck.hsbc  HSBC Checking
+                              2000.00   cc.hsbc.visa  Visa Credit Card
+
+2017-01-06         hsbc_visa  -500.00   cc.hsbc.visa  Visa Credit Card
+                               500.00      conf.fees  Conference Fees
+Phoenix conference registration fee
+Receipt: 01/2017-01-06-phoenix-conference-registration.pdf
+
+2017-01-07           ck.hsbc 10000.00        ck.hsbc  HSBC Checking
+                            -10000.00       sls.cons  Sales - Consulting
+Invoice #437, Dec. 2016 work, ABC, Inc.
+
+2017-01-08           general   300.00     tr.airfare  Travel - Air Fares
+                              -300.00     loan.to.sh  Loan Payable to Shareholder
+Phoenix conference air ticket paid on personal credit card
+
+2017-01-20           general   495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
+                              -495.00     loan.to.sh  Loan Payable to Shareholder
+Per diem allowance for Phoenix conference (see worksheet)
+
+2017-01-20         hsbc_visa  -400.00   cc.hsbc.visa  Visa Credit Card
+                               400.00     tr.lodging  Travel - Lodging
+Hampton Inn Phoenix (conference)
+Receipt: 01/2017-01-20-phoenix-hampton.pdf
+
+2017-01-31           general   117.70     tr.mileage  Travel - Mileage Allowance
+                              -117.70     loan.to.sh  Loan Payable to Shareholder
+Mileage reimbursement for business travel of January 2017 (see worksheet)
+
+Totals
+------
+
+      250.00   cc.hsbc.visa    Visa Credit Card
+    13000.00   ck.hsbc         HSBC Checking
+      500.00   conf.fees       Conference Fees
+      100.00   cowork.fees     Coworking Fees
+      750.00   insurance       Insurance
+     -912.70   loan.to.sh      Loan Payable to Shareholder
+    -5000.00   own.equity      Owner's Equity
+   -10000.00   sls.cons        Sales - Consulting
+      300.00   tr.airfare      Travel - Air Fares
+      400.00   tr.lodging      Travel - Lodging
+      117.70   tr.mileage      Travel - Mileage Allowance
+      495.00   tr.perdiem.mi   Travel - Per Diem (Meals and Incidentals)
+------------
+        0.00
+

@@ -1,0 +1,33 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+                            HSBC Visa Journal - 2017
+           Transactions for Account #cc.hsbc.visa -- Visa Credit Card
+--------------------------------------------------------------------------------
+
+
+2017-01-02    -750.00   cc.hsbc.visa  Visa Credit Card
+Professional insurance for the year 2017, Hartford Insurance
+Receipt: 01/2017-01-02-hartford-insurance.pdf
+
+2017-01-02    -100.00   cc.hsbc.visa  Visa Credit Card
+New Work City coworking fee for the month of January
+Receipt: 01/2017-01-02-nwc.pdf
+
+2017-01-06    -500.00   cc.hsbc.visa  Visa Credit Card
+Phoenix conference registration fee
+Receipt: 01/2017-01-06-phoenix-conference-registration.pdf
+
+2017-01-20    -400.00   cc.hsbc.visa  Visa Credit Card
+Hampton Inn Phoenix (conference)
+Receipt: 01/2017-01-20-phoenix-hampton.pdf
+
+Totals
+------
+
+    -1750.00   cc.hsbc.visa    Visa Credit Card
+      500.00   conf.fees       Conference Fees
+      100.00   cowork.fees     Coworking Fees
+      750.00   insurance       Insurance
+      400.00   tr.lodging      Travel - Lodging
+------------
+        0.00

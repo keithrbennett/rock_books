@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+      Transactions for Account tr.airfare -- Travel - Air Fares  (Expense)
+                                 Total: 300.00
+--------------------------------------------------------------------------------
+
+
+2017-01-08           general   300.00     tr.airfare  Travel - Air Fares
+                              -300.00     loan.to.sh  Loan Payable to Shareholder
+Phoenix conference air ticket paid on personal credit card
+
+
+Totals
+------
+
+     -300.00   loan.to.sh      Loan Payable to Shareholder
+      300.00   tr.airfare      Travel - Air Fares
+------------
+        0.00
