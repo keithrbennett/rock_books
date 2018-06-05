@@ -106,6 +106,8 @@ When in interactive shell mode:
       output << validate_receipts_dir.()
     end
 
+    output.compact!
+
     unless output.empty?
       message = output.compact.join("\n") << "\n"
       raise Error.new(message)
