@@ -264,6 +264,7 @@ When in interactive shell mode:
       puts report_text
       puts "\n\n\n"
     end
+    nil
   end
 
 

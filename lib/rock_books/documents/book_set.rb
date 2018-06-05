@@ -58,9 +58,9 @@ module RockBooks
       reports = all_reports(filter)
       reports.each do |short_name, report_text|
         filespec = if /^acct_/.match(short_name)
-          File.join(directory, SINGLE_ACCT_SUBDIR, "#{short_name}.rpt")
+          File.join(directory, SINGLE_ACCT_SUBDIR, "#{short_name}.txt")
         else
-          File.join(directory, "#{short_name}.rpt")
+          File.join(directory, "#{short_name}.txt")
         end
         File.write(filespec, report_text)
         puts "Created report for #{"%-20s" % short_name} at #{filespec}."
