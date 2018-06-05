@@ -78,30 +78,37 @@ When in interactive shell mode:
 
 
   def validate_run_options(options)
-    output = ''
 
-    unless File.directory?(options.input_dir)
-      output << "Input directory '#{options.input_dir}' does not exist. "
+    validate_input_dir = -> do
+      File.directory?(options.input_dir) ? nil : "Input directory '#{options.input_dir}' does not exist. "
     end
 
-    # Look for the output directory and attempt to create it if it doesn't exist.
-    dir = options.output_dir
-    subdir = File.join(dir, SINGLE_ACCT_SUBDIR)
+    validate_output_dir = -> do
+      dir = options.output_dir
+      subdir = File.join(dir, SINGLE_ACCT_SUBDIR)
 
-    # We need to create the reports directory and its single-account subdirectory.
-    # We can accomplish both by creating just the subdirectory.
-    if FileUtils.mkdir_p(subdir).nil?
-      output << "Output directory '#{dir}' and/or #{subdir} does not exist and could not be created. "
+      # We need to create the reports directory and its single-account subdirectory.
+      # We can accomplish both by creating just the subdirectory.
+      FileUtils.mkdir_p(subdir) ? nil : \
+          "Output directory '#{dir}' and/or #{subdir} does not exist and could not be created. "
     end
 
+    validate_receipts_dir = -> do
+      File.directory?(options.receipt_dir) ? nil : \
+          "Receipts directory '#{options.receipt_dir}' does not exist. " +
+          "If you do not want receipt handling, use the --no-receipts command line option."
+    end
+
+    output = []
+    output << validate_input_dir.()
+    output << validate_output_dir.()
     if run_options.do_receipts
-      unless File.directory?(options.receipt_dir)
-        output << "Receipts directory '#{options.receipt_dir}' does not exist. "
-      end
+      output << validate_receipts_dir.()
     end
 
-    unless output.length == 0
-      raise Error.new(output)
+    unless output.empty?
+      message = output.compact.join("\n") << "\n"
+      raise Error.new(message)
     end
   end
 

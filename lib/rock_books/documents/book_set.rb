@@ -65,7 +65,6 @@ module RockBooks
       reports = all_reports(filter)
       reports.each do |short_name, report_text|
         report_directory = /^acct_/.match(short_name) ? File.join(directory, SINGLE_ACCT_SUBDIR) : directory
-        puts report_directory
         txt_filespec  = File.join(report_directory, "#{short_name}.txt")
         html_filespec = File.join(report_directory, "#{short_name}.html")
         pdf_filespec  = File.join(report_directory, "#{short_name}.pdf")
