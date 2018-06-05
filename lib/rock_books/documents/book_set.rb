@@ -54,16 +54,25 @@ module RockBooks
     end
 
 
+    def run_command(command)
+      command = command + ' 2>&1'
+      puts command
+      `#{command}`
+    end
+
+
     def all_reports_to_files(directory = '.', filter = nil)
       reports = all_reports(filter)
       reports.each do |short_name, report_text|
-        filespec = if /^acct_/.match(short_name)
-          File.join(directory, SINGLE_ACCT_SUBDIR, "#{short_name}.txt")
-        else
-          File.join(directory, "#{short_name}.txt")
-        end
-        File.write(filespec, report_text)
-        puts "Created report for #{"%-20s" % short_name} at #{filespec}."
+        report_directory = /^acct_/.match(short_name) ? File.join(directory, SINGLE_ACCT_SUBDIR) : directory
+        puts report_directory
+        txt_filespec  = File.join(report_directory, "#{short_name}.txt")
+        html_filespec = File.join(report_directory, "#{short_name}.html")
+        pdf_filespec  = File.join(report_directory, "#{short_name}.pdf")
+        File.write(txt_filespec, report_text)
+        run_command("textutil -convert html -font 'Menlo Regular' #{txt_filespec} -output #{html_filespec}")
+        run_command("cupsfilter #{html_filespec} > #{pdf_filespec}")
+        puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
       end
     end
 
