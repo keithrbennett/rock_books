@@ -95,8 +95,7 @@ When in interactive shell mode:
 
     validate_receipts_dir = -> do
       File.directory?(options.receipt_dir) ? nil : \
-          "Receipts directory '#{options.receipt_dir}' does not exist. " +
-          "If you do not want receipt handling, use the --no-receipts command line option."
+          "Receipts directory '#{options.receipt_dir}' does not exist. "
     end
 
     output = []
@@ -109,7 +108,21 @@ When in interactive shell mode:
     output.compact!
 
     unless output.empty?
-      message = output.compact.join("\n") << "\n"
+      message = <<~HEREDOC
+      #{output.compact.join("\n")}
+
+      Running this program assumes that you you have:
+
+      * an input directory containing documents with your accounting data. 
+        The default directory for this is #{DEFAULT_INPUT_DIR} and can be overridden
+        with the -i/--input_dir option.
+
+      * Unless receipt handling is disabled with the --no-receipts option,
+        a directory where receipts can or will be stored.
+        The default directory for this is #{DEFAULT_RECEIPT_DIR} and can be overridden
+        with the -r/--receipt_dir option.
+      
+      HEREDOC
       raise Error.new(message)
     end
   end
