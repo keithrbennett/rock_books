@@ -47,7 +47,7 @@ module RockBooks
 
       chart_of_accounts.accounts.each do |account|
         key = 'acct_' + account.code
-        report = TxOneAccount.new(context, account.code)
+        report = TxOneAccount.new(context, account.code).call
         report_hash[key] = report
       end
       report_hash
