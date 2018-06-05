@@ -79,8 +79,22 @@ class Main
   # Arg is a directory containing 'chart_of_accounts.rbd' and '*journal*.rbd' for input,
   # and reports (*.rpt) will be output to this directory as well.
   def call
-    run_options = parse_command_line
-    CommandLineInterface.new(run_options).call
+    begin
+      run_options = parse_command_line
+      CommandLineInterface.new(run_options).call
+    rescue => error
+      $stderr.puts  \
+      <<~HEREDOC
+      #{error.backtrace.join("\n")}
+
+      #{error}
+      HEREDOC
+
+      exit(-1)
+      binding.pry
+      raise error
+    end
+
   end
 end
 end
