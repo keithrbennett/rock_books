@@ -84,13 +84,15 @@ When in interactive shell mode:
     end
 
     validate_output_dir = -> do
-      dir = options.output_dir
-      subdir = File.join(dir, SINGLE_ACCT_SUBDIR)
 
-      # We need to create the reports directory and its single-account subdirectory.
-      # We can accomplish both by creating just the subdirectory.
-      FileUtils.mkdir_p(subdir) ? nil : \
-          "Output directory '#{dir}' and/or #{subdir} does not exist and could not be created. "
+      # We need to create the reports directory if it does not already exist.
+      # mkdir_p silently returns if the directory already exists.
+      begin
+        FileUtils.mkdir_p(options.output_dir)
+        nil
+      rescue Errno::EACCES => error
+        "Output directory '#{options.output_dir}' does not exist and could not be created. "
+      end
     end
 
     validate_receipts_dir = -> do

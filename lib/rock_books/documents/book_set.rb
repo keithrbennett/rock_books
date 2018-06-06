@@ -63,11 +63,26 @@ module RockBooks
 
     def all_reports_to_files(directory = '.', filter = nil)
       reports = all_reports(filter)
+
+      # "./pdf/short_name.pdf" or "./pdf/single_account/short_name.pdf"
+      build_filespec = ->(short_name, file_format) do
+        fragments = [directory, file_format, "#{short_name}.#{file_format}"]
+        is_acct_report =  /^acct_/.match(short_name)
+        if is_acct_report
+          fragments.insert(2, SINGLE_ACCT_SUBDIR)
+        end
+        File.join(*fragments)
+      end
+
       reports.each do |short_name, report_text|
-        report_directory = /^acct_/.match(short_name) ? File.join(directory, SINGLE_ACCT_SUBDIR) : directory
-        txt_filespec  = File.join(report_directory, "#{short_name}.txt")
-        html_filespec = File.join(report_directory, "#{short_name}.html")
-        pdf_filespec  = File.join(report_directory, "#{short_name}.pdf")
+        txt_filespec  = build_filespec.(short_name, 'txt')
+        html_filespec = build_filespec.(short_name, 'html')
+        pdf_filespec  = build_filespec.(short_name, 'pdf')
+
+        FileUtils.mkdir_p(File.dirname(txt_filespec))
+        FileUtils.mkdir_p(File.dirname(html_filespec))
+        FileUtils.mkdir_p(File.dirname(pdf_filespec))
+
         File.write(txt_filespec, report_text)
         run_command("textutil -convert html -font 'Menlo Regular' #{txt_filespec} -output #{html_filespec}")
         run_command("cupsfilter #{html_filespec} > #{pdf_filespec}")
