@@ -5,7 +5,7 @@
 --------------------------------------------------------------------------------
 
 
-2017-01-07           ck.hsbc 10000.00        ck.hsbc  HSBC Checking
+2017-01-07      ck.hsbc.disb 10000.00        ck.hsbc  HSBC Checking
                             -10000.00       sls.cons  Sales - Consulting
 Invoice #437, Dec. 2016 work, ABC, Inc.
 

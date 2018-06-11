@@ -2,7 +2,7 @@
 @title: HSBC Checking Disbursements Journal - 2017
 @account_code: ck.hsbc
 @debit_or_credit: debit
-@short_name: ck.hsbc
+@short_name: ck.hsbc.disb
 @date_prefix: 2017-
 
 01-01   -5000.00   own.equity

@@ -5,15 +5,15 @@
 --------------------------------------------------------------------------------
 
 
-2017-01-01           ck.hsbc  5000.00        ck.hsbc  HSBC Checking
+2017-01-01      ck.hsbc.disb  5000.00        ck.hsbc  HSBC Checking
                              -5000.00     own.equity  Owner's Equity
 Initial Deposit from Shareholder
 
 
-2017-01-05           ck.hsbc -2000.00        ck.hsbc  HSBC Checking
+2017-01-05      ck.hsbc.disb -2000.00        ck.hsbc  HSBC Checking
                               2000.00   cc.hsbc.visa  Visa Credit Card
 
-2017-01-07           ck.hsbc 10000.00        ck.hsbc  HSBC Checking
+2017-01-07      ck.hsbc.disb 10000.00        ck.hsbc  HSBC Checking
                             -10000.00       sls.cons  Sales - Consulting
 Invoice #437, Dec. 2016 work, ABC, Inc.
 

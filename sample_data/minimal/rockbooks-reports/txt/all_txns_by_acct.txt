@@ -8,15 +8,15 @@
              Total: 13000.00 -- ck.hsbc -- HSBC Checking  (Asset))
 --------------------------------------------------------------------------------
 
-2017-01-01           ck.hsbc  5000.00        ck.hsbc  HSBC Checking
+2017-01-01      ck.hsbc.disb  5000.00        ck.hsbc  HSBC Checking
                              -5000.00     own.equity  Owner's Equity
 Initial Deposit from Shareholder
 
 
-2017-01-05           ck.hsbc -2000.00        ck.hsbc  HSBC Checking
+2017-01-05      ck.hsbc.disb -2000.00        ck.hsbc  HSBC Checking
                               2000.00   cc.hsbc.visa  Visa Credit Card
 
-2017-01-07           ck.hsbc 10000.00        ck.hsbc  HSBC Checking
+2017-01-07      ck.hsbc.disb 10000.00        ck.hsbc  HSBC Checking
                             -10000.00       sls.cons  Sales - Consulting
 Invoice #437, Dec. 2016 work, ABC, Inc.
 
@@ -57,7 +57,7 @@ Professional insurance for the year 2017, Hartford Insurance
 Receipt: 01/2017-01-02-hartford-insurance.pdf
 
 
-2017-01-05           ck.hsbc -2000.00        ck.hsbc  HSBC Checking
+2017-01-05      ck.hsbc.disb -2000.00        ck.hsbc  HSBC Checking
                               2000.00   cc.hsbc.visa  Visa Credit Card
 
 2017-01-06         hsbc_visa  -500.00   cc.hsbc.visa  Visa Credit Card
@@ -103,7 +103,7 @@ Mileage reimbursement for business travel of January 2017 (see worksheet)
            Total: -5000.00 -- own.equity -- Owner's Equity  (Equity))
 --------------------------------------------------------------------------------
 
-2017-01-01           ck.hsbc  5000.00        ck.hsbc  HSBC Checking
+2017-01-01      ck.hsbc.disb  5000.00        ck.hsbc  HSBC Checking
                              -5000.00     own.equity  Owner's Equity
 Initial Deposit from Shareholder
 
@@ -124,7 +124,7 @@ Initial Deposit from Shareholder
          Total: -10000.00 -- sls.cons -- Sales - Consulting  (Income))
 --------------------------------------------------------------------------------
 
-2017-01-07           ck.hsbc 10000.00        ck.hsbc  HSBC Checking
+2017-01-07      ck.hsbc.disb 10000.00        ck.hsbc  HSBC Checking
                             -10000.00       sls.cons  Sales - Consulting
 Invoice #437, Dec. 2016 work, ABC, Inc.
 

@@ -56,6 +56,7 @@ w[rite_reports]           - write all reports to the output directory (see -o op
 c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
+proj[ect_page]            - open the RockBooks Github project page in a browser
 rel[oad_data]             - reload data from input files
 q[uit]                    - exits this program (interactive shell mode only) (see also 'x')
 x[it]                     - exits this program (interactive shell mode only) (see also 'q')
