@@ -6,6 +6,11 @@ module JournalEntryFilters
   module_function
 
 
+  def filter(entries, entry_filter)
+    entries.select { |entry| entry_filter.(entry) }
+  end
+
+
   # Dates can be provided as a Ruby Date object, or as a string that will be converted to date (yyyy-mm-dd).
   def to_date(string_or_date_object)
     if string_or_date_object.is_a?(String)
@@ -40,7 +45,7 @@ module JournalEntryFilters
   end
 
 
-  def account_code_filter(account_code)
+  def account_code(account_code)
     ->(entry) do
       entry.acct_amounts.map(&:code).detect { |code| code == account_code }
     end
