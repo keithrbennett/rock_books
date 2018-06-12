@@ -55,13 +55,18 @@ Receipt: 01/2017-01-20-phoenix-hampton.pdf
                               -117.70     loan.to.sh  Loan Payable to Shareholder
 Mileage reimbursement for business travel of January 2017 (see worksheet)
 
+2017-02-01         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+                               100.00    cowork.fees  Coworking Fees
+New Work City coworking fee for the month of February
+Receipt: 02/2017-02-01-nwc.pdf
+
 Totals
 ------
 
-      250.00   cc.hsbc.visa    Visa Credit Card
+      150.00   cc.hsbc.visa    Visa Credit Card
     13000.00   ck.hsbc         HSBC Checking
       500.00   conf.fees       Conference Fees
-      100.00   cowork.fees     Coworking Fees
+      200.00   cowork.fees     Coworking Fees
       750.00   insurance       Insurance
      -912.70   loan.to.sh      Loan Payable to Shareholder
     -5000.00   own.equity      Owner's Equity

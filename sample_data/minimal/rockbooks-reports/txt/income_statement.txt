@@ -16,14 +16,14 @@ Expenses
 --------
 
       500.00   conf.fees       Conference Fees
-      100.00   cowork.fees     Coworking Fees
+      200.00   cowork.fees     Coworking Fees
       750.00   insurance       Insurance
       300.00   tr.airfare      Travel - Air Fares
       400.00   tr.lodging      Travel - Lodging
       117.70   tr.mileage      Travel - Mileage Allowance
       495.00   tr.perdiem.mi   Travel - Per Diem (Meals and Incidentals)
 ------------
-     2662.70
+     2762.70
 
-     7337.30    Net Income
+     7237.30    Net Income
 ============

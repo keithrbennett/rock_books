@@ -21,12 +21,16 @@ Receipt: 01/2017-01-06-phoenix-conference-registration.pdf
 Hampton Inn Phoenix (conference)
 Receipt: 01/2017-01-20-phoenix-hampton.pdf
 
+2017-02-01    -100.00   cc.hsbc.visa  Visa Credit Card
+New Work City coworking fee for the month of February
+Receipt: 02/2017-02-01-nwc.pdf
+
 Totals
 ------
 
-    -1750.00   cc.hsbc.visa    Visa Credit Card
+    -1850.00   cc.hsbc.visa    Visa Credit Card
       500.00   conf.fees       Conference Fees
-      100.00   cowork.fees     Coworking Fees
+      200.00   cowork.fees     Coworking Fees
       750.00   insurance       Insurance
       400.00   tr.lodging      Travel - Lodging
 ------------
