@@ -109,5 +109,13 @@ class ChartOfAccounts
       raise "Unexpected type #{type} for code #{code}."
     end
   end
+
+
+  def ==(other)
+    doc_type == other.doc_type   && \
+    title    == other.title      && \
+    accounts == other.accounts   && \
+    entity   == other.entity
+  end
 end
 end

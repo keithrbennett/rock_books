@@ -157,5 +157,18 @@ class Journal
 
   def to_json; to_h.to_json; end
   def to_yaml; to_h.to_yaml; end
+
+
+  def ==(other)
+    # excluding date_prefix from this test intentionally because it does not
+    # affect the parsed data.
+    short_name        == other.short_name          && \
+    account_code      == other.account_code        && \
+    chart_of_accounts == other.chart_of_accounts   && \
+    debit_or_credit   == other.debit_or_credit     && \
+    doc_type          == other.doc_type            && \
+    title             == other.title               && \
+    entries           == other.entries
+  end
 end
 end
