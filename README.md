@@ -19,8 +19,7 @@ the double entry bookkeeping paradigm pretty well.
 * document - a RockBooks logical document such as a chart of accounts, a journal, etc.,
 usually containing information parsed from a data file
 
-* data file - a RockBooks data file, which is a text file, which
- by convention has the extension `.rbt`
+* data file - a RockBooks data file, which is a text file with the extension `.txt`
 
 
 ## Data File Format

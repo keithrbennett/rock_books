@@ -8,7 +8,7 @@ module RockBooks
     module_function
 
     def get_files_with_types(directory)
-      files = Dir[File.join(directory, '*.rbt')]
+      files = Dir[File.join(directory, '*.txt')]
       files.each_with_object({}) do |filespec, files_with_types|
         files_with_types[filespec] = ParseHelper.find_document_type_in_file(filespec)
       end
@@ -40,7 +40,7 @@ module RockBooks
     end
 
 
-    # Uses all *.rbt files in the specified directory; uses @doc_type to determine which
+    # Uses all *.txt files in the specified directory; uses @doc_type to determine which
     # is the chart of accounts and which are journals.
     # To exclude a file, make the extension other than .rdt.
     def load(run_options)
