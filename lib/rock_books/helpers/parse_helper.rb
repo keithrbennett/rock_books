@@ -16,7 +16,7 @@ module RockBooks
 
 
     def find_document_type_in_file(filespec)
-      find_document_type(File.readlines(filespec))
+      find_document_type(File.readlines(filespec).map(&:chomp))
     end
   end
 end

@@ -9,14 +9,13 @@ class ChartOfAccounts
 
 
   def self.from_file(file)
-    self.new(File.read(file))
+    self.new(File.readlines(file).map(&:chomp))
   end
 
 
-  def initialize(input_string)
+  def initialize(input_lines)
     @accounts = []
-    lines = input_string.split("\n")
-    lines.each { |line| parse_line(line) }
+    input_lines.each { |line| parse_line(line) }
   end
 
 
@@ -49,9 +48,11 @@ class ChartOfAccounts
     end
   end
 
+
   def accounts_of_type(type)
     accounts.select { |account| account.type == type }
   end
+
 
   def account_codes_of_type(type)
     accounts_of_type(type).map(&:code)
@@ -87,6 +88,7 @@ class ChartOfAccounts
     found = account_for_code(code)
     found ? found.type : nil
   end
+
 
   def name_for_code(code)
     found = account_for_code(code)

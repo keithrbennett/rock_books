@@ -18,7 +18,7 @@ module RockBooks
 class Journal
 
   def self.from_file(chart_of_accounts, file)
-    self.new(chart_of_accounts, File.read(file))
+    self.new(chart_of_accounts, File.readlines(file).map(&:chomp))
   end
 
 
@@ -61,14 +61,13 @@ class Journal
   attr_reader :short_name, :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
 
   # short_name is a name that will appear on reports identifying the journal from which a transaction comes
-  def initialize(chart_of_accounts, input_string, short_name = nil)
+  def initialize(chart_of_accounts, input_lines, short_name = nil)
     @chart_of_accounts = chart_of_accounts
     @short_name = short_name
     @entries = []
     @date_prefix = ''
     @title = ''
-    lines = input_string.split("\n")
-    lines.each { |line| parse_line(line) }
+    input_lines.each { |line| parse_line(line) }
   end
 
 
