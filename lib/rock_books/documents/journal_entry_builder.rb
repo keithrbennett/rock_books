@@ -122,6 +122,14 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
   end
 
 
+  def validate_transaction_is_balanced(acct_amounts)
+    sum = acct_amounts.map(&:amount).sum.round(4)
+    unless sum == 0.0
+      raise "Transaction not balanced; net is #{sum}."
+    end
+  end
+
+
   def build
     # this is an account line in the form: yyyy-mm-dd 101 blah blah blah
     tokens = line.split
@@ -141,6 +149,7 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
     end
 
     acct_amounts = build_acct_amount_array(date, acct_amount_tokens)
+    validate_transaction_is_balanced(acct_amounts)
     JournalEntry.new(date, acct_amounts, journal.short_name)
   end
 

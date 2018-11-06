@@ -24,7 +24,7 @@ class CommandLineInterface
   class BadCommandError < RuntimeError; end
 
 
-  # Enable use of some BookSet methods in shell with long and short names aaa, ae:
+  # Enable use of some BookSet methods in shell with long and short aliases:
 
   def_delegator :book_set, :all_acct_amounts
   def_delegator :book_set, :all_acct_amounts, :aaa
