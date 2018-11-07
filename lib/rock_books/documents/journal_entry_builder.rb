@@ -125,7 +125,7 @@ class JournalEntryBuilder < Struct.new(:journal_entry_context)
   def validate_transaction_is_balanced(acct_amounts)
     sum = acct_amounts.map(&:amount).sum.round(4)
     unless sum == 0.0
-      raise TransactionNotBalancedError.new(sum)
+      raise TransactionNotBalancedError.new(sum, journal_entry_context)
     end
   end
 
