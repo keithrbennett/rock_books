@@ -80,6 +80,8 @@ When in interactive shell mode:
 
   def validate_run_options(options)
 
+    return if options.suppress_command_line_validation
+
     validate_input_dir = -> do
       File.directory?(options.input_dir) ? nil : "Input directory '#{options.input_dir}' does not exist. "
     end

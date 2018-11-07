@@ -39,6 +39,11 @@ class Main
 
     OptionParser.new do |parser|
 
+      parser.on("-h", "--help", "Show help") do |_help_requested|
+        ARGV << 'h' # pass on the request to the command processor
+        options.suppress_command_line_validation = true
+      end
+
       parser.on('-i', '--input_dir DIR',
           "Input directory containing source data files, default: '#{DEFAULT_INPUT_DIR}'") do |v|
         options.input_dir = File.expand_path(v)
@@ -80,10 +85,9 @@ class Main
   end
 
 
-  # Arg is a directory containing 'chart_of_accounts.rbd' and '*journal*.rbd' for input,
-  # and reports (*.rpt) will be output to this directory as well.
   def call
     begin
+      ARGV << '-h' if ARGV.empty?
       run_options = parse_command_line
       CommandLineInterface.new(run_options).call
     rescue => error
