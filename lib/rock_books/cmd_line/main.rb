@@ -95,7 +95,10 @@ class Main
       <<~HEREDOC
       #{error.backtrace.join("\n")}
 
+      #{'-' * 79}
       #{error}
+      #{'-' * 79}
+
       HEREDOC
 
       if run_options.say

@@ -5,7 +5,7 @@ module RockBooks
     module_function
 
     def chart_of_accounts
-      ChartOfAccounts.new(
+      ChartOfAccounts.from_string(
         <<~HEREDOC
           101 A Cash in Bank
           141 A Computer Equipment

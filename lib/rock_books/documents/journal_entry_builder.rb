@@ -1,23 +1,23 @@
+require_relative '../errors/transaction_not_balanced_error'
 require_relative '../types/acct_amount'
+require_relative '../types/journal_entry_context'
 require_relative 'chart_of_accounts'
 require_relative 'journal'
 
 module RockBooks
-class JournalEntryBuilder < Struct.new(:line, :journal)
+class JournalEntryBuilder < Struct.new(:journal_entry_context)
 
-  def acct_amounts_from_tokens(tokens, date, chart_of_accounts)
+  def journal;           journal_entry_context.journal;            end
+  def linenum;           journal_entry_context.linenum;            end
+  def line;              journal_entry_context.line;               end
+  def chart_of_accounts; journal_entry_context.chart_of_accounts;  end
+
+
+  def acct_amounts_from_tokens(tokens, date)
     acct_amounts = []
 
     tokens[0..-1].each_slice(2).each do |(account_code, amount)|
-      begin
-        acct_amount = AcctAmount.create_with_chart_validation(date, account_code, amount, chart_of_accounts)
-      rescue AccountNotFoundError => error
-        error.document_name = journal.short_name
-        error.line = line
-        raise
-      end
-
-      acct_amounts << acct_amount
+      acct_amounts <<  AcctAmount.create_with_chart_validation(date, account_code, amount, journal_entry_context)
     end
 
     acct_amounts
@@ -118,14 +118,14 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
       convert_signs_for_debit_credit(tokens)
     end
 
-    acct_amounts_from_tokens(tokens, date, journal.chart_of_accounts)
+    acct_amounts_from_tokens(tokens, date)
   end
 
 
   def validate_transaction_is_balanced(acct_amounts)
     sum = acct_amounts.map(&:amount).sum.round(4)
     unless sum == 0.0
-      raise "Transaction not balanced; net is #{sum}."
+      raise TransactionNotBalancedError.new(sum)
     end
   end
 
@@ -152,6 +152,5 @@ class JournalEntryBuilder < Struct.new(:line, :journal)
     validate_transaction_is_balanced(acct_amounts)
     JournalEntry.new(date, acct_amounts, journal.short_name)
   end
-
 end
 end

@@ -1,20 +1,21 @@
+require_relative '../types/journal_entry_context'
+
+
 module RockBooks
 class AccountNotFoundError < RuntimeError
 
-  attr_accessor :bad_account_code, :document_name, :line
+  attr_accessor :code, :journal_entry_context
 
-  def initialize(bad_account_code, document_name = nil, line = nil)
-    self.bad_account_code = bad_account_code
+  def initialize(code, journal_entry_context)
+    self.code = code
+    self.journal_entry_context = journal_entry_context
     super(to_s)
   end
 
 
   def to_s
-    s = "Account code not found in chart of accounts: #{bad_account_code}"
-    if document_name && line
-      s << ", document: #{document_name}, line: #{line}"
-    end
-    s
+    ctx = journal_entry_context
+    "Account code '#{code}' in journal '#{ctx.journal.short_name}', line ##{ctx.linenum} not found in chart of accounts. Line: '#{ctx.line}'"
   end
 end
 end

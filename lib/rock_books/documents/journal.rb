@@ -4,6 +4,7 @@ require 'yaml'
 
 require_relative '../errors/account_not_found_error'
 require_relative '../types/acct_amount'
+require_relative '../types/journal_entry_context'
 require_relative 'journal_entry'
 require_relative 'journal_entry_builder'
 require_relative '../reports/reporter'
@@ -19,6 +20,11 @@ class Journal
 
   def self.from_file(chart_of_accounts, file)
     self.new(chart_of_accounts, File.readlines(file).map(&:chomp))
+  end
+
+
+  def self.from_string(chart_of_accounts, string)
+    self.new(chart_of_accounts, string.split("\n"))
   end
 
 
@@ -67,11 +73,15 @@ class Journal
     @entries = []
     @date_prefix = ''
     @title = ''
-    input_lines.each { |line| parse_line(line) }
+    input_lines.each_with_index do |line, linenum|
+      context = JournalEntryContext.new(self, linenum + 1, line)
+      parse_line(context)
+    end
   end
 
 
-  def parse_line(line)
+  def parse_line(journal_entry_context)
+    line = journal_entry_context.line
     case line.strip
     when /^@doc_type:/
       @doc_type = line.split(/^@doc_type:/).last.strip
@@ -79,7 +89,7 @@ class Journal
       @account_code = line.split(/^@account_code:/).last.strip
 
       unless chart_of_accounts.include?(@account_code)
-        raise AccountNotFoundError.new(@account_code)
+        raise AccountNotFoundError.new(@account_code, journal_entry_context)
       end
 
       # if debit or credit has not yet been specified, inherit the setting from the account:
@@ -101,7 +111,7 @@ class Journal
     when /^#/
       # ignore comment line
     when /^\d/  # a date/acct/amount line starting with a number
-      entries << JournalEntryBuilder.new(line, self).build
+      entries << JournalEntryBuilder.new(journal_entry_context).build
     else # Text line(s) to be attached to the most recently parsed transaction
       unless entries.last
         raise Error.new("Entry for this description cannot be found: #{line}")

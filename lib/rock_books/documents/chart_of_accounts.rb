@@ -13,6 +13,11 @@ class ChartOfAccounts
   end
 
 
+  def self.from_string(string)
+    self.new(string.split("\n"))
+  end
+
+
   def initialize(input_lines)
     @accounts = []
     input_lines.each { |line| parse_line(line) }
