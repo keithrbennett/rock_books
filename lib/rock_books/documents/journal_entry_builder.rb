@@ -1,3 +1,4 @@
+require_relative '../errors/incorrect_sequence_error'
 require_relative '../errors/transaction_not_balanced_error'
 require_relative '../types/acct_amount'
 require_relative '../types/journal_entry_context'
@@ -26,7 +27,7 @@ class JournalEntryBuilder < Struct.new(:journal_entry_context)
 
   def validate_acct_amount_token_array_size(tokens)
     if tokens.size.odd?
-      raise Error.new("Incorrect sequence of account codes and amounts: #{tokens}")
+      raise IncorrectSequenceError.new(tokens, journal_entry_context)
     end
   end
 

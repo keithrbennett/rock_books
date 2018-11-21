@@ -13,7 +13,8 @@ class TransactionNotBalancedError < RuntimeError
     end
 
     def to_s
-      "Transaction not balanced; discrepancy is #{discrepancy}. Context: #{journal_entry_context}"
+      amount_string = "%0.2f" % discrepancy
+      "Transaction not balanced; discrepancy is #{amount_string}. Context: #{journal_entry_context}"
     end
 end
 

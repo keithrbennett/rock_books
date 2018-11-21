@@ -51,7 +51,7 @@ module RockBooks
 
     it 'raises an error when an even number of tokens greater than 0 is passed' do
       builder = create_journal_entry_builder.("#{TEST_DATE}  7.89  701  7.89  702")
-      expect { builder.build.acct_amounts }.to raise_error(Error)
+      expect { builder.build.acct_amounts }.to raise_error(IncorrectSequenceError)
     end
 
 
