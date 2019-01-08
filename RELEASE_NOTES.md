@@ -1,3 +1,14 @@
+## v0.1.6
+
+* Fixed PDF output; PDF files were corrupt because cupsfilter starting sending
+output to stderr at some point.
+
+
+## v0.1.4, v0.1.5
+
+* Intermediate unsatisfactory fixes, these versions were published but yanked. 
+
+
 ## v0.1.3
 
 * Report output now goes to separate txt, html, and pdf subdirectories.
@@ -12,9 +23,11 @@
 * Add JournalEntryContext and TransactionNotBalancedError classes.
 * Add 'from_string' methods to Journal and ChartOfAccounts.
 
+
 ## v0.1.2
 
 * Improve error message when the needed directories do not exist. 
+
 
 ## v0.1.1
 

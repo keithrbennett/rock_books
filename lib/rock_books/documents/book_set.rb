@@ -13,6 +13,8 @@ require_relative '../reports/transaction_report'
 require_relative '../reports/tx_by_account'
 require_relative '../reports/tx_one_account'
 
+require 'open3'
+
 module RockBooks
 
   class BookSet < Struct.new(:run_options, :chart_of_accounts, :journals)
@@ -55,9 +57,17 @@ module RockBooks
 
 
     def run_command(command)
-      command = command + ' 2>&1'
-      puts command
-      `#{command}`
+      puts "\n----\nRunning command: #{command}"
+      stdout, stderr, status = Open3.capture3(command)
+      puts "Status was #{status}."
+      unless stdout.size == 0
+        puts "\nStdout was:\n\n#{stdout}"
+      end
+      unless stderr.size == 0
+        puts "\nStderr was:\n\n#{stderr}"
+      end
+      puts
+      stdout
     end
 
 
@@ -85,9 +95,7 @@ module RockBooks
 
         File.write(txt_filespec, report_text)
         run_command("textutil -convert html -font 'Menlo Regular' -fontsize 10 #{txt_filespec} -output #{html_filespec}")
-        command = "cupsfilter #{html_filespec} > #{pdf_filespec}"
-        puts command
-        `command`
+        run_command("cupsfilter #{html_filespec} > #{pdf_filespec}")
         puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
       end
     end
