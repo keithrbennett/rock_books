@@ -148,44 +148,57 @@ module RockBooks
           <body>
 
             <h1>#{chart_of_accounts.entity}</h1>
+            <h4>Reports Generated at #{DateTime.now.strftime('%Y-%m-%d_%H-%M-%S')} by RockBooks version #{RockBooks::VERSION}</h4>
 
-            <h2>Financial Statements</h1>
+            <h2>Financial Statements</h2>
             <ul>
               <li><a href='balance_sheet.html'>Balance Sheet</a></li>
               <li><a href='income_statement.html'>Income Statement</a></li>
             </ul>
             
-            <h2>All Transactions</h1>
+            <h2>All Transactions</h2>
             <ul>
               <li><a href="all_txns_by_acct.html">By Account</a></li>
               <li><a href="all_txns_by_amount.html">By Amount</a></li>
               <li><a href="all_txns_by_date.html">By Date</a></li>
             </ul>
 
-            
-            <h2>Individual Accounts</h1>
+            <h2>Journals</h2>
             <ul>
-
       HEREDOC
 
+      journals.each do |journal|
+        filespec = journal.short_name + '.html'
+        caption = "#{journal.title} -- #{journal.short_name} -- #{journal.account_code}"
+        content << %Q{      <li><a href="#{filespec}">#{caption}</a></li>\n}
+      end
+
+
+      content << \
+          "    </ul>
+
+    <h2>Individual Accounts</h2>
+    <ul>
+"
       chart_of_accounts.accounts.each do |account|
         filespec = File.join('single-account', "acct_#{account.code}.html")
         caption = "#{account.name} (#{account.code})"
-        content << %Q{        <li><a href="#{filespec}">#{caption}</a></li>\n}
+        content << %Q{      <li><a href="#{filespec}">#{caption}</a></li>\n}
       end
+
+      content << "    </ul>\n"
 
       if run_options.do_receipts
-        content << "        <h2>Receipts</h2>\n" \
-                << "        <ul>" \
-                << %q{           <li><a href="receipts.html">Missing and Existing Receipts</a></li>} \
-                << "</ul>\n"
+        content << "    <h2>Receipts</h2>\n" \
+                << "    <ul>\n" \
+                << %Q{      <li><a href="receipts.html">Missing and Existing Receipts</a></li>\n} \
+                << "    </ul>\n"
       end
 
-      content << <<~HEREDOC
-          </body>
-        </html>
-      HEREDOC
-
+      content << "
+  </body>
+</html>
+"
       content
     end
   end
