@@ -75,7 +75,7 @@ module RockBooks
       reports = all_reports(filter)
 
       # "./pdf/short_name.pdf" or "./pdf/single_account/short_name.pdf"
-      build_filespec = ->(short_name, file_format) do
+      build_filespec = ->(directory, short_name, file_format) do
         fragments = [directory, file_format, "#{short_name}.#{file_format}"]
         is_acct_report =  /^acct_/.match(short_name)
         if is_acct_report
@@ -84,20 +84,27 @@ module RockBooks
         File.join(*fragments)
       end
 
+      create_index_html = -> do
+        filespec = build_filespec.(directory, 'index', 'html')
+        File.write(filespec, index_html_content(directory))
+      end
+
       reports.each do |short_name, report_text|
-        txt_filespec  = build_filespec.(short_name, 'txt')
-        html_filespec = build_filespec.(short_name, 'html')
-        pdf_filespec  = build_filespec.(short_name, 'pdf')
+        txt_filespec  = build_filespec.(directory, short_name, 'txt')
+        html_filespec = build_filespec.(directory, short_name, 'html')
+        pdf_filespec  = build_filespec.(directory, short_name, 'pdf')
 
         FileUtils.mkdir_p(File.dirname(txt_filespec))
         FileUtils.mkdir_p(File.dirname(html_filespec))
         FileUtils.mkdir_p(File.dirname(pdf_filespec))
 
         File.write(txt_filespec, report_text)
-        run_command("textutil -convert html -font 'Menlo Regular' -fontsize 10 #{txt_filespec} -output #{html_filespec}")
+        run_command("textutil -convert html -font 'Menlo Regular' -fontsize 12 #{txt_filespec} -output #{html_filespec}")
         run_command("cupsfilter #{html_filespec} > #{pdf_filespec}")
         puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
       end
+
+      create_index_html.()
     end
 
 
@@ -133,6 +140,53 @@ module RockBooks
         end
       end
       [missing, existing]
+    end
+
+    def index_html_content(directory)
+      content = <<~HEREDOC
+        <html>
+          <body>
+
+            <h1>#{chart_of_accounts.entity}</h1>
+
+            <h2>Financial Statements</h1>
+            <ul>
+              <li><a href='balance_sheet.html'>Balance Sheet</a></li>
+              <li><a href='income_statement.html'>Income Statement</a></li>
+            </ul>
+            
+            <h2>All Transactions</h1>
+            <ul>
+              <li><a href="all_txns_by_acct.html">By Account</a></li>
+              <li><a href="all_txns_by_amount.html">By Amount</a></li>
+              <li><a href="all_txns_by_date.html">By Date</a></li>
+            </ul>
+
+            
+            <h2>Individual Accounts</h1>
+            <ul>
+
+      HEREDOC
+
+      chart_of_accounts.accounts.each do |account|
+        filespec = File.join('single-account', "acct_#{account.code}.html")
+        caption = "#{account.name} (#{account.code})"
+        content << %Q{        <li><a href="#{filespec}">#{caption}</a></li>\n}
+      end
+
+      if run_options.do_receipts
+        content << "        <h2>Receipts</h2>\n" \
+                << "        <ul>" \
+                << %q{           <li><a href="receipts.html">Missing and Existing Receipts</a></li>} \
+                << "</ul>\n"
+      end
+
+      content << <<~HEREDOC
+          </body>
+        </html>
+      HEREDOC
+
+      content
     end
   end
 end
