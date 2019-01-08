@@ -85,7 +85,9 @@ module RockBooks
 
         File.write(txt_filespec, report_text)
         run_command("textutil -convert html -font 'Menlo Regular' -fontsize 10 #{txt_filespec} -output #{html_filespec}")
-        `cupsfilter #{html_filespec} > #{pdf_filespec}`
+        command = "cupsfilter #{html_filespec} > #{pdf_filespec}"
+        puts command
+        `command`
         puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
       end
     end
