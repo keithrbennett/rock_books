@@ -2,11 +2,11 @@
 <html>
 <body>
 
-<h1><%= chart_of_accounts.entity %></h1>
+<h1><%= chart_of_accounts.entity %> -- Receipts</h1>
 <p>Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d_%H-%M-%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
+<br />
 
-<h2><a href="../../receipts">Browse Receipts</a></h2>
-
+<% receipts.each  %>
 <h2>Financial Statements</h2>
 <ul>
   <li><a href='balance_sheet.html'>Balance Sheet</a></li>
@@ -23,9 +23,9 @@
 <h2>Journals</h2>
 <ul>
   <% journals.each do |journal|
-       filespec = journal.short_name + '.html'
-       caption = "#{journal.title} -- #{journal.short_name} -- #{journal.account_code}"
-  %>
+    filespec = journal.short_name + '.html'
+    caption = "#{journal.title} -- #{journal.short_name} -- #{journal.account_code}"
+%>
     <li><a href="<%= filespec %>"><%= caption %></a></li>
   <% end %>
 </ul>
@@ -38,15 +38,13 @@
       filespec = File.join('single-account', "acct_#{account.code}.html")
       caption = "#{account.name} (#{account.code})"
   %>
-  <li><a href="<%= filespec %>"><%= caption %></a></li>
+    <li><a href="<%= filespec %>"><%= caption %></a></li>
   <% end %>
 </ul>
 
 
-<h2>Receipts</h2>
-
+  <h2>Receipts</h2>
   <ul>
-    <li><a href="../../receipts">Browse Receipts</a></li>
     <% if run_options.do_receipts  %>
       <li><a href="receipts.html">Missing and Existing Receipts</a></li>
     <% end %>
