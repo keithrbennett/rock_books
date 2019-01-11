@@ -3,10 +3,23 @@
 <body>
 
 <h1><%= chart_of_accounts.entity %></h1>
-<p>Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d_%H-%M-%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
+<p>Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
 
-<h2><a href="../../receipts">Browse Receipts</a></h2>
-
+<h2>Supporting Documents</h2>
+<ul>
+<%
+  subdir_link = ->(name, caption) do
+    dir_name = File.expand_path(File.join(Dir.pwd, name))
+    if Dir.exist?(dir_name)
+      %Q{<li><a href=#{dir_name}>#{caption}</a></li>}
+    end
+  end
+%>
+  <%= subdir_link.('invoices',   'Invoices')   %>
+  <%= subdir_link.('receipts',   'Receipts')   %>
+  <%= subdir_link.('statements', 'Statements') %>
+  <%= subdir_link.('worksheets', 'Worksheets') %>
+</ul>
 <h2>Financial Statements</h2>
 <ul>
   <li><a href='balance_sheet.html'>Balance Sheet</a></li>
