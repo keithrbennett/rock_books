@@ -1,37 +1,59 @@
 <!DOCTYPE html>
+
+
 <html>
+
+<head>
+
+<!--Bootstrap:-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      padding: 18px;
+      background-color: #e7f7cd;
+      color: darkgreen;
+    }
+  </style>
+
+</head>
+
 <body>
 
 <h1><%= chart_of_accounts.entity %></h1>
-<p>Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
+<p class="muted">Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
 
 <h2>Supporting Documents</h2>
-<ul>
+
 <%
   subdir_link = ->(name, caption) do
     dir_name = File.expand_path(File.join(Dir.pwd, name))
     if Dir.exist?(dir_name)
-      %Q{<li><a href=#{dir_name}>#{caption}</a></li>}
+      %Q{<a href=#{dir_name} class="btn btn-success">#{caption}</a>}
     end
   end
 %>
-  <%= subdir_link.('invoices',   'Invoices')   %>
-  <%= subdir_link.('receipts',   'Receipts')   %>
-  <%= subdir_link.('statements', 'Statements') %>
-  <%= subdir_link.('worksheets', 'Worksheets') %>
-</ul>
+<%= subdir_link.('invoices',   'Invoices')   %>
+<%= subdir_link.('receipts',   'Receipts')   %>
+<%= subdir_link.('statements', 'Statements') %>
+<%= subdir_link.('worksheets', 'Worksheets') %>
+<br />
+<br />
+
 <h2>Financial Statements</h2>
-<ul>
-  <li><a href='balance_sheet.html'>Balance Sheet</a></li>
-  <li><a href='income_statement.html'>Income Statement</a></li>
-</ul>
+<a href='balance_sheet.html' class="btn btn-success">Balance Sheet</a>
+<a href='income_statement.html' class="btn btn-success">Income Statement</a>
+<br />
+<br />
 
 <h2>All Transactions</h2>
-<ul>
-  <li><a href="all_txns_by_acct.html">By Account</a></li>
-  <li><a href="all_txns_by_amount.html">By Amount</a></li>
-  <li><a href="all_txns_by_date.html">By Date</a></li>
-</ul>
+<a href="all_txns_by_acct.html" class="btn btn-success">By Account</a>
+<a href="all_txns_by_amount.html" class="btn btn-success">By Amount</a>
+<a href="all_txns_by_date.html" class="btn btn-success">By Date</a>
+<br />
+<br />
+
 
 <h2>Journals</h2>
 <ul>
