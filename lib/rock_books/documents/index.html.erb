@@ -42,20 +42,21 @@
 <br />
 
 <h2>Financial Statements</h2>
+<div id="financial-statements">
 <a href='balance_sheet.html' class="btn btn-success">Balance Sheet</a>
 <a href='income_statement.html' class="btn btn-success">Income Statement</a>
-<br />
-<br />
+</div>
 
-<h2>All Transactions</h2>
+<h2>All Transactions Reports</h2>
+<div id="all-transactions">
 <a href="all_txns_by_acct.html" class="btn btn-success">By Account</a>
 <a href="all_txns_by_amount.html" class="btn btn-success">By Amount</a>
 <a href="all_txns_by_date.html" class="btn btn-success">By Date</a>
-<br />
-<br />
+</div>
 
 
-<h2>Journals</h2>
+<h2>Journal Reports</h2>
+<div id="journals">
 <ul>
   <% journals.each do |journal|
        filespec = journal.short_name + '.html'
@@ -64,8 +65,11 @@
     <li><a href="<%= filespec %>"><%= caption %></a></li>
   <% end %>
 </ul>
+</div>
+
 
 <h2>Individual Accounts</h2>
+<div id="individual-accounts">
 <ul>
 
   <%
@@ -76,16 +80,17 @@
   <li><a href="<%= filespec %>"><%= caption %></a></li>
   <% end %>
 </ul>
+</div>
 
 
-<h2>Receipts</h2>
-
+<h2>Other</h2>
+<div id="other">
   <ul>
-    <li><a href="../../receipts">Browse Receipts</a></li>
     <% if run_options.do_receipts  %>
       <li><a href="receipts.html">Missing and Existing Receipts</a></li>
     <% end %>
   </ul>
+</div>
 
 </body>
 </html>
