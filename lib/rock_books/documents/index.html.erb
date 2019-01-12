@@ -17,14 +17,19 @@
       background-color: #e7f7cd;
       color: darkgreen;
     }
+
     h2 {
-      margin-top: 12px
+      margin-top: 32px;
+      margin-bottom: 12px;
     }
-      theme_color_style {
-        padding: 18px;
-        background-color: #e7f7cd;
-        color: darkgreen;
-      }
+
+    .this_page_style {
+      background-color: #e7f7cd;
+      color: darkgreen;
+      border: 0px;
+    }
+
+
 
   </style>
 
@@ -64,11 +69,10 @@
 <a href="all_txns_by_amount.html" class="btn btn-success">By Amount</a>
 <a href="all_txns_by_date.html" class="btn btn-success">By Date</a>
 </div>
-<br /><br />
 
 <% collapsible_heading = ->(caption, href) do
-
-  %Q{<div class="collapsible-heading">
+  %Q{<br /><br />
+  <div class="collapsible-heading">
     <div class="container-fluid">
       <div class="row">
 
@@ -84,7 +88,6 @@
       </div>
     </div>
   </div>
-  <br /><br />
   }
   end
 %>
@@ -93,12 +96,12 @@
 
 </div>
 <div class="collapse" id="journal-reports">
-  <div class="card card-body">
+  <div class="card card-body this_page_style">
     <ul>
       <% journals.each do |journal|
         filespec = journal.short_name + '.html'
         caption = "#{journal.title} -- #{journal.short_name} -- #{journal.account_code}"%>
-        <li><a href="<%= filespec %>"><%= caption %></a></li>
+        <li><a href="<%= filespec %>" class="this_page_style" target="_blank"><%= caption %></a></li>
       <% end %>
     </ul>
   </div>
@@ -108,7 +111,7 @@
 <%= collapsible_heading.('Individual Accounts', '#individual-accounts') %>
 
 <div class="collapse" id="individual-accounts">
-  <div class="card card-body">
+  <div class="card card-body  this_page_style">
     <ul>
 
     <%
@@ -116,7 +119,7 @@
           filespec = File.join('single-account', "acct_#{account.code}.html")
           caption = "#{account.name} (#{account.code})"
     %>
-      <li><a href="<%= filespec %>"><%= caption %></a></li>
+      <li><a href="<%= filespec %>" class="this_page_style"><%= caption %></a></li>
     <% end %>
     </ul>
 </div>
@@ -127,10 +130,10 @@
 <%= collapsible_heading.('Other', '#other') %>
 
 <div class="collapse" id="other">
-  <div class="card card-body">
+  <div class="card card-body this_page_style">
     <ul>
       <% if run_options.do_receipts  %>
-        <li><a href="receipts.html">Missing and Existing Receipts</a></li>
+        <li><a href="receipts.html" class="this_page_style">Missing and Existing Receipts</a></li>
       <% end %>
     </ul>
   </div>
