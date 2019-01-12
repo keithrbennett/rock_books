@@ -7,6 +7,8 @@
 
 <!--Bootstrap:-->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
   <style>
@@ -15,6 +17,15 @@
       background-color: #e7f7cd;
       color: darkgreen;
     }
+    h2 {
+      margin-top: 12px
+    }
+      theme_color_style {
+        padding: 18px;
+        background-color: #e7f7cd;
+        color: darkgreen;
+      }
+
   </style>
 
 </head>
@@ -25,21 +36,21 @@
 <p class="muted">Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
 
 <h2>Supporting Documents</h2>
-
-<%
-  subdir_link = ->(name, caption) do
-    dir_name = File.expand_path(File.join(Dir.pwd, name))
-    if Dir.exist?(dir_name)
-      %Q{<a href=#{dir_name} class="btn btn-success">#{caption}</a>}
+<div id="supporting-documents" style="display: inline ">
+  <%
+    subdir_link = ->(name, caption) do
+      dir_name = File.expand_path(File.join(Dir.pwd, name))
+      if Dir.exist?(dir_name)
+        %Q{<a href=#{dir_name} class="btn btn-success">#{caption}</a>}
+      end
     end
-  end
-%>
-<%= subdir_link.('invoices',   'Invoices')   %>
-<%= subdir_link.('receipts',   'Receipts')   %>
-<%= subdir_link.('statements', 'Statements') %>
-<%= subdir_link.('worksheets', 'Worksheets') %>
-<br />
-<br />
+  %>
+  <%= subdir_link.('invoices',   'Invoices')   %>
+  <%= subdir_link.('receipts',   'Receipts')   %>
+  <%= subdir_link.('statements', 'Statements') %>
+  <%= subdir_link.('worksheets', 'Worksheets') %>
+</div>
+
 
 <h2>Financial Statements</h2>
 <div id="financial-statements">
@@ -53,43 +64,76 @@
 <a href="all_txns_by_amount.html" class="btn btn-success">By Amount</a>
 <a href="all_txns_by_date.html" class="btn btn-success">By Date</a>
 </div>
+<br /><br />
 
+<% collapsible_heading = ->(caption, href) do
 
-<h2>Journal Reports</h2>
-<div id="journals">
-<ul>
-  <% journals.each do |journal|
-       filespec = journal.short_name + '.html'
-       caption = "#{journal.title} -- #{journal.short_name} -- #{journal.account_code}"
-  %>
-    <li><a href="<%= filespec %>"><%= caption %></a></li>
-  <% end %>
-</ul>
+  %Q{<div class="collapsible-heading">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm2" style="margin-right: 12px;">
+          <a class="btn btn-success" data-toggle="collapse" href="#{href}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            +/-
+          </a>
+        </div>
+
+        <div class="col-sm10">
+          <h2 style="margin: 0px;">#{caption}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br /><br />
+  }
+  end
+%>
+
+<%= collapsible_heading.('Journal Reports', '#journal-reports') %>
+
+</div>
+<div class="collapse" id="journal-reports">
+  <div class="card card-body">
+    <ul>
+      <% journals.each do |journal|
+        filespec = journal.short_name + '.html'
+        caption = "#{journal.title} -- #{journal.short_name} -- #{journal.account_code}"%>
+        <li><a href="<%= filespec %>"><%= caption %></a></li>
+      <% end %>
+    </ul>
+  </div>
 </div>
 
 
-<h2>Individual Accounts</h2>
-<div id="individual-accounts">
-<ul>
+<%= collapsible_heading.('Individual Accounts', '#individual-accounts') %>
 
-  <%
-    chart_of_accounts.accounts.each do |account|
-      filespec = File.join('single-account', "acct_#{account.code}.html")
-      caption = "#{account.name} (#{account.code})"
-  %>
-  <li><a href="<%= filespec %>"><%= caption %></a></li>
-  <% end %>
-</ul>
-</div>
+<div class="collapse" id="individual-accounts">
+  <div class="card card-body">
+    <ul>
 
-
-<h2>Other</h2>
-<div id="other">
-  <ul>
-    <% if run_options.do_receipts  %>
-      <li><a href="receipts.html">Missing and Existing Receipts</a></li>
+    <%
+        chart_of_accounts.accounts.each do |account|
+          filespec = File.join('single-account', "acct_#{account.code}.html")
+          caption = "#{account.name} (#{account.code})"
+    %>
+      <li><a href="<%= filespec %>"><%= caption %></a></li>
     <% end %>
-  </ul>
+    </ul>
+</div>
+</div>
+</div>
+
+
+<%= collapsible_heading.('Other', '#other') %>
+
+<div class="collapse" id="other">
+  <div class="card card-body">
+    <ul>
+      <% if run_options.do_receipts  %>
+        <li><a href="receipts.html">Missing and Existing Receipts</a></li>
+      <% end %>
+    </ul>
+  </div>
 </div>
 
 </body>
