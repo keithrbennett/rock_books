@@ -105,8 +105,10 @@ module RockBooks
           pdf_filespec  = build_filespec.(directory, short_name, 'pdf')
 
           File.write(txt_filespec, report_text)
-          run_command("textutil -convert html -font 'Courier New Bold' -fontsize 12 #{txt_filespec} -output #{html_filespec}")
+          # Use smaller size for the PDF but larger size for the web pages:
+          run_command("textutil -convert html -font 'Courier New Bold' -fontsize 11 #{txt_filespec} -output #{html_filespec}")
           run_command("cupsfilter #{html_filespec} > #{pdf_filespec}")
+          run_command("textutil -convert html -font 'Courier New Bold' -fontsize 14 #{txt_filespec} -output #{html_filespec}")
           puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
         end
       end
