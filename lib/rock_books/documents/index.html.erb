@@ -40,6 +40,14 @@
 <h1><%= chart_of_accounts.entity %></h1>
 <p class="muted">Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
 
+
+<h2>Financial Statements</h2>
+<div id="financial-statements">
+<a href='balance_sheet.html' class="btn btn-success">Balance Sheet</a>
+<a href='income_statement.html' class="btn btn-success">Income Statement</a>
+</div>
+
+
 <h2>Supporting Documents</h2>
 <div id="supporting-documents" style="display: inline ">
   <%
@@ -56,12 +64,6 @@
   <%= subdir_link.('worksheets', 'Worksheets') %>
 </div>
 
-
-<h2>Financial Statements</h2>
-<div id="financial-statements">
-<a href='balance_sheet.html' class="btn btn-success">Balance Sheet</a>
-<a href='income_statement.html' class="btn btn-success">Income Statement</a>
-</div>
 
 <h2>All Transactions Reports</h2>
 <div id="all-transactions">
