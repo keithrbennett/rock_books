@@ -94,7 +94,8 @@ module RockBooks
 
       create_index_html = -> do
         filespec = build_filespec.(directory, 'index', 'html')
-        File.write(filespec, index_html_content(directory))
+        File.write(filespec, index_html_content)
+        puts "Created index.html"
       end
 
       write_reports = ->do
@@ -153,7 +154,7 @@ module RockBooks
       [missing, existing]
     end
 
-    def index_html_content(directory)
+    def index_html_content
       erb_filespec = File.join(File.dirname(__FILE__), 'index.html.erb')
       erb = ERB.new(File.read(erb_filespec))
       erb.result_with_hash(
