@@ -137,8 +137,8 @@ class JournalEntryBuilder < Struct.new(:journal_entry_context)
     acct_amount_tokens = tokens[1..-1]
     date_string = journal.date_prefix + tokens[0]
     raise_error = -> do
-      raise Error.new("In journal '#{journal.short_name}', date string was '#{date_string}'" +
-          " but should be a valid date in the form YYYY-MM-DD.")
+      raise Error.new("Date string was '#{date_string}' but should be a valid date in the form YYYY-MM-DD in " + \
+          "journal '#{journal_entry_context[:journal].title}', line #{journal_entry_context[:linenum]}.")
     end
 
     raise_error.() if date_string.length != 10
