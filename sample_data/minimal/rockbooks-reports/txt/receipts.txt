@@ -9,10 +9,11 @@ Missing Receipts:
 Journal           Receipt Filespec
 -------           ----------------
 
-hsbc_visa         01/2017-01-02-nwc.pdf
-hsbc_visa         01/2017-01-02-hartford-insurance.pdf
-hsbc_visa         01/2017-01-06-phoenix-conference-registration.pdf
-hsbc_visa         02/2017-02-01-nwc.pdf
+hsbc_visa         01/2018-01-02-nwc.pdf
+hsbc_visa         01/2018-01-02-hartford-insurance.pdf
+hsbc_visa         01/2018-01-06-phoenix-conference-registration.pdf
+hsbc_visa         01/2018-01-20-phoenix-hampton.pdf
+hsbc_visa         02/2018-02-01-nwc.pdf
 
 
 
@@ -21,4 +22,4 @@ Existing Receipts:
 Journal           Receipt Filespec
 -------           ----------------
 
-hsbc_visa         01/2017-01-20-phoenix-hampton.pdf
+hsbc_visa         01/2018-01-01-sample-receipt.jpg

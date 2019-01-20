@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
                               XYZ Consulting, Inc.
-                          Balance Sheet -- 2018-06-15
+                          Balance Sheet -- 2019-01-20
 --------------------------------------------------------------------------------
 
 
@@ -15,10 +15,10 @@ Assets
 Liabilities
 -----------
 
-     -150.00   cc.hsbc.visa    Visa Credit Card
+      107.25   cc.hsbc.visa    Visa Credit Card
       912.70   loan.to.sh      Loan Payable to Shareholder
 ------------
-      762.70
+     1019.95
 
 
 Equity
@@ -28,5 +28,5 @@ Equity
 ------------
      5000.00
 
-     7237.30    Assets - (Liabilities + Equity)
+     6980.05    Assets - (Liabilities + Equity)
 ============

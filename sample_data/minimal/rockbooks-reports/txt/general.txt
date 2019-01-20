@@ -1,18 +1,18 @@
 --------------------------------------------------------------------------------
                               XYZ Consulting, Inc.
-                             General Journal - 2017
+                             General Journal - 2018
                          Transactions for Account # -- 
 --------------------------------------------------------------------------------
 
 
-2017-01-08     300.00     tr.airfare  Travel - Air Fares
+2018-01-08     300.00     tr.airfare  Travel - Air Fares
 Phoenix conference air ticket paid on personal credit card
 
-2017-01-20     495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
+2018-01-20     495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
 Per diem allowance for Phoenix conference (see worksheet)
 
-2017-01-31     117.70     tr.mileage  Travel - Mileage Allowance
-Mileage reimbursement for business travel of January 2017 (see worksheet)
+2018-01-31     117.70     tr.mileage  Travel - Mileage Allowance
+Mileage reimbursement for business travel of January 2018 (see worksheet)
 
 Totals
 ------

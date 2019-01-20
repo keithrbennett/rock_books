@@ -5,7 +5,7 @@
 --------------------------------------------------------------------------------
 
 
-2017-01-08           general   300.00     tr.airfare  Travel - Air Fares
+2018-01-08           general   300.00     tr.airfare  Travel - Air Fares
                               -300.00     loan.to.sh  Loan Payable to Shareholder
 Phoenix conference air ticket paid on personal credit card
 

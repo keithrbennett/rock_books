@@ -5,7 +5,7 @@ Transactions for Account tr.perdiem.mi -- Travel - Per Diem (Meals and Incidenta
 --------------------------------------------------------------------------------
 
 
-2017-01-20           general   495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
+2018-01-20           general   495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
                               -495.00     loan.to.sh  Loan Payable to Shareholder
 Per diem allowance for Phoenix conference (see worksheet)
 

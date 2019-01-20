@@ -1,0 +1,32 @@
+@doc_type: journal
+@title: HSBC Visa Journal - 2018
+@account_code: cc.hsbc.visa
+@short_name: hsbc_visa
+@debit_or_credit: debit
+@date_prefix: 2018-
+
+01-01     257.25  supplies
+Office Supplies
+Receipt: 01/2018-01-01-sample-receipt.jpg
+
+01-02     750   insurance
+Professional insurance for the year 2018, Hartford Insurance
+Receipt: 01/2018-01-02-hartford-insurance.pdf
+
+01-02     100   cowork.fees
+New Work City coworking fee for the month of January
+Receipt: 01/2018-01-02-nwc.pdf
+
+01-06     500   conf.fees
+Phoenix conference registration fee
+Receipt: 01/2018-01-06-phoenix-conference-registration.pdf
+
+01-20     400   tr.lodging
+Hampton Inn Phoenix (conference)
+Receipt: 01/2018-01-20-phoenix-hampton.pdf
+
+02-01     100   cowork.fees
+New Work City coworking fee for the month of February
+Receipt: 02/2018-02-01-nwc.pdf
+
+

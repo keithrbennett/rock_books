@@ -1,37 +1,42 @@
 --------------------------------------------------------------------------------
                               XYZ Consulting, Inc.
-                            HSBC Visa Journal - 2017
+                            HSBC Visa Journal - 2018
            Transactions for Account #cc.hsbc.visa -- Visa Credit Card
 --------------------------------------------------------------------------------
 
 
-2017-01-02    -750.00   cc.hsbc.visa  Visa Credit Card
-Professional insurance for the year 2017, Hartford Insurance
-Receipt: 01/2017-01-02-hartford-insurance.pdf
+2018-01-01    -257.25   cc.hsbc.visa  Visa Credit Card
+Office Supplies
+Receipt: 01/2018-01-01-sample-receipt.jpg
 
-2017-01-02    -100.00   cc.hsbc.visa  Visa Credit Card
+2018-01-02    -750.00   cc.hsbc.visa  Visa Credit Card
+Professional insurance for the year 2018, Hartford Insurance
+Receipt: 01/2018-01-02-hartford-insurance.pdf
+
+2018-01-02    -100.00   cc.hsbc.visa  Visa Credit Card
 New Work City coworking fee for the month of January
-Receipt: 01/2017-01-02-nwc.pdf
+Receipt: 01/2018-01-02-nwc.pdf
 
-2017-01-06    -500.00   cc.hsbc.visa  Visa Credit Card
+2018-01-06    -500.00   cc.hsbc.visa  Visa Credit Card
 Phoenix conference registration fee
-Receipt: 01/2017-01-06-phoenix-conference-registration.pdf
+Receipt: 01/2018-01-06-phoenix-conference-registration.pdf
 
-2017-01-20    -400.00   cc.hsbc.visa  Visa Credit Card
+2018-01-20    -400.00   cc.hsbc.visa  Visa Credit Card
 Hampton Inn Phoenix (conference)
-Receipt: 01/2017-01-20-phoenix-hampton.pdf
+Receipt: 01/2018-01-20-phoenix-hampton.pdf
 
-2017-02-01    -100.00   cc.hsbc.visa  Visa Credit Card
+2018-02-01    -100.00   cc.hsbc.visa  Visa Credit Card
 New Work City coworking fee for the month of February
-Receipt: 02/2017-02-01-nwc.pdf
+Receipt: 02/2018-02-01-nwc.pdf
 
 Totals
 ------
 
-    -1850.00   cc.hsbc.visa    Visa Credit Card
+    -2107.25   cc.hsbc.visa    Visa Credit Card
       500.00   conf.fees       Conference Fees
       200.00   cowork.fees     Coworking Fees
       750.00   insurance       Insurance
+      257.25   supplies        Supplies
       400.00   tr.lodging      Travel - Lodging
 ------------
         0.00

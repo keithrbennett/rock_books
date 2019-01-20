@@ -5,16 +5,16 @@
 --------------------------------------------------------------------------------
 
 
-2017-01-02         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+2018-01-02         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
                                100.00    cowork.fees  Coworking Fees
 New Work City coworking fee for the month of January
-Receipt: 01/2017-01-02-nwc.pdf
+Receipt: 01/2018-01-02-nwc.pdf
 
 
-2017-02-01         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+2018-02-01         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
                                100.00    cowork.fees  Coworking Fees
 New Work City coworking fee for the month of February
-Receipt: 02/2017-02-01-nwc.pdf
+Receipt: 02/2018-02-01-nwc.pdf
 
 
 Totals

@@ -1,17 +1,17 @@
 --------------------------------------------------------------------------------
                               XYZ Consulting, Inc.
-                   HSBC Checking Disbursements Journal - 2017
+                   HSBC Checking Disbursements Journal - 2018
                Transactions for Account #ck.hsbc -- HSBC Checking
 --------------------------------------------------------------------------------
 
 
-2017-01-01    5000.00        ck.hsbc  HSBC Checking
+2018-01-01    5000.00        ck.hsbc  HSBC Checking
 Initial Deposit from Shareholder
 
-2017-01-05   -2000.00        ck.hsbc  HSBC Checking
+2018-01-05   -2000.00        ck.hsbc  HSBC Checking
 
-2017-01-07   10000.00        ck.hsbc  HSBC Checking
-Invoice #437, Dec. 2016 work, ABC, Inc.
+2018-01-07   10000.00        ck.hsbc  HSBC Checking
+Invoice #437, Dec. 2017 work, ABC, Inc.
 
 Totals
 ------

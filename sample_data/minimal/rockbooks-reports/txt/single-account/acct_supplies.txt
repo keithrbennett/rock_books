@@ -1,11 +1,20 @@
 --------------------------------------------------------------------------------
                               XYZ Consulting, Inc.
             Transactions for Account supplies -- Supplies  (Expense)
-                                  Total: 0.00
+                                 Total: 257.25
 --------------------------------------------------------------------------------
 
 
-There were no transactions for this account.
+2018-01-01         hsbc_visa  -257.25   cc.hsbc.visa  Visa Credit Card
+                               257.25       supplies  Supplies
+Office Supplies
+Receipt: 01/2018-01-01-sample-receipt.jpg
 
 
+Totals
+------
 
+     -257.25   cc.hsbc.visa    Visa Credit Card
+      257.25   supplies        Supplies
+------------
+        0.00

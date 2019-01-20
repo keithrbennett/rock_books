@@ -5,9 +5,9 @@
 --------------------------------------------------------------------------------
 
 
-2017-01-31           general   117.70     tr.mileage  Travel - Mileage Allowance
+2018-01-31           general   117.70     tr.mileage  Travel - Mileage Allowance
                               -117.70     loan.to.sh  Loan Payable to Shareholder
-Mileage reimbursement for business travel of January 2017 (see worksheet)
+Mileage reimbursement for business travel of January 2018 (see worksheet)
 
 
 Totals

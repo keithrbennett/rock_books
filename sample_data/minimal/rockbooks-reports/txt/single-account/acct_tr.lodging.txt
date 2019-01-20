@@ -5,10 +5,10 @@
 --------------------------------------------------------------------------------
 
 
-2017-01-20         hsbc_visa  -400.00   cc.hsbc.visa  Visa Credit Card
+2018-01-20         hsbc_visa  -400.00   cc.hsbc.visa  Visa Credit Card
                                400.00     tr.lodging  Travel - Lodging
 Hampton Inn Phoenix (conference)
-Receipt: 01/2017-01-20-phoenix-hampton.pdf
+Receipt: 01/2018-01-20-phoenix-hampton.pdf
 
 
 Totals

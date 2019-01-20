@@ -5,10 +5,10 @@
 --------------------------------------------------------------------------------
 
 
-2017-01-02         hsbc_visa  -750.00   cc.hsbc.visa  Visa Credit Card
+2018-01-02         hsbc_visa  -750.00   cc.hsbc.visa  Visa Credit Card
                                750.00      insurance  Insurance
-Professional insurance for the year 2017, Hartford Insurance
-Receipt: 01/2017-01-02-hartford-insurance.pdf
+Professional insurance for the year 2018, Hartford Insurance
+Receipt: 01/2018-01-02-hartford-insurance.pdf
 
 
 Totals
