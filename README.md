@@ -1,23 +1,54 @@
 # RockBooks
 
-A super primitive bookkeeping system using text files as input documents and console output
-for reporting.
+A simple but useful accounting software application for small entities.
 
-A supreme goal of this project is to give _you_ control over your data. 
-Want to serialize it to YAML, JSON, CSV, or manipulate it in your custom code?
-No problem! 
+A supreme goal of this project is to give _you_ control over your data. Want to serialize it to YAML, JSON, CSV, or manipulate it in your custom code? No problem! 
 
-It assumes the traditional double entry bookkeeping system, with debits and credits.
-In general, assets and expenses are debit balance accounts, and income, liabilities and equity
-are credit balance accounts.
+After entering the data in input files, there is a processing step (a single command) that is done to output the reports and home page. (This could be automated using `guard`, etc.) This generates an `index.html` that links to the reports, input documents, receipts, invoices, statements, worksheets, etc., in a unified interface. This `index.html` can be opened _locally_ using a `file:///` URL but the directory tree can easily be copied to a web server for shared and remote access.
 
-So, to really have this software make sense to you, you should probably understand
-the double entry bookkeeping paradigm pretty well. 
+#### How RockBooks Is Different
+
+Mainstream accounting packages like QuickBooks have lots of bells and whistles, but are opinionated and not customizable; if you want to use your data _your_ way, or do something differently, you're out of luck.
+
+RockBooks is different in many ways.
+
+The software is in the form of Ruby classes and objects that can be incorporated into your own code for your own customizations. The data is available to programmers as Ruby objects (and therefore JSON, YAML, etc.)
+
+Rather than hiding accounting concepts from the user, RockBooks embraces and exposes them. There is no attempt to hide the traditional double entry bookkeeping system, with debits and credits, and accounting terminology is used throughout (e.g. "chart of accounts", "journals"). Some understanding of accounting or bookkeeping principles is helpful but not absolutely necessary.
+
+To simplify its implementation, RockBooks assumes some conventions:
+
+* The following directories are assumed to contain the appropriate content:
+** `receipts` - receipts documenting expenses & other transactions
+** `invoices` - sales/services invoices
+** `statements` - statements from banks, etc.
+** `worksheets` - spreadsheets, etc., e.g. mileage and per diem calculations
+** `rockbooks-inputs` - journals, chart of accounts, etc.
+
+
+
+##### Text Files as Input
+
+Instead of a web interface, data input is done in plain text files. This isn't as fancy but has the following advantages:
+
+* Data can be tracked in git or other version control software, offering a readable and easily accessible audit trail.
+
+* Text notes of arbitrary length can be included in input files, and included or excluded in reports. This can be useful, for example, in explaining the context of a transaction more thoroughly than could be done in a conventional accounting application.
+
+* Data can be easily printed out.
+
+* Data will be longer lived, as it is readable without any special software.
+
+* Users can use their favorite text editors.
+
+* All data entry can be done without moving the hands away from the keyboard.
+
+----
+
 
 # Terminology Usage
 
-* document - a RockBooks logical document such as a chart of accounts, a journal, etc.,
-usually containing information parsed from a data file
+* document - a RockBooks logical document such as a chart of accounts, a journal, etc., usually containing information parsed from a data file
 
 * data file - a RockBooks data file, which is a text file with the extension `.txt`
 
