@@ -19,14 +19,14 @@ class BalanceSheet
 
 
   def end_date
-    context.end_date || Time.new.to_date
+    context.chart_of_accounts.end_date
   end
 
 
   def generate_header
     lines = [banner_line]
     lines << center(context.entity || 'Unspecified Entity')
-    lines << center("Balance Sheet -- #{end_date}")
+    lines << center("Balance Sheet for Period Ending #{end_date}")
     lines << banner_line
     lines << ''
     lines << ''

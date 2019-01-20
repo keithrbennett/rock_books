@@ -1,6 +1,8 @@
 @doc_type: chart_of_accounts
 @title: Chart of Accounts - 2018
 @entity: XYZ Consulting, Inc.
+@start_date: 2018-01-01
+@end_date: 2018-12-31
 
 
 # Assets

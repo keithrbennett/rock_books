@@ -29,7 +29,7 @@ module RockBooks
 
 
     def report_context
-      @report_context ||= ReportContext.new(chart_of_accounts, journals, nil, nil, 80)
+      @report_context ||= ReportContext.new(chart_of_accounts, journals, 80)
     end
 
 

@@ -17,12 +17,12 @@ module RockBooks
 
 
   def start_date
-    context.start_date || Date.new(1900, 1, 1)
+    context.chart_of_accounts.start_date
   end
 
 
   def end_date
-    context.end_date || Date.new(2100, 1, 1)
+    context.chart_of_accounts.end_date
   end
 
 

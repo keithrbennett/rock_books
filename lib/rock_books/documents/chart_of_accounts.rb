@@ -5,7 +5,7 @@ require_relative '../errors/error'
 module RockBooks
 class ChartOfAccounts
 
-  attr_reader :doc_type, :title, :accounts, :entity
+  attr_reader :doc_type, :title, :accounts, :entity, :start_date, :end_date
 
 
   def self.from_file(file)
@@ -21,8 +21,18 @@ class ChartOfAccounts
   def initialize(input_lines)
     @accounts = []
     input_lines.each { |line| parse_line(line) }
+    # TODO: Add validation for required fields.
   end
 
+
+  def parse_date(date_string)
+    # TODO: Add better handling for this error.
+    # begin
+      date = Date.iso8601(date_string)
+    # rescue ArgumentError
+    #  ..
+    # end
+  end
 
   def parse_line(line)
     case line.strip
@@ -32,6 +42,10 @@ class ChartOfAccounts
       @entity ||= line.split('@entity:').last.strip
     when /^@title:/
       @title = line.split('@title:').last.strip
+    when /^@start_date:/
+      @start_date = parse_date(line.split('@start_date:').last.strip)
+    when /^@end_date:/
+      @end_date = parse_date(line.split('@end_date:').last.strip)
     when /^$/
       # ignore empty line
     when /^#/
@@ -119,10 +133,12 @@ class ChartOfAccounts
 
 
   def ==(other)
-    doc_type == other.doc_type   && \
-    title    == other.title      && \
-    accounts == other.accounts   && \
-    entity   == other.entity
+    doc_type   == other.doc_type   && \
+    title      == other.title      && \
+    accounts   == other.accounts   && \
+    entity     == other.entity     && \
+    start_date == other.start_date && \
+    end_date   == other.end_date
   end
 end
 end
