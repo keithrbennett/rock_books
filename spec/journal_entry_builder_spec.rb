@@ -11,7 +11,8 @@ module RockBooks
 
 
     create_empty_journal = -> do
-      Journal.from_string(Samples.chart_of_accounts, "@account_code: 101\n@debit_or_credit: debit")
+      Journal.from_string(Samples.chart_of_accounts,
+          "@account_code: 101\n@short_name: sample_journal \n@debit_or_credit: debit")
     end
 
 
@@ -56,11 +57,18 @@ module RockBooks
 
 
     it 'parses a general journal' do
-      gj_filespec = File.join(File.dirname(__FILE__), 'samples', 'general_journal.rdt')
+      gj_filespec = File.join(File.dirname(__FILE__), 'samples', 'general_journal.txt')
       general_journal = Journal.from_file(Samples.chart_of_accounts, gj_filespec)
       acct_amounts = general_journal.entries.first.acct_amounts
       expect(acct_amounts.map(&:code)).to eq(%w(101  141  142  201  301))
       expect(acct_amounts.map(&:amount)).to eq([1000.00, 2500.00, -500.00, -800.00, -2200.00])
+    end
+
+
+    it 'raises a DateRangeError when the date is out of range' do
+      bad_date = Samples.chart_of_accounts.start_date - 1
+      builder = create_journal_entry_builder.("#{bad_date}  7.89  701  7.89  702")
+      expect { builder.build }.to raise_error(DateRangeError)
     end
   end
 

@@ -136,17 +136,23 @@ class JournalEntryBuilder < Struct.new(:journal_entry_context)
     tokens = line.split
     acct_amount_tokens = tokens[1..-1]
     date_string = journal.date_prefix + tokens[0]
-    raise_error = -> do
+
+    raise_date_format_error = -> do
       raise Error.new("Date string was '#{date_string}' but should be a valid date in the form YYYY-MM-DD in " + \
           "journal '#{journal_entry_context[:journal].title}', line #{journal_entry_context[:linenum]}.")
     end
 
-    raise_error.() if date_string.length != 10
+    raise_date_format_error.() if date_string.length != 10
 
     begin
       date = Date.iso8601(date_string)
     rescue ArgumentError
-      raise_error.()
+      raise_date_format_error.()
+    end
+
+    unless chart_of_accounts.included_in_period?(date)
+      raise DateRangeError.new(date, chart_of_accounts.start_date,
+          chart_of_accounts.end_date, journal_entry_context)
     end
 
     acct_amounts = build_acct_amount_array(date, acct_amount_tokens)

@@ -1,6 +1,7 @@
 require_relative '../types/account'
 require_relative '../types/account_type'
 require_relative '../errors/error'
+require_relative '../errors/date_range_error'
 
 module RockBooks
 class ChartOfAccounts
@@ -80,6 +81,11 @@ class ChartOfAccounts
 
   def include?(candidate_code)
     accounts.any? { |account| account.code == candidate_code }
+  end
+
+
+  def included_in_period?(date)
+    (start_date..end_date).include?(date)
   end
 
 

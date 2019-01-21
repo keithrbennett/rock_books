@@ -1,0 +1,8 @@
+@doc_type: general_journal
+@title: Example, Inc. General Journal - 2018
+@date_prefix: 2018-
+@short_name: gj
+
+01-01   101  1000.00   141 2500.00   142 -500.00   201 -800.00   301 -2200.00
+Opening Balances, 2017-01-01
+

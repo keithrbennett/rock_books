@@ -1,0 +1,64 @@
+@doc_type: chart_of_accounts
+@title: Chart of Accounts - 2018
+@entity: XYZ Consulting, Inc.
+@start_date: 2018-01-01
+@end_date: 2018-12-31
+
+
+# Assets
+
+ck.hsbc     A  HSBC Checking
+paypal      A  Paypal
+accts.rec   A  Accounts Receivable
+
+
+# Liabilities
+
+cc.hsbc.visa   L  Visa Credit Card
+loan.to.sh     L  Loan Payable to Shareholder
+
+
+# Equity
+
+own.equity  O  Owner's Equity
+ret.earn    O  Retained Earnings
+
+
+# Income
+
+sls.cons    I  Sales - Consulting
+
+
+# Expenses
+
+bank.fees     E  Bank Charges
+books.refs    E  Books, Screencasts, References
+conf.fees     E  Conference Fees
+cowork.fees   E  Coworking Fees
+govt.fees     E  Government Fees
+inet.fees     E  Internet Service, Domain, and Hosting Fees
+insurance     E  Insurance
+int.exp       E  Interest Expense
+mktng.exp     E  Marketing Expenses
+meals.ent     E  Meals & Entertainment
+misc.exp      E  Miscellaneous Expenses
+prof.fees     E  Professional Fees
+repair.maint  E  Repair & Maintenance
+ship.exp      E  Shipping and Mailing Expenses
+sw.exp        E  Software Expense
+supplies      E  Supplies
+cc.proc       E  Credit Card Processing Fees
+tr.airfare    E  Travel - Air Fares
+tr.autorent   E  Travel - Auto Rental
+tr.gas.etc    E  Travel - Gas, Oil, Tolls, etc.
+tr.govt       E  Travel - Government Fees
+tr.lodging    E  Travel - Lodging
+tr.m.i        E  Travel - Meals & Incidentals
+tr.mileage    E  Travel - Mileage Allowance
+tr.misc       E  Travel - Miscellaneous
+tr.parking    E  Travel - Parking
+tr.perdiem.mi E  Travel - Per Diem (Meals and Incidentals)
+tr.taxi       E  Travel - Taxi
+tr.trainfare  E  Travel - Train Fare
+tr.m.e        E  Meals and Entertainment
+tr.unclass    E  Expenses Not Yet Classified
