@@ -31,7 +31,7 @@ To simplify its implementation, RockBooks assumes some conventions:
 
 Instead of a web interface, data input is done in plain text files. This isn't as fancy but has the following advantages:
 
-* Data can be tracked in git or other version control software, offering a readable and easily accessible audit trail, with free cloud backup including history with Github, Gitlab, Bitbucket, etc.
+* Data can be tracked in git or other version control software, offering a readable and easily accessible audit trail, manageable collaboration, with free cloud backup including history with Github, Gitlab, Bitbucket, etc.
 
 * Text notes of arbitrary length can be included in input files, and included or excluded in reports. This can be useful, for example, in explaining the context of a transaction more thoroughly than could be done in a conventional accounting application. This can be helpful to accountants, auditors, etc., saving the time, and you money, and can demonstrate your helpfulness and transparency.
 
