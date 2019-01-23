@@ -31,14 +31,35 @@ Here are the subdirectories:
 * statements
 * worksheets
 
-The last five will merely be available to navigate the file system with your browser in the reports home page. Receipts are handled specially though -- you can specify a receipt in a journal and it will be checked for existence in the Receipts report.
+The last five contain non-RockBooks specific files that you would normally keep anyway. These directories will be offered by the reports home page web interface merely to navigate them and view the files as they are. Receipts are handled specially though -- you can specify a receipt in a journal and it will be checked for existence in the Receipts report. In the future we hope to generate hyperlinks to both receipts and invoices in the journal reports.
 
 Feel free to organize your files in subdirectories of these directories in whatever way makes sense to you. I have subdirectories of `receipts` for the respective months (`01`, `02` ... `12`).
 
+
 ### Version Control
 
-Tracking this directory tree with version control software such as `git` in a private repository is _highly_ recommended to provide:
+Tracking this directory tree with version control software such as `git` in a private repository is _highly_ recommended, and would provide:
 
 * free cloud backup with Github, Gitlab, Bitbucket, etc.
 * an audit trail with human readable diffs
 * manageable collaboration
+
+
+### Chart of Accounts
+
+You will need a chart of accounts in the `rockbooks-inputs` directory. A sample chart of accounts is provided in the sample data (see [sample_data/minimal/rockbooks-inputs/2018-xyz-chart-of-accounts.txt](sample_data/minimal/rockbooks-inputs/2018-xyz-chart-of-accounts.txt)).
+
+
+### Journals
+
+You will need journals. Usually there would be one journal per external financial institution accounts, such as checking and credit card accounts. Samples have been provided in the sample_data/minimal/rockbooks-inputs directory of the gem:
+
+* [Checking](sample_data/minimal/rockbooks-inputs/2018-xyz-checking-journal.txt)
+* [Credit Card](sample_data/minimal/rockbooks-inputs/2018-xyz-visa-journal.txt)
+
+
+### General Journal
+
+The general journal is a special journal that is not associated with any particular account. One use of the general journal is for entering the balances of the assets, liabilities, and equity accounts at the beginning of the reporting period (usually a year). A sample general journal is at [sample_data/minimal/rockbooks-inputs/2018-xyz-general-journal.txt](sample_data/minimal/rockbooks-inputs/2018-xyz-general-journal.txt).
+
+
