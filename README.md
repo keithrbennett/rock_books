@@ -1,5 +1,9 @@
 # RockBooks
 
+| Note: |
+| ---- |
+| The [manual.md file](manual.md) has more detailed information about RockBooks usage. |
+
 **A simple but useful accounting software application for very small entities.**
 
 A supreme goal of this project is to give _you_ control over your data. Want to serialize it to YAML, JSON, CSV, or manipulate it in your custom code? No problem! 
@@ -20,7 +24,8 @@ To simplify its implementation, RockBooks assumes some conventions:
 
 * Input documents (chart of accounts, journals) are assumed to be in the `rockbooks-inputs` directory.
 
-* The following directories are assumed to contain the appropriate content. They are simply presented as directories in the filesystem, so you can feel free to organize files in subdirectories as you see fit:
+* The following directories are assumed to contain the appropriate content, or nothing at all. They are simply presented on the reports web page as directories in the filesystem, so you can feel free to organize files in subdirectories as you see fit:
+
   * `receipts` - receipts documenting expenses & other transactions
   * `invoices` - sales/services invoices
   * `statements` - statements from banks, etc.
@@ -44,188 +49,19 @@ Instead of a web interface, data input is done in plain text files. This isn't a
 
 #### The Accounting Period
 
-There is no handling of end of year closings or the like; the entire set of data in the input files is considered included in the reporting period when generating the reports. Therefore, the best approach is to create a new data set for each year. The chart of accounts can be copied verbatim, and journal files copied, data removed, and titles edited.
+There is no handling of end of year closings or the like; the entire set of data in the input files is considered included in the reporting period when generating the reports. Therefore, the best approach is to create a new data set for each year. The chart of accounts and journal files can be copied and modified as necessary.
 
 ----
 
-
-
 ## What RockBooks Is Not
 
-As a product written by a single developer in his spare time, RockBooks lacks some conveniences of traditional software programs, such as:
+As a product written by a single developer in his spare time, RockBooks lacks some conveniences of traditional accounting software programs, such as:
 
 * Import of data from financial institutions
 * On the fly data validation
 * Data entry conveniences such as drop down selection lists for data such as accounts
 * Fancy reporting and graphing -- however, RockBooks' bringing links to all the entity's documentation and output into a single web page may well be more useful
-* At this time, RockBooks is only tested on Macs. The input files are plain text files and could be created on any OS, but the validation and report generation might not work. Get in touch with me if you are using a different OS and want to use RockBooks, and are willing and available to test my changes.
-
-# Terminology Usage
-
-* _document_ - a RockBooks logical document such as a chart of accounts, a journal, etc., usually containing information parsed from a data file
-
-* _data file_ - a RockBooks input data file, which is a text file with the extension `.txt`
-
-
-## Input Data File Format
-
-Input data files are plain text files. We recommend using a text editor and _not_ a word processor for them. If you don't already have a favorite text editor, some excellent graphical text editors are [VS Code](https://code.visualstudio.com/), [Atom](https://atom.io/), and [Brackets](http://brackets.io/).
-
-Fields are space separated; any number of spaces can be used.
-
-#### Comment Lines
-
-Lines beginning with `#` will be ignored when the input data is parsed. Comment lines are useful for:
- 
-* explanations of the input itself
-* information that you would like to be available for deeper research or examination but not printed in the reports
-
-#### Document Properties
-
-Data lines that contain the value of document properties,
-as opposed to transactions, etc., will be expressed as lines beginning with `@`:
-
-```
-@doc_type: journal
-@title: "ABC Bank Checking Account Disbursements Journal"
-@account: ck_abc
-```
-
-#### Input Records
-
-Input records are multiple records for the type appropriate to the document:
-
-* chart of accounts - each account
-* journals - each transaction
-
-Input records are, in general, entered into the text files after all properties. One exception is that the `@date_prefix` is often specified in multiple places in the journal, usually with a new month (e.g. `@date_prefix: 2018-11`).
-
-
-
-Data lines will contain fields that an be separated with an arbitrary number of spaces, e.g.:
-
-```
-2018-05-18   123.45   supplies 
-```
-
-In journals, all entries will begin with dates, and all dates begin with numerals, so the
-presence of a numeral in the first column will be interpreted as the beginning of a new
-transaction (entry). Any lines following it not beginning with a `#` or number will be
-assumed to be the textual description of the transaction, and will be saved along with
-its other data.
-
-In order to make the entry of dates more convenient, many documents will support
-a `@date_prefix` property that will be prepended to dates. For example, if this prefix
-contains `2018-`, then subsequent dates must exclude that prefix since it will be
-automatically prepended. So, for example, a journal might contain the following lines:
-
-```
-@date_prefix: 2018-
-# ...more lines...
-05-29   37.50   ofc.spls
-05-30   22.20   tr.taxi
-```
-
-All date strings must use the format `YYYY-MM-DD`, because that's what will be expected
-by the application when it converts the date strings into numeric dates.
-
-
-
-### Chart of Accounts
-
-Pretty much everything in this application assumes the presence of a chart of accounts
-listing the accounts, including their codes, types, and names.
-
-You'll need to provide a chart of accounts file that includes the following line in the header:
-
-`@document_type: chart_of_accounts`
-
-This file should contain the accounts
-that will be used. Each account should contain the following fields:
-
-| Property Name | Description |
-| ------------- | ------------- |
-| code          | a short string with which to identify an account, e.g. `ret.earn` for retained earnings
-| type          | 'A' for asset, 'L' for liability, 'O' for (owners) equity, 'I' for income, and 'E' for expenses.
-| name          | a longer more descriptive name, used in reports, so no more than 30 or so characters long is recommended
-  
-
-So, the chart of accounts data might include something like this:
-
-```
-ck.xyz       A   XYZ Bank Checking Account
-loan.owner   L   Loan Payable to Owner
-o.equity     O   Owner's Equity
-sls.cons     I   Consulting Sales
-tr.airfare   E   Travel - Air Fare
-```
-
-Although hyphens and underscores are typically used to logically separate string fragments,
-we recommend periods; they're much easier to type, and you'll be doing a lot of that.
-
-There is no maximum length for account codes, and reports will automatically align based
-on the longest account code. However, keep in mind that you will need to type these codes,
-and they will consume space in reports.
-
-### Journals
-
-Journals (also referred to as _documents_ by this application)
-are used to record transactions of, for example:
-
-* cash disbursements (expenditures for a single checking account)
-* cash receipts (funds coming into a single checking account)
-* combined cash disbursements and receipts
-* a credit card account
-* a Paypal account
-* sales
-
-Each journal data file needs to contain:
-
-`@doc_type: journal`
-
-Also, it needs to identify the code of the account the journal is representing.
-So for example, if it is a journal of a PayPal account, and the PayPal 
-account's code is `paypal`, then you'll need a line like this in your journal file:
-
-`@account_code: paypal`
-
-For your convenience, when entering transactions in a journal (but _not_ a _general_ journal),
-you may enter all numbers going in the direction natural for that journal as positive numbers.
-
-For example, a _Cash Disbursements Journal_ (something like a
-check register) may contain a transaction like this:
-
-```
-05-29   37.50   ofc.spls
-```
-
-There may be many transactions in your journal, and it would be cumbersome to have to
-type minus signs in front of all of them if they were credits.
-
-Because of this, the program allows you to configure each journal as to the direction
-(debit or credit) of the transaction. This is done with the `@debit_or_credit` property.
-
-For an asset journal whose numbers will be crediting the main account
-(e.g. a cash disbursements journal whose entries will primarily be crediting
-the cash account), you would set the property to `debit`:
-
-```
-@debit_or_credit: debit
-```
-
-
-#### General Journal
-
-The general journal is a special form of journal that does not have a primary account.
-
-In this journal, debits and credits need to be specified literally as account code/amount
-pairs, where positive numbers will result in debits, and negative numbers will result in credits, e.g.:
-
-```
-03-10   tr.perdiem.mi   495.00   loan.to.sh  -495.00
-Per Diem allowance for conference trip
-```
-
+* At this time, RockBooks is only tested on Macs. The input files are plain text files and could be created on any OS, but the validation and report generation might not work. Get in touch with me if you are using a different OS and want to use RockBooks, and are willing and available to test my changes. Linux in particular should be an easy port.
 
 
 ## Installation
