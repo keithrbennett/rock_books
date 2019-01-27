@@ -1,10 +1,10 @@
 # RockBooks
 
-**A simple but useful accounting software application for small entities.**
+**A simple but useful accounting software application for very small entities.**
 
 A supreme goal of this project is to give _you_ control over your data. Want to serialize it to YAML, JSON, CSV, or manipulate it in your custom code? No problem! 
 
-After entering the data in input files, there is a processing step (a single command) that is done to output the reports and home page. (This could be automated using `guard`, etc.) This generates an `index.html` that links to the reports, input documents, receipts, invoices, statements, worksheets, etc., in a unified interface. This `index.html` can be opened locally using a `file:///` URL but the directory tree can easily be copied to a web server for shared and remote access.
+After entering the data in input files, there is a processing step (a single command) that is done to validate the input and generate the reports and home page. (This could be automated using `guard`, etc.) An `index.html` is generated that links to the reports, input documents, receipts, invoices, statements, worksheets, etc., in a unified interface. This `index.html` can be opened locally using a `file:///` URL but the directory tree can easily be copied to a web server for shared and/or remote access.
 
 #### How RockBooks Is Different
 
@@ -52,24 +52,35 @@ There is no handling of end of year closings or the like; the entire set of data
 
 ## What RockBooks Is Not
 
-As a product written by a single developer in his spare time, RockBooks lacks some conveniences of traditional software programs:
+As a product written by a single developer in his spare time, RockBooks lacks some conveniences of traditional software programs, such as:
 
 * Import of data from financial institutions
 * On the fly data validation
 * Data entry conveniences such as drop down selection lists for data such as accounts
 * Fancy reporting and graphing -- however, RockBooks' bringing links to all the entity's documentation and output into a single web page may well be more useful
-* At this time, RockBooks is only tested on Macs. The input files are plain text files and could be created on any OS, but the validation and report generation might not work.
+* At this time, RockBooks is only tested on Macs. The input files are plain text files and could be created on any OS, but the validation and report generation might not work. Get in touch with me if you are using a different OS and want to use RockBooks, and are willing and available to test my changes.
 
 # Terminology Usage
 
-* document - a RockBooks logical document such as a chart of accounts, a journal, etc., usually containing information parsed from a data file
+* _document_ - a RockBooks logical document such as a chart of accounts, a journal, etc., usually containing information parsed from a data file
 
-* data file - a RockBooks input data file, which is a text file with the extension `.txt`
+* _data file_ - a RockBooks input data file, which is a text file with the extension `.txt`
 
 
 ## Input Data File Format
 
-Lines beginning with `#` will be ignored.
+Input data files are plain text files. We recommend using a text editor and _not_ a word processor for them. If you don't already have a favorite text editor, some excellent graphical text editors are [VS Code](https://code.visualstudio.com/), [Atom](https://atom.io/), and [Brackets](http://brackets.io/).
+
+Fields are space separated; any number of spaces can be used.
+
+#### Comment Lines
+
+Lines beginning with `#` will be ignored when the input data is parsed. Comment lines are useful for:
+ 
+* explanations of the input itself
+* information that you would like to be available for deeper research or examination but not printed in the reports
+
+#### Document Properties
 
 Data lines that contain the value of document properties,
 as opposed to transactions, etc., will be expressed as lines beginning with `@`:
@@ -80,13 +91,21 @@ as opposed to transactions, etc., will be expressed as lines beginning with `@`:
 @account: ck_abc
 ```
 
-Repeating data types such as entries in journals, and accounts in the chart of accounts,
-should in general be input after the properties.
+#### Input Records
+
+Input records are multiple records for the type appropriate to the document:
+
+* chart of accounts - each account
+* journals - each transaction
+
+Input records are, in general, entered into the text files after all properties. One exception is that the `@date_prefix` is often specified in multiple places in the journal, usually with a new month (e.g. `@date_prefix: 2018-11`).
+
+
 
 Data lines will contain fields that an be separated with an arbitrary number of spaces, e.g.:
 
 ```
-2018-05-18  123.45 703
+2018-05-18   123.45   supplies 
 ```
 
 In journals, all entries will begin with dates, and all dates begin with numerals, so the
@@ -210,18 +229,6 @@ Per Diem allowance for conference trip
 
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'rock_books'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install rock_books
 
