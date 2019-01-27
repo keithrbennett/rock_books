@@ -34,22 +34,26 @@ module RockBooks
 
 
     def all_reports(filter = nil)
+
+      periods_to_underscores = ->(string) { string.gsub('.', '_') }
+
       context = report_context
       report_hash = context.journals.each_with_object({}) do |journal, report_hash|
-        report_hash[journal.short_name] = TransactionReport.new(journal, context).call(filter)
+        key = periods_to_underscores.(journal.short_name).to_sym
+        report_hash[key] = TransactionReport.new(journal, context).call(filter)
       end
-      report_hash['all_txns_by_date'] = MultidocTransactionReport.new(context).call(filter)
-      report_hash['all_txns_by_amount'] = MultidocTransactionReport.new(context).call(filter, :amount)
-      report_hash['all_txns_by_acct'] = TxByAccount.new(context).call
-      report_hash['balance_sheet'] = BalanceSheet.new(context).call
-      report_hash['income_statement'] = IncomeStatement.new(context).call
+      report_hash[:all_txns_by_date] = MultidocTransactionReport.new(context).call(filter)
+      report_hash[:all_txns_by_amount] = MultidocTransactionReport.new(context).call(filter, :amount)
+      report_hash[:all_txns_by_acct] = TxByAccount.new(context).call
+      report_hash[:balance_sheet] = BalanceSheet.new(context).call
+      report_hash[:income_statement] = IncomeStatement.new(context).call
 
       if run_options.do_receipts
-        report_hash['receipts'] = ReceiptsReport.new(context, *missing_and_existing_receipts).call
+        report_hash[:receipts] = ReceiptsReport.new(context, *missing_and_existing_receipts).call
       end
 
       chart_of_accounts.accounts.each do |account|
-        key = 'acct_' + account.code
+        key = ('acct_' + periods_to_underscores.(account.code)).to_sym
         report = TxOneAccount.new(context, account.code).call
         report_hash[key] = report
       end
