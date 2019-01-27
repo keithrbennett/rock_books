@@ -287,7 +287,7 @@ When in interactive shell mode:
     os = OpenStruct.new(book_set.all_reports($filter))
 
     # add hash methods for convenience
-    def os.keys; to_h.keys.map(&:to_s); end
+    def os.keys; to_h.keys; end
     def os.values; to_h.values; end
 
     # to access as array, e.g. `a.at(1)`
