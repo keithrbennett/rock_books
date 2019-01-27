@@ -80,10 +80,14 @@ When in interactive shell mode:
 
   def validate_run_options(options)
 
-    # If the command requested was to show the project page there is no need to validate the options.
-    return if find_command_action(ARGV[0]) == find_command_action('proj')
+    if [
+        # the command requested was to show the project page
+        find_command_action(ARGV[0]) == find_command_action('proj'),
 
-    return if options.suppress_command_line_validation
+        options.suppress_command_line_validation,
+    ].any?
+      return  # do not validate
+    end
 
     validate_input_dir = -> do
       File.directory?(options.input_dir) ? nil : "Input directory '#{options.input_dir}' does not exist. "
@@ -371,6 +375,8 @@ When in interactive shell mode:
 
 
   def find_command_action(command_string)
+    return nil if command_string.nil?
+
     result = commands.detect do |cmd|
       cmd.max_string.start_with?(command_string) \
     && \
