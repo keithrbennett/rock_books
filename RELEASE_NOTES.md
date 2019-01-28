@@ -1,3 +1,8 @@
+## v0.2.1
+
+* Add help text to readme.
+
+
 ## v0.2.0
 
 * Add instruction manual, modify readme.

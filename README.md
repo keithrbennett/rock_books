@@ -51,6 +51,36 @@ Instead of a web interface, data input is done in plain text files. This isn't a
 
 There is no handling of end of year closings or the like; the entire set of data in the input files is considered included in the reporting period when generating the reports. Therefore, the best approach is to create a new data set for each year. The chart of accounts and journal files can be copied and modified as necessary.
 
+#### RockBooks Help Text
+
+```
+Command Line Switches:                    [rock-books version 0.2.1 at https://github.com/keithrbennett/rock_books]
+
+-i   input directory specification, default: './rockbooks-inputs'
+-o   output (reports) directory specification, default: './rockbooks-reports'
+-r   receipts directory, default: './receipts'
+-s   run in shell mode
+
+Commands:
+
+rec[eipts]                - receipts: a/:a all, m/:m missing, e/:e existing
+rep[orts]                 - return an OpenStruct containing all reports (interactive shell mode only)
+d[isplay_reports]         - display all reports on stdout
+w[rite_reports]           - write all reports to the output directory (see -o option)
+c[hart_of_accounts]       - chart of accounts
+h[elp]                    - prints this help
+jo[urnals]                - list of the journals' short names
+proj[ect_page]            - open the RockBooks Github project page in a browser
+rel[oad_data]             - reload data from input files
+q[uit]                    - exits this program (interactive shell mode only) (see also 'x')
+x[it]                     - exits this program (interactive shell mode only) (see also 'q')
+
+When in interactive shell mode:
+* use quotes for string parameters such as method names.
+* for pry commands, use prefix `%`.
+* you can use the global variable $filter to filter reports
+```
+
 ----
 
 ## What RockBooks Is Not
