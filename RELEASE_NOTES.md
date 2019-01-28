@@ -1,3 +1,11 @@
+## v0.2.0
+
+* Add instruction manual, modify readme.
+* Overhaul generated index.html.
+* Add accounting period start and end date to configuration and reports.
+* Add validation of transaction dates to ensure within configured date range.
+* Make report hash / OpenStruct keys consistently symbols.
+
 ## v0.1.6
 
 * Fixed PDF output; PDF files were corrupt because cupsfilter starting sending
