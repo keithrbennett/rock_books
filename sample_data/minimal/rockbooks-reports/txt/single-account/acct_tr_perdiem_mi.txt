@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+Transactions for Account tr.perdiem.mi -- Travel - Per Diem (Meals and Incidentals)  (Expense)
+                                 Total: 495.00
+--------------------------------------------------------------------------------
+
+
+2018-01-20           general   495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
+                              -495.00     loan.to.sh  Loan Payable to Shareholder
+Per diem allowance for Phoenix conference (see worksheet)
+
+
+Totals
+------
+
+     -495.00   loan.to.sh      Loan Payable to Shareholder
+      495.00   tr.perdiem.mi   Travel - Per Diem (Meals and Incidentals)
+------------
+        0.00

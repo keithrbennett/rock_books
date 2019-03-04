@@ -1,0 +1,26 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+       Transactions for Account cowork.fees -- Coworking Fees  (Expense)
+                                 Total: 200.00
+--------------------------------------------------------------------------------
+
+
+2018-01-02         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+                               100.00    cowork.fees  Coworking Fees
+New Work City coworking fee for the month of January
+Receipt: 01/2018-01-02-nwc.pdf
+
+
+2018-02-01         hsbc_visa  -100.00   cc.hsbc.visa  Visa Credit Card
+                               100.00    cowork.fees  Coworking Fees
+New Work City coworking fee for the month of February
+Receipt: 02/2018-02-01-nwc.pdf
+
+
+Totals
+------
+
+     -200.00   cc.hsbc.visa    Visa Credit Card
+      200.00   cowork.fees     Coworking Fees
+------------
+        0.00

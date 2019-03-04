@@ -1,0 +1,11 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+         Transactions for Account sw.exp -- Software Expense  (Expense)
+                                  Total: 0.00
+--------------------------------------------------------------------------------
+
+
+There were no transactions for this account.
+
+
+

@@ -1,0 +1,31 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+Transactions for Account loan.to.sh -- Loan Payable to Shareholder  (Liability)
+                                 Total: -912.70
+--------------------------------------------------------------------------------
+
+
+2018-01-08           general   300.00     tr.airfare  Travel - Air Fares
+                              -300.00     loan.to.sh  Loan Payable to Shareholder
+Phoenix conference air ticket paid on personal credit card
+
+
+2018-01-20           general   495.00  tr.perdiem.mi  Travel - Per Diem (Meals and Incidentals)
+                              -495.00     loan.to.sh  Loan Payable to Shareholder
+Per diem allowance for Phoenix conference (see worksheet)
+
+
+2018-01-31           general   117.70     tr.mileage  Travel - Mileage Allowance
+                              -117.70     loan.to.sh  Loan Payable to Shareholder
+Mileage reimbursement for business travel of January 2018 (see worksheet)
+
+
+Totals
+------
+
+     -912.70   loan.to.sh      Loan Payable to Shareholder
+      300.00   tr.airfare      Travel - Air Fares
+      117.70   tr.mileage      Travel - Mileage Allowance
+      495.00   tr.perdiem.mi   Travel - Per Diem (Meals and Incidentals)
+------------
+        0.00

@@ -1,0 +1,11 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+        Transactions for Account int.exp -- Interest Expense  (Expense)
+                                  Total: 0.00
+--------------------------------------------------------------------------------
+
+
+There were no transactions for this account.
+
+
+

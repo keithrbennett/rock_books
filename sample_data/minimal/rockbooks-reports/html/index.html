@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+
+<!--Bootstrap:-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      padding: 18px;
+      background-color: #e7f7cd;
+      color: darkgreen;
+    }
+
+    h2 {
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+
+    .this_page_style {
+      background-color: #e7f7cd;
+      color: darkgreen;
+      border: 0px;
+    }
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+<h1>XYZ Consulting, Inc.</h1>
+<p class="muted">Reports Generated at 2019-03-04 12:09:49 by RockBooks version 0.2.1</p>
+
+
+<h2>Financial Statements</h2>
+<div id="financial-statements">
+<a href='balance_sheet.html' class="btn btn-success">Balance Sheet</a>
+<a href='income_statement.html' class="btn btn-success">Income Statement</a>
+</div>
+
+
+<h2>Supporting Documents</h2>
+<div id="supporting-documents" style="display: inline ">
+  
+  
+  <a href=/Users/kbennett/work/rock_books/sample_data/minimal/receipts class="btn btn-success">Receipts</a>
+  
+  
+</div>
+
+
+<h2>All Transactions Reports</h2>
+<div id="all-transactions">
+<a href="all_txns_by_acct.html" class="btn btn-success">By Account</a>
+<a href="all_txns_by_amount.html" class="btn btn-success">By Amount</a>
+<a href="all_txns_by_date.html" class="btn btn-success">By Date</a>
+</div>
+
+
+
+<br /><br />
+  <div class="collapsible-heading">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm2" style="margin-right: 12px;">
+          <a class="btn btn-success" data-toggle="collapse" href="#journal-reports" role="button" aria-expanded="false" aria-controls="collapseExample">
+            +/-
+          </a>
+        </div>
+
+        <div class="col-sm10">
+          <h2 style="margin: 0px;">Journal Reports</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+<div class="collapse" id="journal-reports">
+  <div class="card card-body this_page_style">
+    <ul>
+      
+        <li><a href="ck.hsbc.disb.html" class="this_page_style" target="_blank">HSBC Checking Disbursements Journal - 2018 -- ck.hsbc.disb -- ck.hsbc</a></li>
+      
+        <li><a href="hsbc_visa.html" class="this_page_style" target="_blank">HSBC Visa Journal - 2018 -- hsbc_visa -- cc.hsbc.visa</a></li>
+      
+        <li><a href="general.html" class="this_page_style" target="_blank">General Journal - 2018 -- general -- </a></li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<br /><br />
+  <div class="collapsible-heading">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm2" style="margin-right: 12px;">
+          <a class="btn btn-success" data-toggle="collapse" href="#individual-accounts" role="button" aria-expanded="false" aria-controls="collapseExample">
+            +/-
+          </a>
+        </div>
+
+        <div class="col-sm10">
+          <h2 style="margin: 0px;">Individual Accounts</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+<div class="collapse" id="individual-accounts">
+  <div class="card card-body  this_page_style">
+    <ul>
+
+    
+      <li><a href="single-account/acct_ck.hsbc.html" class="this_page_style">HSBC Checking (ck.hsbc)</a></li>
+    
+      <li><a href="single-account/acct_paypal.html" class="this_page_style">Paypal (paypal)</a></li>
+    
+      <li><a href="single-account/acct_accts.rec.html" class="this_page_style">Accounts Receivable (accts.rec)</a></li>
+    
+      <li><a href="single-account/acct_cc.hsbc.visa.html" class="this_page_style">Visa Credit Card (cc.hsbc.visa)</a></li>
+    
+      <li><a href="single-account/acct_loan.to.sh.html" class="this_page_style">Loan Payable to Shareholder (loan.to.sh)</a></li>
+    
+      <li><a href="single-account/acct_own.equity.html" class="this_page_style">Owner's Equity (own.equity)</a></li>
+    
+      <li><a href="single-account/acct_ret.earn.html" class="this_page_style">Retained Earnings (ret.earn)</a></li>
+    
+      <li><a href="single-account/acct_sls.cons.html" class="this_page_style">Sales - Consulting (sls.cons)</a></li>
+    
+      <li><a href="single-account/acct_bank.fees.html" class="this_page_style">Bank Charges (bank.fees)</a></li>
+    
+      <li><a href="single-account/acct_books.refs.html" class="this_page_style">Books, Screencasts, References (books.refs)</a></li>
+    
+      <li><a href="single-account/acct_conf.fees.html" class="this_page_style">Conference Fees (conf.fees)</a></li>
+    
+      <li><a href="single-account/acct_cowork.fees.html" class="this_page_style">Coworking Fees (cowork.fees)</a></li>
+    
+      <li><a href="single-account/acct_govt.fees.html" class="this_page_style">Government Fees (govt.fees)</a></li>
+    
+      <li><a href="single-account/acct_inet.fees.html" class="this_page_style">Internet Service, Domain, and Hosting Fees (inet.fees)</a></li>
+    
+      <li><a href="single-account/acct_insurance.html" class="this_page_style">Insurance (insurance)</a></li>
+    
+      <li><a href="single-account/acct_int.exp.html" class="this_page_style">Interest Expense (int.exp)</a></li>
+    
+      <li><a href="single-account/acct_mktng.exp.html" class="this_page_style">Marketing Expenses (mktng.exp)</a></li>
+    
+      <li><a href="single-account/acct_meals.ent.html" class="this_page_style">Meals & Entertainment (meals.ent)</a></li>
+    
+      <li><a href="single-account/acct_misc.exp.html" class="this_page_style">Miscellaneous Expenses (misc.exp)</a></li>
+    
+      <li><a href="single-account/acct_prof.fees.html" class="this_page_style">Professional Fees (prof.fees)</a></li>
+    
+      <li><a href="single-account/acct_repair.maint.html" class="this_page_style">Repair & Maintenance (repair.maint)</a></li>
+    
+      <li><a href="single-account/acct_ship.exp.html" class="this_page_style">Shipping and Mailing Expenses (ship.exp)</a></li>
+    
+      <li><a href="single-account/acct_sw.exp.html" class="this_page_style">Software Expense (sw.exp)</a></li>
+    
+      <li><a href="single-account/acct_supplies.html" class="this_page_style">Supplies (supplies)</a></li>
+    
+      <li><a href="single-account/acct_cc.proc.html" class="this_page_style">Credit Card Processing Fees (cc.proc)</a></li>
+    
+      <li><a href="single-account/acct_tr.airfare.html" class="this_page_style">Travel - Air Fares (tr.airfare)</a></li>
+    
+      <li><a href="single-account/acct_tr.autorent.html" class="this_page_style">Travel - Auto Rental (tr.autorent)</a></li>
+    
+      <li><a href="single-account/acct_tr.gas.etc.html" class="this_page_style">Travel - Gas, Oil, Tolls, etc. (tr.gas.etc)</a></li>
+    
+      <li><a href="single-account/acct_tr.govt.html" class="this_page_style">Travel - Government Fees (tr.govt)</a></li>
+    
+      <li><a href="single-account/acct_tr.lodging.html" class="this_page_style">Travel - Lodging (tr.lodging)</a></li>
+    
+      <li><a href="single-account/acct_tr.m.i.html" class="this_page_style">Travel - Meals & Incidentals (tr.m.i)</a></li>
+    
+      <li><a href="single-account/acct_tr.mileage.html" class="this_page_style">Travel - Mileage Allowance (tr.mileage)</a></li>
+    
+      <li><a href="single-account/acct_tr.misc.html" class="this_page_style">Travel - Miscellaneous (tr.misc)</a></li>
+    
+      <li><a href="single-account/acct_tr.parking.html" class="this_page_style">Travel - Parking (tr.parking)</a></li>
+    
+      <li><a href="single-account/acct_tr.perdiem.mi.html" class="this_page_style">Travel - Per Diem (Meals and Incidentals) (tr.perdiem.mi)</a></li>
+    
+      <li><a href="single-account/acct_tr.taxi.html" class="this_page_style">Travel - Taxi (tr.taxi)</a></li>
+    
+      <li><a href="single-account/acct_tr.trainfare.html" class="this_page_style">Travel - Train Fare (tr.trainfare)</a></li>
+    
+      <li><a href="single-account/acct_tr.m.e.html" class="this_page_style">Meals and Entertainment (tr.m.e)</a></li>
+    
+      <li><a href="single-account/acct_tr.unclass.html" class="this_page_style">Expenses Not Yet Classified (tr.unclass)</a></li>
+    
+    </ul>
+</div>
+</div>
+</div>
+
+
+<br /><br />
+  <div class="collapsible-heading">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm2" style="margin-right: 12px;">
+          <a class="btn btn-success" data-toggle="collapse" href="#other" role="button" aria-expanded="false" aria-controls="collapseExample">
+            +/-
+          </a>
+        </div>
+
+        <div class="col-sm10">
+          <h2 style="margin: 0px;">Other</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+<div class="collapse" id="other">
+  <div class="card card-body this_page_style">
+    <ul>
+      
+        <li><a href="receipts.html" class="this_page_style">Missing and Existing Receipts</a></li>
+      
+    </ul>
+  </div>
+</div>
+
+<br /><br />
+  <div class="collapsible-heading">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm2" style="margin-right: 12px;">
+          <a class="btn btn-success" data-toggle="collapse" href="#other-formats" role="button" aria-expanded="false" aria-controls="collapseExample">
+            +/-
+          </a>
+        </div>
+
+        <div class="col-sm10">
+          <h2 style="margin: 0px;">Reports in PDF and Text Formats</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+<div class="collapse" id="other-formats">
+  <div class="card card-body this_page_style">
+    <ul>
+        <li><a href="../pdf" class="this_page_style" target="_blank">PDF Format</a></li>
+        <li><a href="../txt" class="this_page_style" target="_blank">Text Format</a></li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

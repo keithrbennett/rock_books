@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------
+                              XYZ Consulting, Inc.
+        Transactions for Account own.equity -- Owner's Equity  (Equity)
+                                Total: -5000.00
+--------------------------------------------------------------------------------
+
+
+2018-01-01      ck.hsbc.disb  5000.00        ck.hsbc  HSBC Checking
+                             -5000.00     own.equity  Owner's Equity
+Initial Deposit from Shareholder
+
+
+Totals
+------
+
+     5000.00   ck.hsbc         HSBC Checking
+    -5000.00   own.equity      Owner's Equity
+------------
+        0.00
