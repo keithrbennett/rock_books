@@ -6,7 +6,8 @@ require_relative '../errors/date_range_error'
 module RockBooks
 class ChartOfAccounts
 
-  attr_reader :doc_type, :title, :accounts, :entity, :start_date, :end_date
+  REQUIRED_FIELDS = %i(doc_type  title  accounts  entity  start_date  end_date)
+  REQUIRED_FIELDS.each { |field| attr_reader(field) }
 
 
   def self.from_file(file)
@@ -23,6 +24,14 @@ class ChartOfAccounts
     @accounts = []
     input_lines.each { |line| parse_line(line) }
     # TODO: Add validation for required fields.
+
+    missing_fields = REQUIRED_FIELDS.select do |field|
+      instance_variable_get("@#{field}").nil?
+    end
+
+    unless missing_fields.empty?
+      raise Error.new("Chart of accounts lacks required fields: #{missing_fields.join(', ')}")
+    end
   end
 
 
