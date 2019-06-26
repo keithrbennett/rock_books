@@ -5,65 +5,73 @@ module RockBooks
 
 RSpec.describe RockBooks::ChartOfAccounts do
 
-  it "can be instantiated" do
-    expect(ChartOfAccounts.new([])).not_to be nil
-  end
+  let(:sample_title) { "2019 Chart of Accounts" }
+  let(:doc_type)     { "chart_of_accounts" }
+  let(:entity)       { 'XYZ Corporation' }
+  let(:start_date)   { '2019-01-01' }
+  let(:end_date)     { '2019-12-31' }
+  let(:sample_code)  { 'ck.knox' }
+  let(:sample_type)  { 'A' }
+  let(:sample_name)  { 'Checking Account - Knox Bank' }
+
+  let(:sample_text) {
+    <<~HEREDOC
+      @title:       #{sample_title}
+      @doc_type:    #{doc_type}
+      @entity:      #{entity}
+      @start_date:  #{start_date}
+      @end_date:    #{end_date}
+
+      #{sample_code}  #{sample_type}  #{sample_name}
+    HEREDOC
+
+  }
+
+  let(:sample_chart) { ChartOfAccounts.from_string(sample_text) }
 
   it "can be instantiated with a string" do
-    expect(ChartOfAccounts.from_string('')).not_to be nil
+    expect(sample_chart).to be_a(ChartOfAccounts)
   end
 
   it 'can read its title' do
-    data = '@title: My Chart of Accounts'
-    expect(ChartOfAccounts.from_string(data).title).to eq('My Chart of Accounts')
+    expect(sample_chart.title).to eq(sample_title)
   end
 
   it 'correctly handles doc_type' do
-    data = "@doc_type: chart_of_accounts\n101 A Cash in Bank"
-    expect(ChartOfAccounts.from_string(data).doc_type).to eq('chart_of_accounts')
+    expect(sample_chart.doc_type).to eq('chart_of_accounts')
   end
 
   it 'can read an account code and name' do
-    data = '101 A My Bank Checking Account'
-    expect(ChartOfAccounts.from_string(data).accounts).to eq([Account.new('101', :asset, 'My Bank Checking Account')])
+    expect(sample_chart.accounts).to eq([Account.new(sample_code, :asset, sample_name)])
   end
 
   it 'can produce a report string' do
-    data = "@title: Title\n101 A Cash in Bank\n"
-    report_string = ChartOfAccounts.from_string(data).report_string
-    expect(report_string).to include('Title')
-    expect(report_string).to include('101')
-    expect(report_string).to include('Cash in Bank')
+    report_string = sample_chart.report_string
+    expect(report_string).to include(sample_title)
+    expect(report_string).to include(sample_code)
+    expect(report_string).to include(sample_name)
   end
 
   it 'can look up a name by a code' do
-    data = "101 A Cash in Bank\n201 L Loan Payable\n301 O Retained Earnings"
-    expect(ChartOfAccounts.from_string(data).name_for_code('201')).to eq('Loan Payable')
+    expect(sample_chart.name_for_code(sample_code)).to eq(sample_name)
   end
 
   it 'does not choke on empty or comment lines' do
-    data = "101 A Cash in Bank\n\n\n\n201 L Loan Payable\n301 O Retained Earnings\n#\n#\n"
+    data = "#{sample_text}\n\n\n\n201 L Loan Payable\n301 O Retained Earnings\n#\n#\n"
     ChartOfAccounts.from_string(data)
   end
 
   it 'can handle a final line without a line ending' do
-    data = "101 A Cash in Bank\n201 L Loan Payable\n301 O Retained Earnings"
-    expect(ChartOfAccounts.from_string(data).name_for_code('301')).to eq('Retained Earnings')
+    expect(ChartOfAccounts.from_string(sample_text.chomp.chomp.chomp).name_for_code(sample_code)).to eq(sample_name)
   end
 
   it 'correctly determines the account type of the account' do
-    data = "101 A Cash in Bank\n201 L Loan Payable\n301 O Retained Earnings"
-    chart = ChartOfAccounts.from_string(data)
-    expect(chart.type_for_code('101')).to eq(:asset)
-    expect(chart.type_for_code('201')).to eq(:liability)
-    expect(chart.type_for_code('301')).to eq(:equity)
+    expect(sample_chart.type_for_code(sample_code)).to eq(:asset)
   end
 
   it 'correctly determines whether or not an account code is included' do
-    data = "101 A Cash in Bank\n201 L Loan Payable\n301 O Retained Earnings"
-    chart = ChartOfAccounts.from_string(data)
-    expect(chart.include?('101')).to eq(true)
-    expect(chart.include?('aaa')).to eq(false)
+    expect(sample_chart.include?(sample_code)).to eq(true)
+    expect(sample_chart.include?('aaa')).to eq(false)
   end
 
 end
