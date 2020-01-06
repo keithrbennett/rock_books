@@ -45,36 +45,42 @@ class ChartOfAccounts
   end
 
   def parse_line(line)
-    case line.strip
-    when /^@doc_type:/
-      @doc_type = line.split('@doc_type:').last.strip
-    when /^@entity:/
-      @entity ||= line.split('@entity:').last.strip
-    when /^@title:/
-      @title = line.split('@title:').last.strip
-    when /^@start_date:/
-      @start_date = parse_date(line.split('@start_date:').last.strip)
-    when /^@end_date:/
-      @end_date = parse_date(line.split('@end_date:').last.strip)
-    when /^$/
-      # ignore empty line
-    when /^#/
-      # ignore comment line
-    else
-      # this is an account line in the form: 101 Asset First National City Bank
-      # The regex below gets everything before the first whitespace in token 1, and the rest in token 2.
-      matcher = line.match(/^(\S+)\s+(.*)$/)
-      code = matcher[1]
-      rest = matcher[2]
+    begin
+      case line.strip
+      when /^@doc_type:/
+        @doc_type = line.split('@doc_type:').last.strip
+      when /^@entity:/
+        @entity ||= line.split('@entity:').last.strip
+      when /^@title:/
+        @title = line.split('@title:').last.strip
+      when /^@start_date:/
+        @start_date = parse_date(line.split('@start_date:').last.strip)
+      when /^@end_date:/
+        @end_date = parse_date(line.split('@end_date:').last.strip)
+      when /^$/
+        # ignore empty line
+      when /^#/
+        # ignore comment line
+      else
+        # this is an account line in the form: 101 Asset First National City Bank
+        # The regex below gets everything before the first whitespace in token 1, and the rest in token 2.
+        matcher = line.match(/^(\S+)\s+(.*)$/)
+        code = matcher[1]
+        rest = matcher[2]
 
-      matcher = rest.match(/^(\S+)\s+(.*)$/)
-      account_type_token = matcher[1]
-      account_type = AccountType.to_type(account_type_token).symbol
+        matcher = rest.match(/^(\S+)\s+(.*)$/)
+        account_type_token = matcher[1]
+        account_type = AccountType.to_type(account_type_token).symbol
 
-      name = matcher[2]
+        name = matcher[2]
 
-      accounts << Account.new(code, account_type, name)
+        accounts << Account.new(code, account_type, name)
+      end
+    rescue => e
+      puts "Error parsing chart of accounts. Line text is:\n#{line}\n\n"
+      raise
     end
+
   end
 
 

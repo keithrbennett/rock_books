@@ -81,47 +81,52 @@ class Journal
 
 
   def parse_line(journal_entry_context)
-    line = journal_entry_context.line
-    case line.strip
-    when /^@doc_type:/
-      @doc_type = line.split(/^@doc_type:/).last.strip
-    when  /^@account_code:/
-      @account_code = line.split(/^@account_code:/).last.strip
+    begin
+      line = journal_entry_context.line
+      case line.strip
+      when /^@doc_type:/
+        @doc_type = line.split(/^@doc_type:/).last.strip
+      when  /^@account_code:/
+        @account_code = line.split(/^@account_code:/).last.strip
 
-      unless chart_of_accounts.include?(@account_code)
-        raise AccountNotFoundError.new(@account_code, journal_entry_context)
-      end
+        unless chart_of_accounts.include?(@account_code)
+          raise AccountNotFoundError.new(@account_code, journal_entry_context)
+        end
 
-      # if debit or credit has not yet been specified, inherit the setting from the account:
-      unless @debit_or_credit
-        @debit_or_credit = chart_of_accounts.debit_or_credit_for_code(@account_code)
-      end
+        # if debit or credit has not yet been specified, inherit the setting from the account:
+        unless @debit_or_credit
+          @debit_or_credit = chart_of_accounts.debit_or_credit_for_code(@account_code)
+        end
 
-    when /^@title:/
-      @title = line.split(/^@title:/).last.strip
-    when /^@short_name:/
-      @short_name = line.split(/^@short_name:/).last.strip
-    when /^@date_prefix:/
-      @date_prefix = line.split(/^@date_prefix:/).last.strip
-    when /^@debit_or_credit:/
-      data = line.split(/^@debit_or_credit:/).last.strip
-      @debit_or_credit = data.to_sym
-    when /^$/
-      # ignore empty line
-    when /^#/
-      # ignore comment line
-    when /^\d/  # a date/acct/amount line starting with a number
-      entries << JournalEntryBuilder.new(journal_entry_context).build
-    else # Text line(s) to be attached to the most recently parsed transaction
-      unless entries.last
-        raise Error.new("Entry for this description cannot be found: #{line}")
-      end
-      entries.last.description << line << "\n"
+      when /^@title:/
+        @title = line.split(/^@title:/).last.strip
+      when /^@short_name:/
+        @short_name = line.split(/^@short_name:/).last.strip
+      when /^@date_prefix:/
+        @date_prefix = line.split(/^@date_prefix:/).last.strip
+      when /^@debit_or_credit:/
+        data = line.split(/^@debit_or_credit:/).last.strip
+        @debit_or_credit = data.to_sym
+      when /^$/
+        # ignore empty line
+      when /^#/
+        # ignore comment line
+      when /^\d/  # a date/acct/amount line starting with a number
+        entries << JournalEntryBuilder.new(journal_entry_context).build
+      else # Text line(s) to be attached to the most recently parsed transaction
+        unless entries.last
+          raise Error.new("Entry for this description cannot be found: #{line}")
+        end
+        entries.last.description << line << "\n"
 
-      if /^Receipt:/.match(line)
-        receipt_spec = line.split(/^Receipt:/).last.strip
-        entries.last.receipts << receipt_spec
+        if /^Receipt:/.match(line)
+          receipt_spec = line.split(/^Receipt:/).last.strip
+          entries.last.receipts << receipt_spec
+        end
       end
+    rescue => e
+      puts "Error occurred parsing:\n#{journal_entry_context}\n\n"
+      raise
     end
   end
 
