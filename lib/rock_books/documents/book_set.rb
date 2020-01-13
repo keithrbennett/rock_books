@@ -55,6 +55,7 @@ module RockBooks
         report = TxOneAccount.new(context, account.code).call
         report_hash[key] = report
       end
+
       report_hash
     end
 

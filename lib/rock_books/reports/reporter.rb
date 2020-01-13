@@ -95,7 +95,7 @@ module Reporter
     acct_amounts = entry.acct_amounts
 
     # "2017-10-29  hsbc_visa":
-    output = entry.date.to_s << '  ' << (SHORT_NAME_FORMAT_STRING % entry.doc_short_name)
+    output = entry.date.to_s << '  ' << (SHORT_NAME_FORMAT_STRING % entry.doc_short_name) << '  '
 
     indent = ' ' * output.length
 
