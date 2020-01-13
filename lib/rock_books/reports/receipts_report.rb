@@ -6,13 +6,14 @@ class ReceiptsReport
 
   include Reporter
 
-  attr_reader :context, :missing, :existing
+  attr_reader :context, :missing, :existing, :unused
 
 
-  def initialize(report_context, missing, existing)
+  def initialize(report_context, missing, existing, unused)
     @context = report_context
     @missing = missing
     @existing = existing
+    @unused = unused
   end
 
 
@@ -48,6 +49,8 @@ class ReceiptsReport
     output << "\n\n\nExisting Receipts:\n\n" << column_headings
     existing.each { |info| output << receipt_info_line(info) }
 
+    output << "\n\n\nUnused Receipts:\n\n"
+    unused.each { |filespec| output << filespec << "\n" }
     output
   end
 

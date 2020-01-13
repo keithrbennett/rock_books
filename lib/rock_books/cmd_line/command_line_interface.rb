@@ -49,7 +49,7 @@ Command Line Switches:                    [rock-books version #{RockBooks::VERSI
 
 Commands:
 
-rec[eipts]                - receipts: a/:a all, m/:m missing, e/:e existing
+rec[eipts]                - receipts: a/:a all, m/:m missing, e/:e existing, u/:u unused
 rep[orts]                 - return an OpenStruct containing all reports (interactive shell mode only)
 d[isplay_reports]         - display all reports on stdout
 w[rite_reports]           - write all reports to the output directory (see -o option)
@@ -317,17 +317,20 @@ When in interactive shell mode:
       raise Error.new("Receipt processing was requested but has been disabled with --no-receipts.")
     end
 
-    missing, existing = book_set.missing_and_existing_receipts
+    missing, existing, unused = book_set.missing_existing_unused_receipts
 
-    print_missing  = -> { puts "Missing Receipts:"; ap missing }
-    print_existing = -> { puts "Existing Receipts:"; ap existing }
+    print_missing  = -> { puts "\n\nMissing Receipts:";  ap missing }
+    print_existing = -> { puts "\n\nExisting Receipts:"; ap existing }
+    print_unused   = -> { puts "\n\nUnused Receipts:";   ap unused }
 
     case options.first.to_s
       when 'a'  # all
         if run_options.interactive_mode
-          { missing: missing, existing: existing }
+          { missing: missing, existing: existing, unused: unused }
         else
-           print_missing.(); print_existing.()
+           print_missing.()
+           print_existing.()
+           print_unused.()
         end
 
       when 'm'
@@ -336,8 +339,11 @@ When in interactive shell mode:
       when 'e'
         run_options.interactive_mode ? existing : print_existing.()
 
+      when 'u'
+        run_options.interactive_mode ? unused : print_unused.()
+
     else
-      message = "Invalid option for receipts. Must be 'a' for all, 'm' for missing, or 'e' for existing."
+      message = "Invalid option for receipts. Must be 'a' for all, 'm' for missing, 'e' for existing, or 'u' for unused."
       if run_options.interactive_mode
         puts message
       else

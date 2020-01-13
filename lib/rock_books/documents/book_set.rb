@@ -47,7 +47,7 @@ module RockBooks
       report_hash[:income_statement] = IncomeStatement.new(context).call
 
       if run_options.do_receipts
-        report_hash[:receipts] = ReceiptsReport.new(context, *missing_and_existing_receipts).call
+        report_hash[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).call
       end
 
       chart_of_accounts.accounts.each do |account|
@@ -145,16 +145,22 @@ module RockBooks
     end
 
 
-    def missing_and_existing_receipts
-      missing = []; existing = []
+    def missing_existing_unused_receipts
+      missing = []
+      existing = []
+      unused = Dir['receipts/**/*'].select { |s| File.file?(s) } # Remove files as they are found
+      unused.map! { |s| "./" +  s }  # Prepend './' to match the data
+
       all_entries.each do |entry|
         entry.receipts.each do |receipt|
-          file_exists = File.file?(receipt_full_filespec(receipt))
+          filespec = receipt_full_filespec(receipt)
+          unused.delete(filespec)
+          file_exists = File.file?(filespec)
           list = (file_exists ? existing : missing)
           list << { receipt: receipt, journal: entry.doc_short_name }
         end
       end
-      [missing, existing]
+      [missing, existing, unused]
     end
 
     def index_html_content
