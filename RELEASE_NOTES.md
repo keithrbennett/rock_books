@@ -1,3 +1,11 @@
+## v0.3.0
+
+* Added ability to report unused receipts.
+* Errors now include more context information.
+* Improved chart of accounts validation.
+* Change license from MIT to Apache 2.
+
+
 ## v0.2.1
 
 * Add help text to readme.
