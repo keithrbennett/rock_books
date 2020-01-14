@@ -148,7 +148,7 @@ module RockBooks
     def missing_existing_unused_receipts
       missing = []
       existing = []
-      unused = Dir['receipts/**/*'].select { |s| File.file?(s) } # Remove files as they are found
+      unused = Dir['receipts/**/*'].select { |s| File.file?(s) }.sort # Remove files as they are found
       unused.map! { |s| "./" +  s }  # Prepend './' to match the data
 
       all_entries.each do |entry|
