@@ -342,8 +342,13 @@ When in interactive shell mode:
       when 'u'
         run_options.interactive_mode ? unused : print_unused.()
 
+      when 'x'
+        run_options.interactive_mode ? missing : print_missing.()
+        run_options.interactive_mode ? unused : print_unused.()
+
     else
-      message = "Invalid option for receipts. Must be 'a' for all, 'm' for missing, 'e' for existing, or 'u' for unused."
+      message = "Invalid option for receipts." + \
+          " Must be 'a' for all, 'm' for missing, 'e' for existing, 'u' for unused, or 'x' for errors (missing/unused)."
       if run_options.interactive_mode
         puts message
       else
