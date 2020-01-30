@@ -37,7 +37,7 @@ class TransactionReport
   def format_entry_first_acct_amount(entry)
     entry.date.to_s \
         << '  ' \
-        << format_acct_amount(entry.acct_amounts.first) \
+        << format_acct_amount(entry.acct_amounts.last) \
         << "\n"
   end
 
@@ -89,7 +89,9 @@ class TransactionReport
       entries = entries.select { |entry| filter.(entry) }
     end
 
-    entries.each { |entry| sio << format_entry(entry) << "\n" }
+    entries.each do |entry|
+      sio << format_entry(entry) << "\n"
+    end
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
     sio << generate_and_format_totals('Totals', totals)
     sio.string
