@@ -22,9 +22,6 @@ class ReceiptsReport
     lines << center(context.entity || 'Unspecified Entity')
     lines << "#{center("Receipts Report")}"
     lines << banner_line
-    lines << ''
-    lines << ''
-    lines << ''
     lines.join("\n")
   end
 
@@ -40,17 +37,30 @@ class ReceiptsReport
   end
 
 
+  def report_one_section(name, list)
+    output = ''
+    output << "\n\n\n#{name} Receipts:\n\n" << column_headings
+    if list.empty?
+      output << "[None]\n\n\n"
+    else
+      list.each { |receipt| output << receipt_info_line(receipt) }
+    end
+    output
+  end
+
+
   def generate_report
     output = generate_header
-
-    output << "Missing Receipts:\n\n" << column_headings
-    missing.each { |info| output << receipt_info_line(info) }
-
-    output << "\n\n\nExisting Receipts:\n\n" << column_headings
-    existing.each { |info| output << receipt_info_line(info) }
+    output << report_one_section('Missing',  missing)
 
     output << "\n\n\nUnused Receipts:\n\n"
-    unused.each { |filespec| output << filespec << "\n" }
+    if unused.empty?
+      output << "[None]\n\n\n"
+    else
+      unused.each { |filespec| output << filespec << "\n" }
+    end
+
+    output << report_one_section('Existing', existing)
     output
   end
 
