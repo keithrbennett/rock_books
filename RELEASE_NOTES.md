@@ -1,3 +1,11 @@
+## v0.4.0
+
+* Sort unused receipts alphanumerically.
+* Add 'x' receipts option for reporting both missing and unused receipts.
+* Fix: journals were showing journal account instead of the other account in each transaction.
+* Improve Receipts report.
+
+
 ## v0.3.0
 
 * Added ability to report unused receipts.
