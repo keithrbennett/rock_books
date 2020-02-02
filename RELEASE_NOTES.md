@@ -1,3 +1,8 @@
+### v0.5.0
+
+* Add receipt hyperlinks to HTML output.
+
+
 ## v0.4.0
 
 * Sort unused receipts alphanumerically.
