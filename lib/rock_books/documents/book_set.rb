@@ -3,6 +3,7 @@ require 'awesome_print'
 require_relative 'chart_of_accounts'
 require_relative 'journal'
 require_relative '../filters/journal_entry_filters'  # for shell mode
+require_relative '../helpers/html_helper'
 require_relative '../helpers/parse_helper'
 require_relative '../reports/balance_sheet'
 require_relative '../reports/income_statement'
@@ -113,6 +114,12 @@ module RockBooks
           run_command("textutil -convert html -font 'Courier New Bold' -fontsize 11 #{txt_filespec} -output #{html_filespec}")
           run_command("cupsfilter #{html_filespec} > #{pdf_filespec}")
           run_command("textutil -convert html -font 'Courier New Bold' -fontsize 14 #{txt_filespec} -output #{html_filespec}")
+
+          hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
+          if replacements_made
+            File.write(html_filespec, hyperlinkized_text)
+          end
+
           puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
         end
       end
