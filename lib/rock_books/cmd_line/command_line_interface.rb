@@ -358,7 +358,7 @@ When in interactive shell mode:
   end
 
   def cmd_w
-    book_set.all_reports_to_files(run_options.output_dir, $filter)
+    BookSetReporter.new(book_set, run_options.output_dir, $filter).call
     nil
   end
 
