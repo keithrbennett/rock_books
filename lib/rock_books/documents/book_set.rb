@@ -1,4 +1,5 @@
 require 'awesome_print'
+require 'os'
 
 require_relative 'chart_of_accounts'
 require_relative 'journal'
@@ -76,7 +77,26 @@ module RockBooks
     end
 
 
+    def executable_exists?(name)
+      `which #{name}`
+      $?.success?
+    end
+
+
+    def check_prequisite_executables
+      raise "Report generation is not currently supported in Windows." if OS.windows?
+      required_exes = OS.mac? ? %w(textutil cupsfilter) : %w(txt2html cupsfilter)
+      missing_exes = required_exes.reject { |exe| executable_exists?(exe) }
+      if missing_exes.any?
+        raise "Missing required report generation executable(s): #{missing_exes.join(', ')}"
+      end
+    end
+
+
     def all_reports_to_files(directory = '.', filter = nil)
+
+      check_prequisite_executables
+
       reports = all_reports(filter)
 
       create_directories = -> do
@@ -110,10 +130,16 @@ module RockBooks
           pdf_filespec  = build_filespec.(directory, short_name, 'pdf')
 
           File.write(txt_filespec, report_text)
+
           # Use smaller size for the PDF but larger size for the web pages:
-          run_command("textutil -convert html -font 'Courier New Bold' -fontsize 11 #{txt_filespec} -output #{html_filespec}")
-          run_command("cupsfilter #{html_filespec} > #{pdf_filespec}")
-          run_command("textutil -convert html -font 'Courier New Bold' -fontsize 14 #{txt_filespec} -output #{html_filespec}")
+          if OS.mac?
+            run_command("textutil -convert html -font 'Courier New Bold' -fontsize 11 #{txt_filespec} -output #{html_filespec}")
+            run_command("cupsfilter #{txt_filespec} > #{pdf_filespec}")
+            run_command("textutil -convert html -font 'Courier New Bold' -fontsize 14 #{txt_filespec} -output #{html_filespec}")
+          else
+            run_command("txt2html --preformat_trigger_lines 0 #{txt_filespec} > #{html_filespec}")
+            run_command("cupsfilter #{txt_filespec} > #{pdf_filespec}")
+          end
 
           hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
           if replacements_made
