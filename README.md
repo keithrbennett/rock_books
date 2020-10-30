@@ -31,6 +31,11 @@ To simplify its implementation, RockBooks assumes some conventions:
   * `statements` - statements from banks, etc.
   * `worksheets` - spreadsheets, etc., e.g. mileage and per diem calculations
   
+#### Supported Operating Systems
+
+At this time, RockBooks is supported only on Mac OS and Linux. (It's really the external tools that is the issue, not the Ruby code.) It should probably work with Windows Subsystem for Linux (WSL) but it hasn't been tested. If you're unsuccessful trying to use RockBooks with WSL, give me as much information as possible and I'll try to resolve the issue.
+
+If you get an error message saying that an external command is missing, install that command using your system's package manager (e.g. `sudo apt install txt2html`).
   
 #### Text Files as Input
 
@@ -91,7 +96,6 @@ As a product written by a single developer in his spare time, RockBooks lacks so
 * On the fly data validation
 * Data entry conveniences such as drop down selection lists for data such as accounts
 * Fancy reporting and graphing -- however, RockBooks' bringing links to all the entity's documentation and output into a single web page may well be more useful
-* At this time, RockBooks is only tested on Macs. The input files are plain text files and could be created on any OS, but the validation and report generation might not work. Get in touch with me if you are using a different OS and want to use RockBooks, and are willing and available to test my changes. Linux in particular should be an easy port.
 
 
 ## Installation

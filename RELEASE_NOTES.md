@@ -1,3 +1,7 @@
+### v0.6.0
+
+* Linux support added!
+
 ### v0.5.0
 
 * Add receipt hyperlinks to HTML output.
