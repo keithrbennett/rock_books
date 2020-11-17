@@ -94,7 +94,7 @@ class BookSetReporter
     required_exes = OS.mac? ? %w(textutil cupsfilter) : %w(txt2html cupsfilter)
     missing_exes = required_exes.reject { |exe| executable_exists?(exe) }
     if missing_exes.any?
-      raise "Missing required report generation executable(s): #{missing_exes.join(', ')}"
+      raise "Missing required report generation executable(s): #{missing_exes.join(', ')}. Please install them with your system's package manager."
     end
   end
 
