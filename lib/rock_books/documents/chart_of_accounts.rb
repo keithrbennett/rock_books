@@ -22,7 +22,7 @@ class ChartOfAccounts
 
   def initialize(input_lines)
     @accounts = []
-    input_lines.each { |line| parse_line(line) }
+    input_lines.each_with_index { |line, line_num| parse_line(line, line_num) }
     # TODO: Add validation for required fields.
 
     missing_fields = REQUIRED_FIELDS.select do |field|
@@ -44,7 +44,7 @@ class ChartOfAccounts
     # end
   end
 
-  def parse_line(line)
+  def parse_line(line, line_num)
     begin
       case line.strip
       when /^@doc_type:/
@@ -77,7 +77,7 @@ class ChartOfAccounts
         accounts << Account.new(code, account_type, name)
       end
     rescue => e
-      puts "Error parsing chart of accounts. Line text is:\n#{line}\n\n"
+      puts "Error parsing chart of accounts. Bad line is line ##{line_num}, text is:\n#{line}\n\n"
       raise
     end
 
