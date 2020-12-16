@@ -10,8 +10,8 @@ class ChartOfAccounts
   REQUIRED_FIELDS.each { |field| attr_reader(field) }
 
 
-  def self.from_file(file)
-    self.new(File.readlines(file).map(&:chomp))
+  def self.from_file(filespec)
+    self.new(File.readlines(filespec).map(&:chomp), filespec)
   end
 
 
@@ -20,9 +20,19 @@ class ChartOfAccounts
   end
 
 
-  def initialize(input_lines)
+  def initialize(input_lines, filespec = nil)
+    @filespec = filespec
     @accounts = []
-    input_lines.each_with_index { |line, line_num| parse_line(line, line_num) }
+    input_lines.each_with_index do |line, line_num|
+      begin
+        parse_line(line)
+      rescue => e
+        file_message_fragment = (@filespec ? " in file '#{@filespec}'" : '')
+        puts "Error parsing chart of accounts#{file_message_fragment}. Bad line is line ##{line_num}, text is:\n#{line}\n\n"
+        raise
+      end
+    end
+
     # TODO: Add validation for required fields.
 
     missing_fields = REQUIRED_FIELDS.select do |field|
@@ -44,7 +54,7 @@ class ChartOfAccounts
     # end
   end
 
-  def parse_line(line, line_num)
+  def parse_line(line)
     begin
       case line.strip
       when /^@doc_type:/
@@ -76,9 +86,6 @@ class ChartOfAccounts
 
         accounts << Account.new(code, account_type, name)
       end
-    rescue => e
-      puts "Error parsing chart of accounts. Bad line is line ##{line_num}, text is:\n#{line}\n\n"
-      raise
     end
 
   end
