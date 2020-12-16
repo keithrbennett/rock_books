@@ -8,12 +8,12 @@ module HtmlHelper
     replacements_made = false
 
     html_lines.each_with_index do |line, index|
-      matches = /Receipt:\s*(.*?)</.match(line)
+      matches = /Receipt:\s*(\S*)/.match(line)
       if matches
         receipt_filespec = matches[1]
         line_with_hyperlink = line.gsub( \
             /Receipt:\s*#{receipt_filespec}/, \
-            %Q{Receipt: <a href="../../../receipts/#{receipt_filespec}">#{receipt_filespec}</a>})
+            %Q{Receipt: <a href="../../receipts/#{receipt_filespec}">#{receipt_filespec}</a>})
         html_lines[index] = line_with_hyperlink
         replacements_made = true
       end
