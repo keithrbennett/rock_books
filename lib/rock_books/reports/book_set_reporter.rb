@@ -91,7 +91,7 @@ class BookSetReporter
 
   private def check_prequisite_executables
     raise "Report generation is not currently supported in Windows." if OS.windows?
-    required_exes = OS.mac? ? %w(textutil cupsfilter) : %w(txt2html cupsfilter)
+    required_exes = OS.mac? ? %w(textutil cupsfilter) : %w(txt2html wkhtmltopdf)
     missing_exes = required_exes.reject { |exe| executable_exists?(exe) }
     if missing_exes.any?
       raise "Missing required report generation executable(s): #{missing_exes.join(', ')}. Please install them with your system's package manager."
@@ -134,16 +134,15 @@ class BookSetReporter
 
       File.write(txt_filespec, report_text)
 
-      # Linux & Mac OS
-      cupsfilter = -> { run_command("cupsfilter #{txt_filespec} > #{pdf_filespec}") }
-
       # Mac OS
       textutil = ->(font_size) do
         run_command("textutil -convert html -font 'Courier New Bold' -fontsize #{font_size} #{txt_filespec} -output #{html_filespec}")
       end
+      cupsfilter = -> { run_command("cupsfilter #{txt_filespec} > #{pdf_filespec}") }
 
       # Linux
       txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 #{txt_filespec} > #{html_filespec}") }
+      html2pdf = -> { run_command("wkhtmltopdf #{html_filespec} #{pdf_filespec}") }
 
       # Use smaller size for the PDF but larger size for the web pages:
       if OS.mac?
@@ -152,7 +151,7 @@ class BookSetReporter
         textutil.(14)
       else
         txt2html.()
-        cupsfilter.()
+        html2pdf.()
       end
 
       hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))

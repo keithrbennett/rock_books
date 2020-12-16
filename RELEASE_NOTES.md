@@ -1,3 +1,7 @@
+### v0.6.1
+
+* Linux PDF generation fixed by using wkhtmltopdf instead of cupsfilter.
+
 ### v0.6.0
 
 * Linux support added!
