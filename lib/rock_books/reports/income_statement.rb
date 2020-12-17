@@ -41,8 +41,7 @@ module RockBooks
   def generate_report
     filter = RockBooks::JournalEntryFilters.date_in_range(start_date, end_date)
     acct_amounts = Journal.acct_amounts_in_documents(context.journals, filter)
-    totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
-    totals.each { |aa| aa[1] = -aa[1] } # income statement shows credits as positive, debits as negative
+    totals = AcctAmount.aggregate_amounts_by_account(acct_amounts) # e.g. totals.first is "comp.hw"=>19937.24
     output = generate_header
 
     income_output,  income_total  = generate_account_type_section('Income',   totals, :income,  true)

@@ -14,6 +14,10 @@ class JournalEntryBuilder < Struct.new(:journal_entry_context)
   def chart_of_accounts; journal_entry_context.chart_of_accounts;  end
 
 
+  # A "token" in this context means an account name and account amount pair, e.g. "pnc.checking 1234.56".
+  # @param tokens the account name/amount pairs found in the source text
+  # @date transaction date
+  # @return array of AcctAmount instances
   def acct_amounts_from_tokens(tokens, date)
     acct_amounts = []
 

@@ -7,6 +7,7 @@ module RockBooks
 
     module_function
 
+    # @return a hash whose keys are the filespecs and values are the document types
     def get_files_with_types(directory)
       files = Dir[File.join(directory, '*.txt')]
       files.each_with_object({}) do |filespec, files_with_types|
@@ -42,7 +43,7 @@ module RockBooks
 
     # Uses all *.txt files in the specified directory; uses @doc_type to determine which
     # is the chart of accounts and which are journals.
-    # To exclude a file, make the extension other than .rdt.
+    # To exclude a file, make the extension something other than .txt.
     def load(run_options)
 
       files_with_types = get_files_with_types(run_options.input_dir)
@@ -54,9 +55,8 @@ module RockBooks
       validate_journal_file_count(journal_files)
 
       chart_of_accounts = ChartOfAccounts.from_file(chart_of_account_files.first)
-      journals = journal_files.map { |fs| Journal.from_file(chart_of_accounts, fs) }
+      journals = journal_files.map { |filespec| Journal.from_file(chart_of_accounts, filespec) }
       BookSet.new(run_options, chart_of_accounts, journals)
     end
-
   end
 end

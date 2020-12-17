@@ -41,30 +41,31 @@ class BookSetReporter
 
   # All methods after this point are private.
 
+  # @return a hash whose keys are short names as symbols, and values are report text strings
   private def all_reports(filter = nil)
 
-    report_hash = journals.each_with_object({}) do |journal, report_hash|
-      key = journal.short_name.to_sym
-      report_hash[key] = TransactionReport.new(journal, context).call(filter)
+    reports_by_short_name = journals.each_with_object({}) do |journal, report_hash|
+      short_name = journal.short_name.to_sym
+      report_hash[short_name] = TransactionReport.new(journal, context).call(filter)
     end
 
-    report_hash[:all_txns_by_date] = MultidocTransactionReport.new(context).call(filter)
-    report_hash[:all_txns_by_amount] = MultidocTransactionReport.new(context).call(filter, :amount)
-    report_hash[:all_txns_by_acct] = TxByAccount.new(context).call
-    report_hash[:balance_sheet] = BalanceSheet.new(context).call
-    report_hash[:income_statement] = IncomeStatement.new(context).call
+    reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context).call(filter)
+    reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context).call(filter, :amount)
+    reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).call
+    reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context).call
+    reports_by_short_name[:income_statement]   = IncomeStatement.new(context).call
 
     if run_options.do_receipts
-      report_hash[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).call
+      reports_by_short_name[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).call
     end
 
     chart_of_accounts.accounts.each do |account|
-      key = ('acct_' + account.code).to_sym
+      short_name = ('acct_' + account.code).to_sym
       report = TxOneAccount.new(context, account.code).call
-      report_hash[key] = report
+      reports_by_short_name[short_name] = report
     end
 
-    report_hash
+    reports_by_short_name
   end
 
 

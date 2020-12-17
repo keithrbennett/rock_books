@@ -47,7 +47,7 @@ class Journal
 
 
 
-    def self.acct_amounts_in_documents(documents, entries_filter = nil, acct_amounts_filter = nil)
+  def self.acct_amounts_in_documents(documents, entries_filter = nil, acct_amounts_filter = nil)
     entries = entries_in_documents(documents, entries_filter)
 
     acct_amounts = entries.each_with_object([]) do |entry, acct_amounts|
@@ -129,7 +129,6 @@ class Journal
       raise
     end
   end
-
 
 
   def acct_amounts
