@@ -23,6 +23,24 @@ class ChartOfAccounts
   def initialize(input_lines, filespec = nil)
     @filespec = filespec
     @accounts = []
+    parse_lines(input_lines)
+    # TODO: Add validation for required fields.
+    check_for_missing_fields
+  end
+
+
+  def check_for_missing_fields
+    missing_fields = REQUIRED_FIELDS.select do |field|
+      instance_variable_get("@#{field}").nil?
+    end
+
+    unless missing_fields.empty?
+      raise Error.new("Chart of accounts lacks required fields: #{missing_fields.join(', ')}")
+    end
+  end
+
+
+  def parse_lines(input_lines)
     input_lines.each_with_index do |line, line_num|
       begin
         parse_line(line)
@@ -31,16 +49,6 @@ class ChartOfAccounts
         puts "Error parsing chart of accounts#{file_message_fragment}. Bad line is line ##{line_num}, text is:\n#{line}\n\n"
         raise
       end
-    end
-
-    # TODO: Add validation for required fields.
-
-    missing_fields = REQUIRED_FIELDS.select do |field|
-      instance_variable_get("@#{field}").nil?
-    end
-
-    unless missing_fields.empty?
-      raise Error.new("Chart of accounts lacks required fields: #{missing_fields.join(', ')}")
     end
   end
 
