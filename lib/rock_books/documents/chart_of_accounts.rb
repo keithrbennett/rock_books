@@ -1,3 +1,4 @@
+require 'stringio'
 require_relative '../types/account'
 require_relative '../types/account_type'
 require_relative '../errors/error'
@@ -120,7 +121,7 @@ class ChartOfAccounts
 
 
   def report_string
-    result = ''
+    result = StringIO.new
 
     if title
       result << title << "\n\n"
@@ -130,7 +131,7 @@ class ChartOfAccounts
     format_string = "%-#{code_width}s  %-10.10s  %s\n"
     accounts.each { |a| result << (format_string % [a.code, a.type.to_s, a.name]) }
 
-    result
+    result.string
   end
 
 
