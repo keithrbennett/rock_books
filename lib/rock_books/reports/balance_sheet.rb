@@ -1,3 +1,4 @@
+require_relative 'balance_sheet_data'
 require_relative '../filters/journal_entry_filters'
 require_relative '../documents/journal'
 require_relative 'report_context'
@@ -11,10 +12,56 @@ class BalanceSheet
 
   include Reporter
 
-  attr_accessor :context
+  attr_accessor :context, :data
+
+
+  def erb_report_template
+    <<~HEREDOC
+<%= banner_line %>
+<%= center(context.entity || 'Unspecified Entity') %>
+<%= center('Balance Sheet for Period Ending #{end_date}') %>
+<%= banner_line %>
+
+<% %i(asset liability equity).each do |section_type| -%>
+<%= section_heading(section_type) %>
+<% section_data = data[section_type] -%>
+<% section_data[:acct_totals].each do |code, amount| -%>
+<%= line_item_format_string % [amount, code, acct_name(code)] %>
+<% end -%>
+------------
+<%= sprintf(line_item_format_string, section_data[:total], '', '') %>
+<% end %>
+
+
+Assets - (Liabilities + Equity) 
+
+<% status_message = (data[:grand_total] == 0.0)  ? '(Ok)' : '(Discrepancy)' -%>
+<%= sprintf(line_item_format_string, data[:grand_total], '', status_message) %>
+============
+    HEREDOC
+  end
+
+
+  def line_item_format_string
+    @line_item_format_string ||= "%12.2f   %-#{context.chart_of_accounts.max_account_code_length}s   %s"
+  end
+
 
   def initialize(report_context)
     @context = report_context
+    @data = BalanceSheetData.new(context).call
+  end
+
+
+  # :asset => "Assets\n------"
+  def section_heading(section_type)
+    title = { asset: 'Assets', liability: 'Liabilities', equity: 'Equity' }[section_type]
+    "\n\n" + title + "\n" + ('-' * title.length)
+  end
+
+
+  def acct_name(code)
+    context.chart_of_accounts.name_for_code(code)
   end
 
 
@@ -23,34 +70,8 @@ class BalanceSheet
   end
 
 
-  def generate_header
-    lines = [banner_line]
-    lines << center(context.entity || 'Unspecified Entity')
-    lines << center("Balance Sheet for Period Ending #{end_date}")
-    lines << banner_line
-    lines << ''
-    lines << ''
-    lines << ''
-    lines.join("\n")
-  end
-
-
- def generate_report
-    filter = RockBooks::JournalEntryFilters.date_on_or_before(end_date)
-    acct_amounts = Journal.acct_amounts_in_documents(context.journals, filter)
-    totals = AcctAmount.aggregate_amounts_by_account(acct_amounts)
-    output = generate_header
-
-    asset_output,  asset_total  = generate_account_type_section('Assets',      totals, :asset,     false)
-    liab_output,   liab_total   = generate_account_type_section('Liabilities', totals, :liability, true)
-    equity_output, equity_total = generate_account_type_section('Equity',      totals, :equity,    true)
-
-    output << [asset_output, liab_output, equity_output].join("\n\n")
-
-    grand_total = asset_total - (liab_total + equity_total)
-
-    output << "\n#{"%12.2f    Assets - (Liabilities + Equity)" % grand_total}\n============\n"
-    output
+  def generate_report
+   ERB.new(erb_report_template, 0, '-').result(binding)
   end
 
   alias_method :to_s, :generate_report
