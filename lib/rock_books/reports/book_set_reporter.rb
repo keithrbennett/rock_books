@@ -49,8 +49,10 @@ class BookSetReporter
       report_hash[short_name] = TransactionReport.new(journal, context).call(filter)
     end
 
-    reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context).call
-    reports_by_short_name[:income_statement]   = IncomeStatement.new(context).call
+    bs_is_data = BsIsData.new(context)
+
+    reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context, bs_is_data.bal_sheet_data).call
+    reports_by_short_name[:income_statement]   = IncomeStatement.new(context, bs_is_data.inc_stat_data).call
     reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context).call(filter)
     reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context).call(filter, :amount)
     reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).call

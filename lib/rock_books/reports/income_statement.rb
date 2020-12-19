@@ -14,9 +14,9 @@ module RockBooks
   attr_accessor :context, :data
 
 
-  def initialize(report_context)
+  def initialize(report_context, data)
     @context = report_context
-    @data = BsIsData.new(context).inc_stat_data
+    @data = data
   end
 
 
