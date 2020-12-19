@@ -1,5 +1,5 @@
 require_relative 'helpers/bs_is_report_helper'
-require_relative 'data/income_statement_data'
+require_relative 'data/bs_is_data'
 require_relative '../documents/journal'
 require_relative 'report_context'
 
@@ -16,7 +16,7 @@ module RockBooks
 
   def initialize(report_context)
     @context = report_context
-    @data = IncomeStatementData.new(context).call
+    @data = BsIsData.new(context).inc_stat_data
   end
 
 

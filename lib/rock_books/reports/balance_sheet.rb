@@ -1,4 +1,4 @@
-require_relative 'data/balance_sheet_data'
+require_relative 'data/bs_is_data'
 require_relative 'helpers/bs_is_report_helper'
 require_relative '../filters/journal_entry_filters'
 require_relative '../documents/journal'
@@ -18,7 +18,7 @@ class BalanceSheet
 
   def initialize(report_context)
     @context = report_context
-    @data = BalanceSheetData.new(context).call
+    @data = BsIsData.new(context).bal_sheet_data
   end
 
 
