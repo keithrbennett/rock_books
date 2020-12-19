@@ -112,6 +112,9 @@ module Reporter
     output
   end
 
+  def read_template(filename)
+    File.read(File.join(File.dirname(__FILE__), '..', 'templates', filename))
+  end
 end
 end
 

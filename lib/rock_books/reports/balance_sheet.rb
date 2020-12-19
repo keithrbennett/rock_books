@@ -23,31 +23,7 @@ class BalanceSheet
 
 
   def erb_report_template
-    <<~HEREDOC
-<%= banner_line %>
-<%= center(context.entity || 'Unspecified Entity') %>
-<%= center('Balance Sheet for Period Ending #{end_date}') %>
-<%= banner_line %>
-
-<% %i(asset liability equity).each do |section_type| -%>
-<%= section_heading(section_type) %>
-
-<% section_data = data[section_type] -%>
-<% section_data[:acct_totals].each do |code, amount| -%>
-<%= line_item_format_string % [amount, code, acct_name(code)] %>
-<% end -%>
-------------
-<%= sprintf(line_item_format_string, section_data[:total], '', '') %>
-<% end %>
-
-
-Assets - (Liabilities + Equity) 
-
-<% status_message = (data[:grand_total] == 0.0)  ? '(Ok)' : '(Discrepancy)' -%>
-<%= sprintf(line_item_format_string, data[:grand_total], '', status_message) %>
-============
-    HEREDOC
+    read_template('balance_sheet.txt.erb')
   end
-
 end
 end
