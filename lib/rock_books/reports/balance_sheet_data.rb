@@ -24,9 +24,9 @@ class BalanceSheetData
 
   def call
     {
-        asset:     section_data(:asset),
-        liability: section_data(:liability),
-        equity:    section_data(:equity),
+        asset:       section_data(:asset),
+        liability:   section_data(:liability),
+        equity:      section_data(:equity),
         grand_total: acct_totals.values.sum.round(2)
     }
   end

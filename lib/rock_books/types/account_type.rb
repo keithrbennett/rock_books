@@ -12,7 +12,7 @@ module RockBooks
 
     ALL_TYPES = [ASSET, LIABILITY, EQUITY, INCOME, EXPENSE]
 
-    TYPE_HASH = {
+    LETTER_TO_TYPE = {
         'A' => ASSET,
         'L' => LIABILITY,
         'O' => EQUITY,
@@ -20,14 +20,21 @@ module RockBooks
         'E' => EXPENSE
     }
 
-    # Converts strings
-    def self.to_type(string)
-      type = TYPE_HASH[string[0].upcase]
-      if type.nil?
-        raise Error.new("Account type of #{string} not valid. " +
-            "Must be one of #{TYPE_HASH.keys} (#{ALL_TYPES.map(&:singular_name)})")
-      end
-      type
+    SYMBOL_TO_TYPE = {
+        :asset => ASSET,
+        :liability => LIABILITY,
+        :equity => EQUITY,
+        :income => INCOME,
+        :expense => EXPENSE
+    }
+
+    # Converts type upper case letter representation to a type object (e.g. 'A' => ASSET)
+    def self.letter_to_type(string)
+      LETTER_TO_TYPE[string[0].upcase]
+    end
+
+    def self.symbol_to_type(symbol)
+      SYMBOL_TO_TYPE[symbol]
     end
   end
 end

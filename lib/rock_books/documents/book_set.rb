@@ -1,4 +1,4 @@
-require 'awesome_print'
+require 'amazing_print'
 require 'os'
 
 require_relative 'chart_of_accounts'

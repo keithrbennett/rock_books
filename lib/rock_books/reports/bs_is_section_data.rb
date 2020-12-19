@@ -8,11 +8,11 @@ class BsIsSectionData
     end
 
     def acct_totals
-      all_acct_totals.select { |code, _amount| acct_codes.include?(code) }
+      @acct_totals ||= all_acct_totals.select { |code, _amount| acct_codes.include?(code) }
     end
 
     def need_to_reverse_sign
-      %i{liability equity}.include?(type)
+      %i{liability equity income}.include?(type)
     end
 
     def section_total
@@ -20,12 +20,13 @@ class BsIsSectionData
     end
 
     def call
+      totals = acct_totals
       if need_to_reverse_sign
-        acct_totals.each { |code, amount| acct_totals[code] = -amount }
+        totals.keys.each { |code| totals[code] = -totals[code] }
       end
 
       {
-          acct_totals: acct_totals,
+          acct_totals: totals,
           total: section_total
       }
     end
