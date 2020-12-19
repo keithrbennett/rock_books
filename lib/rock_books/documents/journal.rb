@@ -7,7 +7,7 @@ require_relative '../types/acct_amount'
 require_relative '../types/journal_entry_context'
 require_relative 'journal_entry'
 require_relative 'journal_entry_builder'
-require_relative '../reports/reporter'
+require_relative '../reports/helpers/reporter'
 
 module RockBooks
 

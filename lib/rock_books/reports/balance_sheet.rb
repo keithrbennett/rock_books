@@ -1,5 +1,5 @@
-require_relative 'balance_sheet_data'
-require_relative 'bs_is_report_helper'
+require_relative 'data/balance_sheet_data'
+require_relative 'helpers/bs_is_report_helper'
 require_relative '../filters/journal_entry_filters'
 require_relative '../documents/journal'
 require_relative 'report_context'

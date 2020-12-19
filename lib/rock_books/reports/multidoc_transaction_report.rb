@@ -1,5 +1,5 @@
 require_relative '../documents/journal'
-require_relative 'reporter'
+require_relative 'helpers/reporter'
 require_relative 'report_context'
 
 module RockBooks

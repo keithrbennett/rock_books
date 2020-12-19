@@ -1,5 +1,5 @@
-require_relative 'bs_is_report_helper'
-require_relative 'income_statement_data'
+require_relative 'helpers/bs_is_report_helper'
+require_relative 'data/income_statement_data'
 require_relative '../documents/journal'
 require_relative 'report_context'
 

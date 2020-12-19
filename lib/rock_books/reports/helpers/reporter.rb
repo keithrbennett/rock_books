@@ -1,4 +1,4 @@
-require_relative '../documents/journal_entry'
+require_relative '../../documents/journal_entry'
 
 module RockBooks
 module Reporter

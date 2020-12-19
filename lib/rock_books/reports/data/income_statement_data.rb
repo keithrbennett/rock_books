@@ -1,7 +1,7 @@
 require_relative 'bs_is_section_data'
-require_relative '../filters/journal_entry_filters'
-require_relative '../documents/journal'
-require_relative 'report_context'
+require_relative '../../filters/journal_entry_filters'
+require_relative '../../documents/journal'
+require_relative '../report_context'
 
 module RockBooks
 class IncomeStatementData

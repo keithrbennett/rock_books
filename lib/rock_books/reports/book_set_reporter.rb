@@ -190,7 +190,7 @@ class BookSetReporter
 
 
   private def index_html_content
-    erb_filespec = File.join(File.dirname(__FILE__), 'index.html.erb')
+    erb_filespec = File.join(File.dirname(__FILE__), 'templates', 'index.html.erb')
     erb = ERB.new(File.read(erb_filespec))
     erb.result_with_hash(
         journals: journals,
