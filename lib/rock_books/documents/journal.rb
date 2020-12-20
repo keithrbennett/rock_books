@@ -45,8 +45,6 @@ class Journal
   end
 
 
-
-
   def self.acct_amounts_in_documents(documents, entries_filter = nil, acct_amounts_filter = nil)
     entries = entries_in_documents(documents, entries_filter)
 
@@ -72,7 +70,6 @@ class Journal
     @short_name = short_name
     @entries = []
     @date_prefix = ''
-    @title = ''
     input_lines.each_with_index do |line, linenum|
       context = JournalEntryContext.new(self, linenum + 1, line)
       parse_line(context)

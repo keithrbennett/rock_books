@@ -1,0 +1,30 @@
+<% totals = data[:totals] %>
+<%= banner_line %>
+<%= center(context.entity || 'Unspecified Entity') %>
+<%= center(title) %>
+<% if data[:code] && data[:name] -%>
+<%= center("Account: #{data[:name]} (#{data[:code]})") %>
+<% end -%>
+<% if data[:short_name] -%>
+<%= center("Journal Short Name: #{data[:short_name]}") %>
+<% end -%>
+<%= center("#{start_date} to #{end_date}"
+) %>
+<%= banner_line %>
+
+
+<% data[:entries].each do |entry| -%>
+<%= format_entry(entry) %>
+<% end %>
+
+
+Totals
+------
+
+<% totals.keys.sort.each do |acct_code| -%>
+<%= sprintf(line_item_format_string, totals[acct_code], acct_code, acct_name(acct_code)) %>
+<% end -%>
+------------
+<% grand_total = totals.values.sum.round(2) %>
+<% grand_total_caption = (grand_total == 0.0 ? '(Ok}' : '(Discrepancy)') %>
+<%= sprintf("%12.2f   %s", grand_total, grand_total_caption) %>

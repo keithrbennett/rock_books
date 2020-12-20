@@ -91,9 +91,8 @@
       <div class="card card-body this_page_style">
         <ul>
           <% journals.each do |journal|
-            filespec = journal.short_name + '.html'
-            caption = "#{journal.title} -- #{journal.short_name} -- #{journal.account_code}"%>
-            <li><a href="<%= filespec %>" class="this_page_style" target="_blank"><%= caption %></a></li>
+            filespec = journal.short_name + '.html' %>
+            <li><a href="<%= filespec %>" class="this_page_style" target="_blank"><%= journal.title %></a></li>
           <% end %>
         </ul>
       </div>

@@ -1,44 +1,29 @@
+require_relative 'data/journal_data'
 require_relative 'helpers/reporter'
 require_relative 'report_context'
 
 module RockBooks
 
-class TransactionReport
+class JournalReport
 
   include Reporter
 
-  attr_accessor :journal, :context
+  attr_accessor :context, :data, :title
 
 
-  def initialize(journal, report_context)
-    @journal = journal
+  def initialize(journal, report_context, filter = nil)
+    raise "Journal title not specified for journal #{journal}" unless journal.title
     @context = report_context
-  end
-
-
-  def generate_header
-
-    code = journal.account_code
-    name = journal.chart_of_accounts.name_for_code(code)
-    title = "Transactions for Account ##{code} -- #{name}"
-
-    lines = [banner_line]
-    lines << center(context.entity || 'Unspecified Entity')
-    lines << center(journal.title) if journal.title && journal.title.length > 0
-    lines << center(title)
-    lines << banner_line
-    lines << ''
-    lines << ''
-    lines << ''
-    lines.join("\n")
+    @data = JournalData.new(journal, report_context, filter).call
+    @title = journal.title
   end
 
 
   def format_entry_first_acct_amount(entry)
     entry.date.to_s \
-        << '  ' \
-        << format_acct_amount(entry.acct_amounts.last) \
-        << "\n"
+         + '  ' \
+         + format_acct_amount(entry.acct_amounts.last) \
+         + "\n"
   end
 
 
@@ -48,7 +33,7 @@ class TransactionReport
     output = format_entry_first_acct_amount(entry)
 
     if entry.description && entry.description.length > 0
-      output << entry.description
+      output += entry.description
     end
     output
   end
@@ -80,26 +65,8 @@ class TransactionReport
   end
 
 
-  def generate_report(filter = nil)
-    sio = StringIO.new
-    sio << generate_header
-
-    entries = journal.entries
-    if filter
-      entries = entries.select { |entry| filter.(entry) }
-    end
-
-    entries.each do |entry|
-      sio << format_entry(entry) << "\n"
-    end
-    totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
-    sio << generate_and_format_totals('Totals', totals)
-    sio.string
+  def erb_report_template
+    read_template('journal.txt.erb')
   end
-
-
-  alias_method :to_s, :generate_report
-  alias_method :call, :generate_report
 end
-
 end

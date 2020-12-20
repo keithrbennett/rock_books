@@ -5,7 +5,7 @@ require_relative 'income_statement'
 require_relative 'multidoc_transaction_report'
 require_relative 'receipts_report'
 require_relative 'report_context'
-require_relative 'transaction_report'
+require_relative 'journal_report'
 require_relative 'tx_by_account'
 require_relative 'tx_one_account'
 
@@ -46,7 +46,7 @@ class BookSetReporter
 
     reports_by_short_name = journals.each_with_object({}) do |journal, report_hash|
       short_name = journal.short_name.to_sym
-      report_hash[short_name] = TransactionReport.new(journal, context).call(filter)
+      report_hash[short_name] = JournalReport.new(journal, context, filter).call
     end
 
     bs_is_data = BsIsData.new(context)
