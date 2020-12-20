@@ -30,7 +30,7 @@ class BookSetReporter
   end
 
 
-  def call
+  def generate
     check_prequisite_executables
     reports = all_reports(filter)
     create_directories

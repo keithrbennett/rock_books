@@ -18,7 +18,7 @@ class JournalData
     @entries
   end
 
-  def call
+  def fetch
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
     {
       code: journal.account_code,

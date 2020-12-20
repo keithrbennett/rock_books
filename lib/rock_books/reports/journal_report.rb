@@ -14,7 +14,7 @@ class JournalReport
   def initialize(journal, report_context, filter = nil)
     raise "Journal title not specified for journal #{journal}" unless journal.title
     @context = report_context
-    @data = JournalData.new(journal, report_context, filter).call
+    @data = JournalData.new(journal, report_context, filter).fetch
     @title = journal.title
   end
 
