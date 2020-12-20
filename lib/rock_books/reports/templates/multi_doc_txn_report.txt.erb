@@ -1,0 +1,26 @@
+<% totals = data[:totals] %>
+<%= banner_line %>
+<%= center(context.entity || 'Unspecified Entity') %>
+<%= center('Multi Document Transaction Report') %>
+
+<%= center('Source Documents') %>
+
+<% context.journals.each do |journal| %>
+<%   short_name = SHORT_NAME_FORMAT_STRING % journal.short_name %>
+<%=  center("#{short_name} -- #{journal.title}") %>
+<% end %>
+
+<%= banner_line %>
+
+   Date     Document           Amount      Account
+   ----     --------           ------      -------
+
+<% data[:entries].each do |entry| %>
+<%= format_multidoc_entry(entry) %>
+<% end %>
+
+
+------
+Totals
+------
+

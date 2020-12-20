@@ -65,8 +65,8 @@ class JournalReport
   end
 
 
-  def erb_report_template
-    read_template('journal.txt.erb')
+  def generate
+    erb_render('journal.txt.erb')
   end
 end
 end

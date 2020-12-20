@@ -49,7 +49,7 @@ class ReceiptsReport
   end
 
 
-  def generate_report
+  def generate
     output = generate_header
     output << report_one_section('Missing',  missing)
 
@@ -63,8 +63,5 @@ class ReceiptsReport
     output << report_one_section('Existing', existing)
     output
   end
-
-  alias_method :to_s, :generate_report
-  alias_method :call, :generate_report
 end
 end

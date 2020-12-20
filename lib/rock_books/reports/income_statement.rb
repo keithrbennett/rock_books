@@ -18,9 +18,8 @@ module RockBooks
   end
 
 
-  def erb_report_template
-    read_template('income_statement.txt.erb')
+  def generate
+    erb_render('income_statement.txt.erb')
   end
-
 end
 end

@@ -19,6 +19,7 @@ class JournalData
   end
 
   def call
+    totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
     {
       code: journal.account_code,
       name: journal.chart_of_accounts.name_for_code(journal.account_code),
@@ -27,7 +28,8 @@ class JournalData
       end_date: context.chart_of_accounts.end_date,
       entity: context.entity,
       entries: entries,
-      totals: AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries)),
+      totals: totals,
+      grand_total: totals.values.sum.round(2),
       max_acct_code_len: context.chart_of_accounts.max_account_code_length
     }
   end

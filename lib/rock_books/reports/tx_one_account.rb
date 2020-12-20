@@ -40,7 +40,7 @@ module RockBooks
     end
 
 
-    def generate_report
+    def generate
       entries = Journal.entries_in_documents(context.journals, JournalEntryFilters.account_code(account_code))
       account_total = JournalEntry.total_for_code(entries, account_code)
       output = generate_header(account_total)
@@ -55,9 +55,6 @@ module RockBooks
 
       output
     end
-
-    alias_method :to_s, :generate_report
-    alias_method :call, :generate_report
   end
 
 end

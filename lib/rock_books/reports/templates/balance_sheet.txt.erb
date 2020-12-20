@@ -17,6 +17,5 @@
 
 Assets - (Liabilities + Equity)
 
-<% status_message = (data[:grand_total] == 0.0)  ? '(Ok)' : '(Discrepancy)' -%>
-<%= sprintf(line_item_format_string, data[:grand_total], '', status_message) %>
+<%= total_with_ok_or_discrepancy(data[:grand_total])  %>
 ============

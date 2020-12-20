@@ -48,7 +48,7 @@ class TxByAccount
   end
 
 
-  def generate_report
+  def generate
     output = generate_header
 
     all_entries = Journal.entries_in_documents(context.journals)
@@ -72,11 +72,5 @@ class TxByAccount
 
     output
   end
-
-  alias_method :to_s, :generate_report
-  alias_method :call, :generate_report
-
-
 end
-
 end

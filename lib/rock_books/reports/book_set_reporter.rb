@@ -48,24 +48,24 @@ class BookSetReporter
 
     journals.each_with_object(reports_by_short_name) do |journal, report_hash|
       short_name = journal.short_name.to_sym
-      report_hash[short_name] = JournalReport.new(journal, context, filter).call
+      report_hash[short_name] = JournalReport.new(journal, context, filter).generate
     end
 
     bs_is_data = BsIsData.new(context)
-    reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context, bs_is_data.bal_sheet_data).call
-    reports_by_short_name[:income_statement]   = IncomeStatement.new(context, bs_is_data.inc_stat_data).call
+    reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context, bs_is_data.bal_sheet_data).generate
+    reports_by_short_name[:income_statement]   = IncomeStatement.new(context, bs_is_data.inc_stat_data).generate
 
-    reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context).call(filter)
-    reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context).call(filter, :amount)
-    reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).call
+    reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context, :date, filter).generate
+    reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context, :amount, filter).generate
+    reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).generate
 
     if run_options.do_receipts
-      reports_by_short_name[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).call
+      reports_by_short_name[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).generate
     end
 
     chart_of_accounts.accounts.each do |account|
       short_name = ('acct_' + account.code).to_sym
-      report = TxOneAccount.new(context, account.code).call
+      report = TxOneAccount.new(context, account.code).generate
       reports_by_short_name[short_name] = report
     end
 

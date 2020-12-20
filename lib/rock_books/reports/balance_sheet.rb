@@ -20,8 +20,8 @@ class BalanceSheet
   end
 
 
-  def erb_report_template
-    read_template('balance_sheet.txt.erb')
+  def generate
+    erb_render('balance_sheet.txt.erb')
   end
 end
 end

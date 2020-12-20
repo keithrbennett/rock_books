@@ -25,6 +25,4 @@ Totals
 <%= sprintf(line_item_format_string, totals[acct_code], acct_code, acct_name(acct_code)) %>
 <% end -%>
 ------------
-<% grand_total = totals.values.sum.round(2) %>
-<% grand_total_caption = (grand_total == 0.0 ? '(Ok}' : '(Discrepancy)') %>
-<%= sprintf("%12.2f   %s", grand_total, grand_total_caption) %>
+<%= total_with_ok_or_discrepancy(data[:grand_total])  %>

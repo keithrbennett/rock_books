@@ -55,14 +55,29 @@ module Reporter
   end
 
 
+  def total_with_ok_or_discrepancy(amount)
+    status_message = (amount == 0.0)  ? '(Ok)' : '(Discrepancy)'
+    sprintf(line_item_format_string, amount, status_message, '')
+  end
+
+
   def generate_and_format_totals(section_caption, totals)
+    totals_for_display = totals.keys.sort.map do |account_code|
+      account_name = context.chart_of_accounts.name_for_code(account_code)
+      account_total = totals[account_code]
+      {
+        amount: account_total,
+        code: account_code,
+        name: account_name
+      }
+    end
+
+
     output = section_caption
     output << "\n#{'-' * section_caption.length}\n\n"
     format_string = "%12.2f   %-#{context.chart_of_accounts.max_account_code_length}s   %s\n"
-    totals.keys.sort.each do |account_code|
-      account_name = context.chart_of_accounts.name_for_code(account_code)
-      account_total = totals[account_code]
-      output << format_string % [account_total, account_code, account_name]
+    totals_for_display.each do |total|
+      output << format_string % [total[:amount], total[:code], total[:name]]
     end
 
     output << "------------\n"
@@ -141,12 +156,10 @@ module Reporter
   end
 
 
-  def generate_report
-    ERB.new(erb_report_template, 0, '-').result(binding)
+  def erb_render(erb_filename)
+    erb_filespec = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'templates', erb_filename))
+    ERB.new(File.read(erb_filespec), 0, '-').result(binding)
   end
-
-  alias_method :to_s, :generate_report
-  alias_method :call, :generate_report
 end
 end
 
