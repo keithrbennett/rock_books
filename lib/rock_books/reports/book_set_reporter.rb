@@ -44,15 +44,17 @@ class BookSetReporter
   # @return a hash whose keys are short names as symbols, and values are report text strings
   private def all_reports(filter = nil)
 
-    reports_by_short_name = journals.each_with_object({}) do |journal, report_hash|
+    reports_by_short_name = {}
+
+    journals.each_with_object(reports_by_short_name) do |journal, report_hash|
       short_name = journal.short_name.to_sym
       report_hash[short_name] = JournalReport.new(journal, context, filter).call
     end
 
     bs_is_data = BsIsData.new(context)
-
     reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context, bs_is_data.bal_sheet_data).call
     reports_by_short_name[:income_statement]   = IncomeStatement.new(context, bs_is_data.inc_stat_data).call
+
     reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context).call(filter)
     reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context).call(filter, :amount)
     reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).call
