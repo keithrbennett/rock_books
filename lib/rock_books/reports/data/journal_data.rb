@@ -14,7 +14,7 @@ class JournalData
   def entries
     return @entries if @entries
     @entries = journal.entries
-    @entries.select! { |entry| filter.(entry) } if filter
+    @entries = @entries.select { |entry| filter.(entry) } if filter
     @entries
   end
 
