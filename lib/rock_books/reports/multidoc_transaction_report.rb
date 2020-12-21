@@ -1,3 +1,4 @@
+require_relative 'data/multidoc_transaction_report_data'
 require_relative '../documents/journal'
 require_relative 'helpers/reporter'
 require_relative 'report_context'
@@ -8,7 +9,7 @@ class MultidocTransactionReport
 
   include Reporter
 
-  attr_reader :context, :sort_by, :filter
+  attr_reader :context, :data
 
   SORT_BY_VALID_OPTIONS = %i(date  amount)
 
@@ -17,8 +18,7 @@ class MultidocTransactionReport
       raise Error.new("sort_by option '#{sort_by}' not in valid choices of #{SORT_BY_VALID_OPTIONS}.")
     end
     @context = report_context
-    @sort_by = sort_by
-    @filter = filter
+    @data = MultidocTransactionReportData.new(context, sort_by, filter).fetch
   end
 
 
@@ -43,22 +43,7 @@ class MultidocTransactionReport
 
 
   def generate
-
-    entries = Journal.entries_in_documents(context.journals, filter)
-
-    if sort_by == :amount
-      JournalEntry.sort_entries_by_amount_descending!(entries)
-    end
-
-    sio = StringIO.new
-    sio << generate_header
-    entries.each { |entry| sio << format_multidoc_entry(entry) << "\n" }
-
-    totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))
-    sio << generate_and_format_totals('Totals', totals)
-
-    sio << "\n"
-    sio.string
+    erb_render('multidoc_txn_report.txt.erb')
   end
 end
 end

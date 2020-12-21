@@ -1,14 +1,13 @@
-<% totals = data[:totals] %>
 <%= banner_line %>
 <%= center(context.entity || 'Unspecified Entity') %>
 <%= center('Multi Document Transaction Report') %>
 
 <%= center('Source Documents') %>
 
-<% context.journals.each do |journal| %>
-<%   short_name = SHORT_NAME_FORMAT_STRING % journal.short_name %>
+<% context.journals.each do |journal| -%>
+<%   short_name = SHORT_NAME_FORMAT_STRING % journal.short_name -%>
 <%=  center("#{short_name} -- #{journal.title}") %>
-<% end %>
+<% end -%>
 
 <%= banner_line %>
 
@@ -24,3 +23,4 @@
 Totals
 ------
 
+<% %>

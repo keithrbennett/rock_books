@@ -32,10 +32,15 @@ class JournalEntry < Struct.new(:date, :acct_amounts, :doc_short_name, :descript
 
   def self.sort_entries_by_amount_descending!(entries)
     entries.sort_by! do |entry|
-      [entry.total_absolute_value, entry.doc_short_name]
+      [-entry.total_absolute_value, entry.doc_short_name]
       end
-    entries.reverse!
   end
+
+
+  def self.sort_entries_by_date!(entries)
+    entries.sort_by! { |entry| [entry.date, entry.doc_short_name] }
+  end
+
 
 
   def total_for_code(account_code)
