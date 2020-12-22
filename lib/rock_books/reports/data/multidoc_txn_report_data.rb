@@ -2,7 +2,7 @@ require_relative '../../documents/journal'
 require_relative '../../documents/journal_entry'
 
 module RockBooks
-class MultidocTransactionReportData
+class MultidocTxnReportData
 
   attr_reader :context, :entries, :totals
 
@@ -16,7 +16,7 @@ class MultidocTransactionReportData
     {
       entries: entries,
       totals: totals,
-      grand_total: totals.values.sum.round(2)
+      grand_total: totals.values.sum.round(2),
     }
   end
 

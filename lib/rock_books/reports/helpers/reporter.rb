@@ -23,6 +23,13 @@ module Reporter
   end
 
 
+  def account_code_name_type_string_for_code(account_code)
+    account = context.chart_of_accounts.account_for_code(account_code)
+    raise "Account for code #{account_code} not found" unless account
+    account_code_name_type_string(account)
+  end
+
+
   def format_amount(amount)
     "%9.2f" % amount
   end

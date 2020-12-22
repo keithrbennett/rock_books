@@ -2,11 +2,11 @@ require_relative '../documents/book_set'
 
 require_relative 'balance_sheet'
 require_relative 'income_statement'
-require_relative 'multidoc_transaction_report'
+require_relative 'multidoc_txn_report'
 require_relative 'receipts_report'
 require_relative 'report_context'
 require_relative 'journal_report'
-require_relative 'multidoc_transaction_by_account_report'
+require_relative 'multidoc_txn_by_account_report'
 require_relative 'tx_one_account'
 
 module RockBooks
