@@ -46,28 +46,44 @@ class BookSetReporter
 
     reports_by_short_name = {}
 
-    journals.each_with_object(reports_by_short_name) do |journal, report_hash|
-      short_name = journal.short_name.to_sym
-      report_hash[short_name] = JournalReport.new(journal, context, filter).generate
+    do_statements = -> do
+      bs_is_data = BsIsData.new(context)
+      reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context, bs_is_data.bal_sheet_data).generate
+      reports_by_short_name[:income_statement]   = IncomeStatement.new(context, bs_is_data.inc_stat_data).generate
     end
 
-    bs_is_data = BsIsData.new(context)
-    reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context, bs_is_data.bal_sheet_data).generate
-    reports_by_short_name[:income_statement]   = IncomeStatement.new(context, bs_is_data.inc_stat_data).generate
-
-    reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context, :date, filter).generate
-    reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context, :amount, filter).generate
-    reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).generate
-
-    if run_options.do_receipts
-      reports_by_short_name[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).generate
+    do_journals = -> do
+      journals.each_with_object(reports_by_short_name) do |journal, report_hash|
+        short_name = journal.short_name.to_sym
+        report_hash[short_name] = JournalReport.new(journal, context, filter).generate
+      end
     end
 
-    chart_of_accounts.accounts.each do |account|
-      short_name = ('acct_' + account.code).to_sym
-      report = TxOneAccount.new(context, account.code).generate
-      reports_by_short_name[short_name] = report
+    do_transaction_reports = -> do
+      reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context, :date, filter).generate
+      reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context, :amount, filter).generate
+      reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).generate
     end
+
+    do_receipt_reports = -> do
+      if run_options.do_receipts
+        reports_by_short_name[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).generate
+      end
+    end
+
+    do_single_account_reports = -> do
+      chart_of_accounts.accounts.each do |account|
+        short_name = ('acct_' + account.code).to_sym
+        report = TxOneAccount.new(context, account.code).generate
+        reports_by_short_name[short_name] = report
+      end
+    end
+
+    do_statements.()
+    do_journals.()
+    do_transaction_reports.()
+    do_receipt_reports.()
+    do_single_account_reports.()
 
     reports_by_short_name
   end
