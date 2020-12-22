@@ -22,7 +22,7 @@ class MultidocTransactionReport
   end
 
   def generate
-    erb_render('multidoc_txn_report.txt.erb')
+    erb_render('multidoc_txn_report.txt.erb', data, template_presentation_context)
   end
 end
 end

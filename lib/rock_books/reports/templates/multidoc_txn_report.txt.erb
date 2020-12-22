@@ -1,13 +1,12 @@
-<% totals = data[:totals] %>
 <%= banner_line %>
-<%= center(context.entity || 'Unspecified Entity') %>
-<%= center('Multi Document Transaction Report') %>
+<%= fn_center.(entity || 'Unspecified Entity') %>
+<%= fn_center.('Multi Document Transaction Report') %>
 
-<%= center('Source Documents') %>
+<%= fn_center.('Source Documents') %>
 
-<% context.journals.each do |journal| -%>
-<%   short_name = SHORT_NAME_FORMAT_STRING % journal.short_name -%>
-<%=  center("#{short_name} -- #{journal.title}") %>
+<% journals.each do |journal| -%>
+<%   short_name = sprintf(short_name_format_string, journal.short_name) -%>
+<%=  fn_center.("#{short_name} -- #{journal.title}") %>
 <% end -%>
 
 <%= banner_line %>
@@ -15,8 +14,8 @@
    Date     Document           Amount      Account
    ----     --------           ------      -------
 
-<% data[:entries].each do |entry| %>
-<%= format_multidoc_entry(entry) %>
+<% entries.each do |entry| %>
+<%=  fn_format_multidoc_entry.(entry) %>
 <% end %>
 
 
@@ -24,7 +23,7 @@ Totals
 ------
 
 <% totals.keys.sort.each do |acct_code| -%>
-<%= sprintf(line_item_format_string, totals[acct_code], acct_code, acct_name(acct_code)) %>
+<%=  sprintf(line_item_format_string, totals[acct_code], acct_code, fn_acct_name.(acct_code)) %>
 <% end -%>
 ------------
-<%= total_with_ok_or_discrepancy(data[:grand_total])  %>
+<%= fn_total_with_ok_or_discrepancy.(grand_total)  %>

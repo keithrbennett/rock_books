@@ -21,7 +21,7 @@ module RockBooks
 
 
     def generate
-      erb_render('tx_one_account.txt.erb')
+      erb_render('tx_one_account.txt.erb', data, template_presentation_context)
     end
   end
 end

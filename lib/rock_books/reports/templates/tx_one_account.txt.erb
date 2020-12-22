@@ -1,8 +1,7 @@
-<% entries = data[:entries] %>
 <%= banner_line %>
-<%= center(context.entity || 'Unspecified Entity') %>
-<%= center("Transactions for Account #{data[:account_string]}") %>
-<%= center(sprintf("Total: %.2f", data[:total])) %>
+<%= fn_center.(entity || 'Unspecified Entity') %>
+<%= fn_center.("Transactions for Account #{account_string}") %>
+<%= fn_center.(sprintf("Total: %.2f", total)) %>
 <%= banner_line %>
 
 
@@ -12,8 +11,8 @@ There were no transactions for this account.
 
 <% else -%>
 <%   entries.each do |entry| -%>
-<%=    format_multidoc_entry(entry) %>
+<%=    fn_format_multidoc_entry.(entry) %>
 <%   end -%>
 
-<%= generate_and_format_totals('Totals', data[:totals]) %>
+<%= fn_generate_and_format_totals.('Totals', totals) %>
 <% end %>

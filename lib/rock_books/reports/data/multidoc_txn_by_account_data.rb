@@ -15,6 +15,7 @@ class MultidocTxnByAccountData
     all_journal_entries = Journal.entries_in_documents(context.journals)
     totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(all_journal_entries))
     {
+      journals: context.journals,
       entries: all_journal_entries,
       totals: totals,
       grand_total: totals.values.sum.round(2),

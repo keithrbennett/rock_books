@@ -1,15 +1,15 @@
 <%= banner_line %>
-<%= center(context.entity || 'Unspecified Entity') %>
-<%= center("Balance Sheet for Period Ending #{end_date}") %>
+<%= fn_center.(entity || 'Unspecified Entity') %>
+<%= fn_center.("Balance Sheet for Period Ending #{end_date}") %>
 <%= banner_line %>
 
 <% %i(asset liability equity).each do |section_type| -%>
-<%= section_heading(section_type) %>
+<%=  fn_section_heading.(section_type) %>
 
-<% section_data = data[section_type] -%>
-<% section_data[:acct_totals].each do |code, amount| -%>
-<%= line_item_format_string % [amount, code, acct_name(code)] %>
-<% end -%>
+<%   section_data = sections[section_type] -%>
+<%   section_data[:acct_totals].each do |code, amount| -%>
+<%=    line_item_format_string % [amount, code, fn_acct_name.(code)] %>
+<%   end -%>
 ------------
 <%= sprintf(line_item_format_string, section_data[:total], '', '') %>
 <% end %>
@@ -17,5 +17,5 @@
 
 Assets - (Liabilities + Equity)
 
-<%= total_with_ok_or_discrepancy(data[:grand_total])  %>
+<%= fn_total_with_ok_or_discrepancy.(grand_total)  %>
 ============

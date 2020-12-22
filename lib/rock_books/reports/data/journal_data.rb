@@ -26,7 +26,6 @@ class JournalData
       short_name: journal.short_name,
       start_date: context.chart_of_accounts.start_date,
       end_date: context.chart_of_accounts.end_date,
-      entity: context.entity,
       entries: entries,
       totals: totals,
       grand_total: totals.values.sum.round(2),

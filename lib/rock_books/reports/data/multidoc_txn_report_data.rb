@@ -14,6 +14,7 @@ class MultidocTxnReportData
 
   def fetch
     {
+      journals: context.journals,
       entries: entries,
       totals: totals,
       grand_total: totals.values.sum.round(2),

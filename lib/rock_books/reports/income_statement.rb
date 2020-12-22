@@ -9,7 +9,7 @@ module RockBooks
 
   include Reporter
 
-  attr_accessor :context, :data
+  attr_reader :data, :context
 
 
   def initialize(report_context, data)
@@ -19,7 +19,7 @@ module RockBooks
 
 
   def generate
-    erb_render('income_statement.txt.erb')
+    erb_render('income_statement.txt.erb', data, template_presentation_context)
   end
 end
 end

@@ -1,28 +1,28 @@
 <%= banner_line %>
-<%= center(context.entity || 'Unspecified Entity') %>
-<%= center('Multi Document Transaction Report by Account') %>
+<%= fn_center.(entity || 'Unspecified Entity') %>
+<%= fn_center.('Multi Document Transaction Report by Account') %>
 
-<%= center('Source Documents') %>
+<%= fn_center.('Source Documents') %>
 
-<% context.journals.each do |journal| -%>
-<%   short_name = SHORT_NAME_FORMAT_STRING % journal.short_name -%>
-<%=  center("#{short_name} -- #{journal.title}") %>
+<% journals.each do |journal| -%>
+<%   short_name = sprintf(short_name_format_string, journal.short_name) -%>
+<%=  fn_center.("#{short_name} -- #{journal.title}") %>
 <% end -%>
 <%= banner_line %>
 
-<% data[:acct_sections].each do |acct| %>
+<% acct_sections.each do |acct| %>
 
 
 <%=   banner_line %>
 <%    total_string = "%.2f" % acct[:total]  -%>
-<%=   center("Total: #{total_string} -- #{account_code_name_type_string_for_code(acct[:code])}") %>
+<%=   fn_center.("Total: #{total_string} -- #{fn_account_code_name_type_string_for_code.(acct[:code])}") %>
 <%=   banner_line %>
 
 <%    acct[:entries].each do |entry| -%>
-<%=     format_multidoc_entry(entry) %>
+<%=     fn_format_multidoc_entry.(entry) %>
 <%    end %>
-<%=   account_total_line(acct[:code], acct[:total]) %>
+<%=   fn_account_total_line.(acct[:code], acct[:total]) %>
 <% end %>
 
 
-<%= generate_and_format_totals('Totals', data[:totals]) %>
+<%= fn_generate_and_format_totals.('Totals', totals) %>

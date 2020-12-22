@@ -7,7 +7,7 @@ module RockBooks
 
 class BsIsData
 
-    attr_reader :journals_acct_totals, :context, :end_date, :totals
+    attr_reader :journals_acct_totals, :context, :start_date, :end_date, :totals
 
     def initialize(context)
       @context = context
@@ -26,9 +26,13 @@ class BsIsData
 
     def bal_sheet_data
       {
-          asset:       section_data(:asset),
-          liability:   section_data(:liability),
-          equity:      section_data(:equity),
+          end_date:    end_date,
+          entity:      context.entity,
+          sections: {
+            asset:       section_data(:asset),
+            liability:   section_data(:liability),
+            equity:      section_data(:equity),
+          },
           grand_total: journals_acct_totals.values.sum.round(2)
       }
     end
@@ -42,8 +46,13 @@ class BsIsData
           ).round(2)
 
       {
-          income:  income_section_data,
-          expense: expense_section_data,
+          start_date: start_date,
+          end_date:   end_date,
+          entity:     context.entity,
+          sections: {
+            income:     income_section_data,
+            expense:    expense_section_data,
+          },
           net_income: net_income
       }
     end

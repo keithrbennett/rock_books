@@ -163,9 +163,32 @@ module Reporter
   end
 
 
-  def erb_render(erb_filename)
+  # Takes 2 hashes, one with data, and the other with presentation functions/lambdas, and passes their union to ERB
+  # for rendering.
+  def erb_render(erb_filename, data_hash, presentation_hash)
+    puts "Rendering #{erb_filename}..."
     erb_filespec = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'templates', erb_filename))
-    ERB.new(File.read(erb_filespec), 0, '-').result(binding)
+    template = ERB.new(File.read(erb_filespec), 0, '-')
+    template.result_with_hash(data_hash.merge(presentation_hash))
+  end
+
+
+  def template_presentation_context
+    {
+      banner_line: banner_line,
+      end_date: end_date,
+      entity: context.entity,
+      fn_acct_name:  method(:acct_name),
+      fn_account_code_name_type_string_for_code: method(:account_code_name_type_string_for_code),
+      fn_center:      method(:center),
+      fn_format_multidoc_entry: method(:format_multidoc_entry),
+      fn_generate_and_format_totals: method(:generate_and_format_totals),
+      fn_section_heading: method(:section_heading),
+      fn_total_with_ok_or_discrepancy: method(:total_with_ok_or_discrepancy),
+      line_item_format_string: line_item_format_string,
+      short_name_format_string: SHORT_NAME_FORMAT_STRING,
+      start_date: start_date,
+    }
   end
 end
 end

@@ -1,20 +1,19 @@
-<% totals = data[:totals] %>
 <%= banner_line %>
-<%= center(context.entity || 'Unspecified Entity') %>
-<%= center(title) %>
-<% if data[:code] && data[:name] -%>
-<%= center("Account: #{data[:name]} (#{data[:code]})") %>
+<%= fn_center.(entity || 'Unspecified Entity') %>
+<%= fn_center.(title) %>
+<% if code && name -%>
+<%= fn_center.("Account: #{name} (#{code})") %>
 <% end -%>
-<% if data[:short_name] -%>
-<%= center("Journal Short Name: #{data[:short_name]}") %>
+<% if short_name -%>
+<%= fn_center.("Journal Short Name: #{short_name}") %>
 <% end -%>
-<%= center("#{start_date} to #{end_date}"
+<%= fn_center.("#{start_date} to #{end_date}"
 ) %>
 <%= banner_line %>
 
 
-<% data[:entries].each do |entry| -%>
-<%= format_entry(entry) %>
+<% entries.each do |entry| -%>
+<%= fn_format_entry.(entry) %>
 <% end %>
 
 
@@ -22,7 +21,7 @@ Totals
 ------
 
 <% totals.keys.sort.each do |acct_code| -%>
-<%= sprintf(line_item_format_string, totals[acct_code], acct_code, acct_name(acct_code)) %>
+<%= sprintf(line_item_format_string, totals[acct_code], acct_code, fn_acct_name.(acct_code)) %>
 <% end -%>
 ------------
-<%= total_with_ok_or_discrepancy(data[:grand_total])  %>
+<%= fn_total_with_ok_or_discrepancy.(grand_total)  %>
