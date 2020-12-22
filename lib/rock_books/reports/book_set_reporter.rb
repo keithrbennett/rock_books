@@ -6,7 +6,7 @@ require_relative 'multidoc_transaction_report'
 require_relative 'receipts_report'
 require_relative 'report_context'
 require_relative 'journal_report'
-require_relative 'tx_by_account'
+require_relative 'multidoc_transaction_by_account_report'
 require_relative 'tx_one_account'
 
 module RockBooks
@@ -62,7 +62,7 @@ class BookSetReporter
     do_transaction_reports = -> do
       reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context, :date, filter).generate
       reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context, :amount, filter).generate
-      reports_by_short_name[:all_txns_by_acct]   = TxByAccount.new(context).generate
+      reports_by_short_name[:all_txns_by_acct]   = MultidocTransactionByAccountReport.new(context).generate
     end
 
     do_receipt_reports = -> do

@@ -5,7 +5,7 @@ require_relative 'report_context'
 
 module RockBooks
 
-class TxByAccount
+class MultidocTransactionByAccountReport
 
   include Reporter
 
