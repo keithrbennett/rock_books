@@ -191,21 +191,24 @@ class BookSetReporter
 
 
   private def missing_existing_unused_receipts
-    missing = []
-    existing = []
-    unused = Dir['receipts/**/*'].select { |s| File.file?(s) }.sort # Remove files as they are found
-    unused.map! { |s| "./" +  s }  # Prepend './' to match the data
+    missing_receipts = []
+    existing_receipts = []
+
+    # We will start out putting all filespecs in the unused array, and delete them as they are found in the transactions.
+    unused_receipt_filespecs = Dir['receipts/**/*'].select { |s| File.file?(s) } \
+        .sort \
+        .map { |s| "./" +  s }  # Prepend './' to match the data
 
     all_entries.each do |entry|
       entry.receipts.each do |receipt|
         filespec = receipt_full_filespec(receipt)
-        unused.delete(filespec)
+        unused_receipt_filespecs.delete(filespec)
         file_exists = File.file?(filespec)
-        list = (file_exists ? existing : missing)
+        list = (file_exists ? existing_receipts : missing_receipts)
         list << { receipt: receipt, journal: entry.doc_short_name }
       end
     end
-    [missing, existing, unused]
+    [missing_receipts, existing_receipts, unused_receipt_filespecs]
   end
 
 
