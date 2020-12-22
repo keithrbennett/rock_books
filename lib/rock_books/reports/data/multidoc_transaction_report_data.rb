@@ -15,7 +15,8 @@ class MultidocTransactionReportData
   def fetch
     {
       entries: entries,
-      totals: totals
+      totals: totals,
+      grand_total: totals.values.sum.round(2)
     }
   end
 

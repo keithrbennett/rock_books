@@ -1,3 +1,4 @@
+<% totals = data[:totals] %>
 <%= banner_line %>
 <%= center(context.entity || 'Unspecified Entity') %>
 <%= center('Multi Document Transaction Report') %>
@@ -19,8 +20,11 @@
 <% end %>
 
 
-------
 Totals
 ------
 
-<% %>
+<% totals.keys.sort.each do |acct_code| -%>
+<%= sprintf(line_item_format_string, totals[acct_code], acct_code, acct_name(acct_code)) %>
+<% end -%>
+------------
+<%= total_with_ok_or_discrepancy(data[:grand_total])  %>
