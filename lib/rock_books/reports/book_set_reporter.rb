@@ -38,8 +38,7 @@ class BookSetReporter
     check_prequisite_executables
     create_directories
     create_index_html
-    reports = all_reports(filter)
-    write_reports(reports)
+    all_reports(filter).each { |report| write_report(report) }
   end
 
 
@@ -145,42 +144,41 @@ class BookSetReporter
   end
 
 
-  private def write_reports(reports)
+  private def write_report(report)
 
-    reports.each do |short_name, report_text|
-      txt_filespec = build_filespec(output_dir, short_name, 'txt')
-      html_filespec = build_filespec(output_dir, short_name, 'html')
-      pdf_filespec = build_filespec(output_dir, short_name, 'pdf')
+    short_name, report_text = report
+    txt_filespec = build_filespec(output_dir, short_name, 'txt')
+    html_filespec = build_filespec(output_dir, short_name, 'html')
+    pdf_filespec = build_filespec(output_dir, short_name, 'pdf')
 
-      File.write(txt_filespec, report_text)
+    File.write(txt_filespec, report_text)
 
-      # Mac OS
-      textutil = ->(font_size) do
-        run_command("textutil -convert html -font 'Courier New Bold' -fontsize #{font_size} #{txt_filespec} -output #{html_filespec}")
-      end
-      cupsfilter = -> { run_command("cupsfilter #{txt_filespec} > #{pdf_filespec}") }
-
-      # Linux
-      txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 #{txt_filespec} > #{html_filespec}") }
-      html2pdf = -> { run_command("wkhtmltopdf #{html_filespec} #{pdf_filespec}") }
-
-      if OS.mac?
-        textutil.(11)
-        cupsfilter.()
-        # Use smaller size for the PDF but larger size for the web pages:
-        textutil.(14)
-      else
-        txt2html.()
-        html2pdf.()
-      end
-
-      hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
-      if replacements_made
-        File.write(html_filespec, hyperlinkized_text)
-      end
-
-      puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
+    # Mac OS
+    textutil = ->(font_size) do
+      run_command("textutil -convert html -font 'Courier New Bold' -fontsize #{font_size} #{txt_filespec} -output #{html_filespec}")
     end
+    cupsfilter = -> { run_command("cupsfilter #{txt_filespec} > #{pdf_filespec}") }
+
+    # Linux
+    txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 #{txt_filespec} > #{html_filespec}") }
+    html2pdf = -> { run_command("wkhtmltopdf #{html_filespec} #{pdf_filespec}") }
+
+    if OS.mac?
+      textutil.(11)
+      cupsfilter.()
+      # Use smaller size for the PDF but larger size for the web pages:
+      textutil.(14)
+    else
+      txt2html.()
+      html2pdf.()
+    end
+
+    hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
+    if replacements_made
+      File.write(html_filespec, hyperlinkized_text)
+    end
+
+    puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
   end
 
 
