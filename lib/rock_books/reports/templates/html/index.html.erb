@@ -92,7 +92,7 @@
         <ul>
           <% journals.each do |journal|
             filespec = journal.short_name + '.html' %>
-            <li><a href="<%= filespec %>" class="this_page_style" target="_blank"><%= journal.title %></a></li>
+            <li><a href="<%= filespec %>" class="this_page_style"><%= journal.title %></a></li>
           <% end %>
         </ul>
       </div>
@@ -131,8 +131,8 @@
     <div class="collapse" id="other-formats">
       <div class="card card-body this_page_style">
         <ul>
-          <li><a href="../pdf" class="this_page_style" target="_blank">PDF Format</a></li>
-          <li><a href="../txt" class="this_page_style" target="_blank">Text Format</a></li>
+          <li><a href="../pdf" class="this_page_style">PDF Format</a></li>
+          <li><a href="../txt" class="this_page_style">Text Format</a></li>
         </ul>
       </div>
     </div>

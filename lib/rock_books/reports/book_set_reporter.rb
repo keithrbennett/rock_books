@@ -36,9 +36,9 @@ class BookSetReporter
 
   def generate
     check_prequisite_executables
-    reports = all_reports(filter)
     create_directories
     create_index_html
+    reports = all_reports(filter)
     write_reports(reports)
   end
 
