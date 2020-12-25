@@ -20,7 +20,7 @@ class BalanceSheet
 
 
   def generate
-    ErbHelper.render_hashes('balance_sheet.txt.erb', data, template_presentation_context)
+    ErbHelper.render_hashes('text/balance_sheet.txt.erb', data, template_presentation_context)
   end
 end
 end

@@ -24,7 +24,7 @@ class MultidocTransactionReport
   end
 
   def generate
-    ErbHelper.render_hashes('multidoc_txn_report.txt.erb', data, template_presentation_context)
+    ErbHelper.render_hashes('text/multidoc_txn_report.txt.erb', data, template_presentation_context)
   end
 end
 end
