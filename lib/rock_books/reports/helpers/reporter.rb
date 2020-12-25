@@ -118,7 +118,7 @@ module Reporter
       fn_acct_name:  method(:acct_name),
       fn_account_code_name_type_string_for_code: method(:account_code_name_type_string_for_code),
       fn_center: method(:center),
-      fn_erb_render_binding: ErbHelper.method(:erb_render_binding),
+      fn_erb_render_binding: ErbHelper.method(:render_binding),
       fn_format_multidoc_entry: method(:format_multidoc_entry),
       fn_section_heading: method(:section_heading),
       fn_total_with_ok_or_discrepancy: method(:total_with_ok_or_discrepancy),

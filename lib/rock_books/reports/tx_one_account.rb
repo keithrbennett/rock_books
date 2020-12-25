@@ -23,7 +23,7 @@ module RockBooks
 
 
     def generate
-      erb_render_hashes('tx_one_account.txt.erb', data, template_presentation_context)
+      ErbHelper.render_hashes('tx_one_account.txt.erb', data, template_presentation_context)
     end
   end
 end

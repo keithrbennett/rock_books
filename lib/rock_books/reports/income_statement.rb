@@ -19,7 +19,7 @@ module RockBooks
 
 
   def generate
-    erb_render_hashes('income_statement.txt.erb', data, template_presentation_context)
+    ErbHelper.render_hashes('income_statement.txt.erb', data, template_presentation_context)
   end
 end
 end
