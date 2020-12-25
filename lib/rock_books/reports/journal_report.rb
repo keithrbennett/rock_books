@@ -1,12 +1,13 @@
 require_relative 'data/journal_data'
+require_relative 'helpers/erb_helper'
 require_relative 'helpers/reporter'
-require_relative 'report_context'
 
 module RockBooks
 
 class JournalReport
 
   include Reporter
+  include ErbHelper
 
   attr_accessor :context, :data, :title
 

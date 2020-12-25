@@ -1,7 +1,5 @@
-require_relative 'data/bs_is_data'
-require_relative '../filters/journal_entry_filters'
-require_relative '../documents/journal'
-require_relative 'report_context'
+require_relative 'helpers/erb_helper'
+require_relative 'helpers/reporter'
 
 module RockBooks
 
@@ -11,6 +9,7 @@ module RockBooks
 class BalanceSheet
 
   include Reporter
+  include ErbHelper
 
   attr_accessor :context, :data
 

@@ -1,6 +1,5 @@
-require_relative 'data/bs_is_data'
-require_relative '../documents/journal'
-require_relative 'report_context'
+require_relative 'helpers/erb_helper'
+require_relative 'helpers/reporter'
 
 module RockBooks
 
@@ -8,6 +7,7 @@ module RockBooks
   class IncomeStatement
 
   include Reporter
+  include ErbHelper
 
   attr_reader :data, :context
 

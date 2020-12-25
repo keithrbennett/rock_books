@@ -1,4 +1,5 @@
 require_relative '../../documents/journal_entry'
+require_relative 'erb_helper'
 
 module RockBooks
 module Reporter
@@ -82,10 +83,6 @@ module Reporter
     output
   end
 
-  def read_template(filename)
-    File.read(File.join(File.dirname(__FILE__), '..', 'templates', filename))
-  end
-
   def line_item_format_string
     @line_item_format_string ||= "%12.2f   %-#{context.chart_of_accounts.max_account_code_length}s   %s"
   end
@@ -113,28 +110,6 @@ module Reporter
   end
 
 
-  def erb_template(erb_filename)
-    erb_filespec = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'templates', erb_filename))
-    eoutvar = "@outvar_#{erb_filename.split('.').first}" # dots will be evaulated by `eval`, must remove them
-    ERB.new(File.read(erb_filespec), eoutvar: eoutvar, trim_mode: '-')
-  end
-
-
-  def erb_render_binding(erb_filename, template_binding)
-    puts "Rendering template #{erb_filename}..."
-    erb_template(erb_filename).result(template_binding)
-  end
-
-
-  # Takes 2 hashes, one with data, and the other with presentation functions/lambdas, and passes their union to ERB
-  # for rendering.
-  def erb_render_hashes(erb_filename, data_hash, presentation_hash  )
-    puts "Rendering template #{erb_filename}..."
-    combined_hash = (data_hash || {}).merge(presentation_hash || {})
-    erb_template(erb_filename).result_with_hash(combined_hash)
-  end
-
-
   def template_presentation_context
     {
       banner_line: banner_line,
@@ -143,7 +118,7 @@ module Reporter
       fn_acct_name:  method(:acct_name),
       fn_account_code_name_type_string_for_code: method(:account_code_name_type_string_for_code),
       fn_center: method(:center),
-      fn_erb_render_binding: method(:erb_render_binding),
+      fn_erb_render_binding: ErbHelper.method(:erb_render_binding),
       fn_format_multidoc_entry: method(:format_multidoc_entry),
       fn_section_heading: method(:section_heading),
       fn_total_with_ok_or_discrepancy: method(:total_with_ok_or_discrepancy),

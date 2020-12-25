@@ -1,6 +1,7 @@
 require_relative '../documents/book_set'
 
 require_relative 'balance_sheet'
+require_relative 'data/bs_is_data'
 require_relative 'income_statement'
 require_relative 'multidoc_txn_report'
 require_relative 'receipts_report'
@@ -8,6 +9,9 @@ require_relative 'report_context'
 require_relative 'journal_report'
 require_relative 'multidoc_txn_by_account_report'
 require_relative 'tx_one_account'
+require_relative 'helpers/erb_helper'
+require_relative 'helpers/reporter'
+
 
 module RockBooks
 class BookSetReporter
@@ -93,27 +97,22 @@ class BookSetReporter
     puts "\n----\nRunning command: #{command}"
     stdout, stderr, status = Open3.capture3(command)
     puts "Status was #{status}."
-    unless stdout.size == 0
-      puts "\nStdout was:\n\n#{stdout}"
-    end
-    unless stderr.size == 0
-      puts "\nStderr was:\n\n#{stderr}"
-    end
+    puts "\nStdout was:\n\n#{stdout}" unless stdout.size == 0
+    puts "\nStderr was:\n\n#{stderr}" unless stderr.size == 0
     puts
-    stdout
-  end
-
-
-  private def executable_exists?(name)
-    `which #{name}`
-    $?.success?
   end
 
 
   private def check_prequisite_executables
+
+    executable_exists = ->(name) do
+      `which #{name}`
+      $?.success?
+    end
+
     raise "Report generation is not currently supported in Windows." if OS.windows?
     required_exes = OS.mac? ? %w(textutil cupsfilter) : %w(txt2html wkhtmltopdf)
-    missing_exes = required_exes.reject { |exe| executable_exists?(exe) }
+    missing_exes = required_exes.reject { |exe| executable_exists.(exe) }
     if missing_exes.any?
       raise "Missing required report generation executable(s): #{missing_exes.join(', ')}. Please install them with your system's package manager."
     end
@@ -165,10 +164,10 @@ class BookSetReporter
       txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 #{txt_filespec} > #{html_filespec}") }
       html2pdf = -> { run_command("wkhtmltopdf #{html_filespec} #{pdf_filespec}") }
 
-      # Use smaller size for the PDF but larger size for the web pages:
       if OS.mac?
         textutil.(11)
         cupsfilter.()
+        # Use smaller size for the PDF but larger size for the web pages:
         textutil.(14)
       else
         txt2html.()
@@ -185,14 +184,10 @@ class BookSetReporter
   end
 
 
-  private def receipt_full_filespec(receipt_filespec)
-    File.join(run_options.receipt_dir, receipt_filespec)
-  end
-
-
   private def missing_existing_unused_receipts
     missing_receipts = []
     existing_receipts = []
+    receipt_full_filespec = ->(receipt_filespec) { File.join(run_options.receipt_dir, receipt_filespec) }
 
     # We will start out putting all filespecs in the unused array, and delete them as they are found in the transactions.
     unused_receipt_filespecs = Dir['receipts/**/*'].select { |s| File.file?(s) } \
@@ -201,7 +196,7 @@ class BookSetReporter
 
     all_entries.each do |entry|
       entry.receipts.each do |receipt|
-        filespec = receipt_full_filespec(receipt)
+        filespec = receipt_full_filespec.(receipt)
         unused_receipt_filespecs.delete(filespec)
         file_exists = File.file?(filespec)
         list = (file_exists ? existing_receipts : missing_receipts)
