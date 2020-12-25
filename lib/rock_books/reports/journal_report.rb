@@ -67,7 +67,7 @@ class JournalReport
 
   def generate
     presentation_context = template_presentation_context.merge(fn_format_entry: method(:format_entry))
-    erb_render('journal.txt.erb', data, presentation_context)
+    erb_render_hashes('journal.txt.erb', data, presentation_context)
   end
 end
 end

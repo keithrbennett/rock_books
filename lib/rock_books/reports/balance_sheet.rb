@@ -21,7 +21,7 @@ class BalanceSheet
 
 
   def generate
-    erb_render('balance_sheet.txt.erb', data, template_presentation_context)
+    erb_render_hashes('balance_sheet.txt.erb', data, template_presentation_context)
   end
 end
 end

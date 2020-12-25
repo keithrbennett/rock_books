@@ -25,4 +25,4 @@
 <% end %>
 
 
-<%= fn_generate_and_format_totals.('Totals', totals) %>
+<%= fn_erb_render_binding.('_totals.txt.erb', binding) %>

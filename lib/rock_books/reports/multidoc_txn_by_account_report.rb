@@ -25,7 +25,7 @@ class MultidocTransactionByAccountReport
 
   def generate
     presentation_context = template_presentation_context.merge({ fn_account_total_line: method(:account_total_line) })
-    erb_render('multidoc_txn_by_account_report.txt.erb', data, presentation_context)
+    erb_render_hashes('multidoc_txn_by_account_report.txt.erb', data, presentation_context)
   end
 end
 end

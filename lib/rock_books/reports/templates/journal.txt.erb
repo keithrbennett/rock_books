@@ -16,12 +16,6 @@
 <%= fn_format_entry.(entry) %>
 <% end %>
 
+<%= fn_erb_render_binding.('_totals.txt.erb', binding) %>
+The End
 
-Totals
-------
-
-<% totals.keys.sort.each do |acct_code| -%>
-<%= sprintf(line_item_format_string, totals[acct_code], acct_code, fn_acct_name.(acct_code)) %>
-<% end -%>
-------------
-<%= fn_total_with_ok_or_discrepancy.(grand_total)  %>
