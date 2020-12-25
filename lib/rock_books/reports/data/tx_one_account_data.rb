@@ -14,7 +14,7 @@ module RockBooks
     def fetch
 
       account = context.chart_of_accounts.account_for_code(account_code)
-      account_string = account_code_name_type_string(account)
+      account_string = "#{account.code} -- #{account.name}  (#{account.type.to_s.capitalize})"
       entries = Journal.entries_in_documents(context.journals, JournalEntryFilters.account_code(account_code))
       account_total = JournalEntry.total_for_code(entries, account_code)
       totals = AcctAmount.aggregate_amounts_by_account(JournalEntry.entries_acct_amounts(entries))

@@ -13,8 +13,8 @@ module Reporter
   end
 
 
-  def format_account_code(code)
-    "%*.*s" % [max_account_code_length, max_account_code_length, code]
+  def account_code_format
+    @account_code_format ||= "%#{max_account_code_length}.#{max_account_code_length}s"
   end
 
 
@@ -30,18 +30,12 @@ module Reporter
   end
 
 
-  def format_amount(amount)
-    "%9.2f" % amount
-  end
-
-
   # e.g. "    117.70     tr.mileage  Travel - Mileage Allowance"
   def format_acct_amount(acct_amount)
-    "%s  %s  %s" % [
-        format_amount(acct_amount.amount),
-        format_account_code(acct_amount.code),
-        context.chart_of_accounts.name_for_code(acct_amount.code)
-    ]
+    sprintf("%s  %s  %s",
+        sprintf("%9.2f", acct_amount.amount),
+        sprintf(account_code_format, acct_amount.code),
+        context.chart_of_accounts.name_for_code(acct_amount.code))
   end
 
 
@@ -51,8 +45,7 @@ module Reporter
 
 
   def center(string)
-    indent = (page_width - string.length) / 2
-    indent = 0 if indent < 0
+    indent = [(page_width - string.length) / 2, 0].max
     (' ' * indent) + string
   end
 
@@ -65,49 +58,6 @@ module Reporter
   def total_with_ok_or_discrepancy(amount)
     status_message = (amount == 0.0)  ? '(Ok)' : '(Discrepancy)'
     sprintf(line_item_format_string, amount, status_message, '')
-  end
-
-
-  def generate_and_format_totals(section_caption, totals)
-    totals_for_display = totals.keys.sort.map do |account_code|
-      account_name = context.chart_of_accounts.name_for_code(account_code)
-      account_total = totals[account_code]
-      {
-        amount: account_total,
-        code: account_code,
-        name: account_name
-      }
-    end
-
-
-    output = section_caption
-    output << "\n#{'-' * section_caption.length}\n\n"
-    format_string = "%12.2f   %-#{context.chart_of_accounts.max_account_code_length}s   %s\n"
-    totals_for_display.each do |total|
-      output << format_string % [total[:amount], total[:code], total[:name]]
-    end
-
-    output << "------------\n"
-    output << "%12.2f\n" % totals.values.sum.round(2)
-    output
-  end
-
-
-  def generate_account_type_section(section_caption, totals, section_type, need_to_reverse_sign)
-    account_codes_this_section = context.chart_of_accounts.account_codes_of_type(section_type)
-
-    totals_this_section = totals.select do |account_code, _amount|
-      account_codes_this_section.include?(account_code)
-    end
-
-    if need_to_reverse_sign
-      totals_this_section.each { |code, amount| totals_this_section[code] = -amount }
-    end
-
-    section_total_amount = totals_this_section.map { |aa| aa.last }.sum
-
-    output = generate_and_format_totals(section_caption, totals_this_section)
-    [ output, section_total_amount ]
   end
 
 
@@ -195,7 +145,6 @@ module Reporter
       fn_center: method(:center),
       fn_erb_render_binding: method(:erb_render_binding),
       fn_format_multidoc_entry: method(:format_multidoc_entry),
-      fn_generate_and_format_totals: method(:generate_and_format_totals),
       fn_section_heading: method(:section_heading),
       fn_total_with_ok_or_discrepancy: method(:total_with_ok_or_discrepancy),
       line_item_format_string: line_item_format_string,
