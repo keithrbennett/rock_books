@@ -11,9 +11,9 @@
 
     <style>
       body {
-        padding: 18px;
-        background-color: #e7f7cd;
-        color: darkgreen;
+        padding: 36px;
+        background-color: #88c1f7;
+        color: #01182d;
       }
 
       h2 {
@@ -22,8 +22,8 @@
       }
 
       .this_page_style {
-        background-color: #e7f7cd;
-        color: darkgreen;
+        background-color: #88c1f7;
+        color: #01182d;
         border: 0px;
       }
     </style>
@@ -36,8 +36,8 @@
 
     <h2>Financial Statements</h2>
     <div id="financial-statements">
-      <a href='balance_sheet.html' class="btn btn-success">Balance Sheet</a>
-      <a href='income_statement.html' class="btn btn-success">Income Statement</a>
+      <a href='balance_sheet.html' class="btn btn-primary">Balance Sheet</a>
+      <a href='income_statement.html' class="btn btn-primary">Income Statement</a>
     </div>
 
 
@@ -47,7 +47,7 @@
         subdir_link = ->(name, caption) do
           dir_name = File.expand_path(File.join(Dir.pwd, name))
           if Dir.exist?(dir_name)
-            %Q{<a href=#{dir_name} class="btn btn-success">#{caption}</a>}
+            %Q{<a href=#{dir_name} class="btn btn-primary">#{caption}</a>}
           end
         end
       %>
@@ -60,9 +60,9 @@
 
     <h2>All Transactions Reports</h2>
     <div id="all-transactions">
-      <a href="all_txns_by_acct.html" class="btn btn-success">By Account</a>
-      <a href="all_txns_by_amount.html" class="btn btn-success">By Amount</a>
-      <a href="all_txns_by_date.html" class="btn btn-success">By Date</a>
+      <a href="all_txns_by_acct.html" class="btn btn-primary">By Account</a>
+      <a href="all_txns_by_amount.html" class="btn btn-primary">By Amount</a>
+      <a href="all_txns_by_date.html" class="btn btn-primary">By Date</a>
     </div>
 
     <% collapsible_heading = ->(caption, href) do %Q{
@@ -72,7 +72,7 @@
         <div class="row">
 
           <div class="col-sm2" style="margin-right: 12px;">
-            <a class="btn btn-success" data-toggle="collapse" href="#{href}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <a class="btn btn-primary" data-toggle="collapse" href="#{href}" role="button" aria-expanded="false" aria-controls="collapseExample">
               +/-
             </a>
           </div>
