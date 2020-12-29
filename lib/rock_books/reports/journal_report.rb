@@ -9,18 +9,22 @@ class JournalReport
   include Reporter
   include ErbHelper
 
-  attr_accessor :context, :data, :title
+  attr_accessor :context, :report_data
 
 
-  def initialize(journal, report_context, filter = nil)
-    raise "Journal title not specified for journal #{journal}" unless journal.title
+  def initialize(report_data, report_context, filter = nil)
+    @report_data = report_data
     @context = report_context
-    @data = JournalData.new(journal, report_context, filter).fetch
-    @title = journal.title
   end
 
 
-  def format_entry_first_acct_amount(entry)
+  def generate
+    presentation_context = template_presentation_context.merge(fn_format_entry: method(:format_entry))
+    ErbHelper.render_hashes('text/journal.txt.erb', report_data, presentation_context)
+  end
+
+
+  private def format_entry_first_acct_amount(entry)
     entry.date.to_s \
          + '  ' \
          + format_acct_amount(entry.acct_amounts.last) \
@@ -30,7 +34,7 @@ class JournalReport
 
   # Formats an entry like this, with entry description added on additional line(s) if it exists:
   # 2018-05-21   $120.00   701  Office Supplies
-  def format_entry_no_split(entry)
+  private def format_entry_no_split(entry)
     output = format_entry_first_acct_amount(entry)
 
     if entry.description && entry.description.length > 0
@@ -43,7 +47,7 @@ class JournalReport
   # Formats an entry like this, with entry description added on additional line(s) if it exists::
   # 2018-05-21   $120.00   95.00     701  Office Supplies
   #                        25.00     751  Gift to Customer
-  def format_entry_with_split(entry)
+  private def format_entry_with_split(entry)
     output = format_entry_first_acct_amount(entry)
     indent = ' ' * 12
 
@@ -57,18 +61,12 @@ class JournalReport
   end
 
 
-  def format_entry(entry)
+  private def format_entry(entry)
     if entry.acct_amounts.size > 2
       format_entry_with_split(entry)
     else
       format_entry_no_split(entry)
     end
-  end
-
-
-  def generate
-    presentation_context = template_presentation_context.merge(fn_format_entry: method(:format_entry))
-    ErbHelper.render_hashes('text/journal.txt.erb', data, presentation_context)
   end
 end
 end

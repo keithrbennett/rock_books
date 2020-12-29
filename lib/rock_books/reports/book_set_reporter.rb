@@ -38,29 +38,43 @@ class BookSetReporter
     check_prequisite_executables
     create_directories
     create_index_html
+    do_statements
+    do_journals
     all_reports(filter).each { |report| write_report(report) }
   end
 
 
   # All methods after this point are private.
 
+  private def do_report(short_name, text_report)
+    txt_filespec = build_filespec(output_dir, short_name, 'txt')
+    File.write(txt_filespec, text_report)
+  end
+
+
+  private def do_statements
+    bs_is_data = BsIsData.new(context)
+
+    bal_sheet_text_report = BalanceSheet.new(context, bs_is_data.bal_sheet_data).generate
+    do_report(:balance_sheet, bal_sheet_text_report)
+
+    inc_stat_text_report = IncomeStatement.new(context, bs_is_data.inc_stat_data).generate
+    do_report(:income_statement, inc_stat_text_report)
+  end
+
+
+  private def do_journals
+    journals.each do |journal|
+      report_data = JournalData.new(journal, context, filter).fetch
+      report_text = JournalReport.new(report_data, context, filter).generate
+      do_report(journal.short_name, report_text)
+    end
+  end
+
   # @return a hash whose keys are short names as symbols, and values are report text strings
   private def all_reports(filter = nil)
 
     reports_by_short_name = {}
-
-    do_statements = -> do
-      bs_is_data = BsIsData.new(context)
-      reports_by_short_name[:balance_sheet]      = BalanceSheet.new(context, bs_is_data.bal_sheet_data).generate
-      reports_by_short_name[:income_statement]   = IncomeStatement.new(context, bs_is_data.inc_stat_data).generate
-    end
-
-    do_journals = -> do
-      journals.each_with_object(reports_by_short_name) do |journal, report_hash|
-        short_name = journal.short_name.to_sym
-        report_hash[short_name] = JournalReport.new(journal, context, filter).generate
-      end
-    end
 
     do_transaction_reports = -> do
       reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context, :date, filter).generate
@@ -82,8 +96,6 @@ class BookSetReporter
       end
     end
 
-    do_statements.()
-    do_journals.()
     do_transaction_reports.()
     do_receipt_reports.()
     do_single_account_reports.()
