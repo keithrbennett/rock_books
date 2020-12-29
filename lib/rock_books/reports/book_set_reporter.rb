@@ -40,26 +40,21 @@ class BookSetReporter
     create_index_html
     do_statements
     do_journals
-    all_reports(filter).each { |report| write_report(report) }
+    do_transaction_reports
+    all_reports(filter).each { |report| write_report(*report) }
   end
 
 
   # All methods after this point are private.
 
-  private def do_report(short_name, text_report)
-    txt_filespec = build_filespec(output_dir, short_name, 'txt')
-    File.write(txt_filespec, text_report)
-  end
-
-
   private def do_statements
     bs_is_data = BsIsData.new(context)
 
     bal_sheet_text_report = BalanceSheet.new(context, bs_is_data.bal_sheet_data).generate
-    do_report(:balance_sheet, bal_sheet_text_report)
+    write_report(:balance_sheet, bal_sheet_text_report)
 
     inc_stat_text_report = IncomeStatement.new(context, bs_is_data.inc_stat_data).generate
-    do_report(:income_statement, inc_stat_text_report)
+    write_report(:income_statement, inc_stat_text_report)
   end
 
 
@@ -67,20 +62,35 @@ class BookSetReporter
     journals.each do |journal|
       report_data = JournalData.new(journal, context, filter).fetch
       report_text = JournalReport.new(report_data, context, filter).generate
-      do_report(journal.short_name, report_text)
+      write_report(journal.short_name, report_text)
     end
   end
 
+
+  private def do_transaction_reports
+
+    do_date_or_amount_report = ->(sort_field, short_name) do
+      data = MultidocTxnReportData.new(context, sort_field, filter).fetch
+      report_text = MultidocTransactionReport.new(data, context).generate
+      write_report(short_name, report_text)
+    end
+
+    do_acct_report = -> do
+      data = MultidocTxnByAccountData.new(context).fetch
+      text_report = MultidocTransactionByAccountReport.new(data, context).generate
+      write_report(:all_txns_by_acct, text_report)
+    end
+
+    do_date_or_amount_report.(:date,   :all_txns_by_date)
+    do_date_or_amount_report.(:amount, :all_txns_by_amount)
+    do_acct_report.()
+  end
+
+  
   # @return a hash whose keys are short names as symbols, and values are report text strings
   private def all_reports(filter = nil)
 
     reports_by_short_name = {}
-
-    do_transaction_reports = -> do
-      reports_by_short_name[:all_txns_by_date]   = MultidocTransactionReport.new(context, :date, filter).generate
-      reports_by_short_name[:all_txns_by_amount] = MultidocTransactionReport.new(context, :amount, filter).generate
-      reports_by_short_name[:all_txns_by_acct]   = MultidocTransactionByAccountReport.new(context).generate
-    end
 
     do_receipt_reports = -> do
       if run_options.do_receipts
@@ -96,7 +106,6 @@ class BookSetReporter
       end
     end
 
-    do_transaction_reports.()
     do_receipt_reports.()
     do_single_account_reports.()
 
@@ -156,9 +165,8 @@ class BookSetReporter
   end
 
 
-  private def write_report(report)
+  private def write_report(short_name, report_text)
 
-    short_name, report_text = report
     txt_filespec = build_filespec(output_dir, short_name, 'txt')
     html_filespec = build_filespec(output_dir, short_name, 'html')
     pdf_filespec = build_filespec(output_dir, short_name, 'pdf')

@@ -13,14 +13,9 @@ class MultidocTransactionReport
 
   attr_reader :context, :data
 
-  SORT_BY_VALID_OPTIONS = %i(date  amount)
-
-  def initialize(report_context, sort_by, filter = nil)
-    unless SORT_BY_VALID_OPTIONS.include?(sort_by)
-      raise Error.new("sort_by option '#{sort_by}' not in valid choices of #{SORT_BY_VALID_OPTIONS}.")
-    end
+  def initialize(report_data, report_context)
+    @data = report_data
     @context = report_context
-    @data = MultidocTxnReportData.new(context, sort_by, filter).fetch
   end
 
   def generate

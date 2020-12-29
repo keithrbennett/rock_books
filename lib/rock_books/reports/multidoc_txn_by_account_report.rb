@@ -14,9 +14,9 @@ class MultidocTransactionByAccountReport
   attr_reader :context, :data
 
 
-  def initialize(report_context)
+  def initialize(data, report_context)
+    @data = data
     @context = report_context
-    @data = MultidocTxnByAccountData.new(context).fetch
   end
 
   def account_total_line(account_code, account_total)
