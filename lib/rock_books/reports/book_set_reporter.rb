@@ -38,11 +38,12 @@ class BookSetReporter
     check_prequisite_executables
     create_directories
     create_index_html
+
     do_statements
     do_journals
     do_transaction_reports
     do_single_account_reports
-    all_reports(filter).each { |report| write_report(*report) }
+    do_receipts_report
   end
 
 
@@ -98,19 +99,9 @@ class BookSetReporter
   end
 
 
-  # @return a hash whose keys are short names as symbols, and values are report text strings
-  private def all_reports(filter = nil)
-
-    reports_by_short_name = {}
-
-    do_receipt_reports = -> do
-      if run_options.do_receipts
-        reports_by_short_name[:receipts] = ReceiptsReport.new(context, *missing_existing_unused_receipts).generate
-      end
-    end
-
-    do_receipt_reports.()
-    reports_by_short_name
+  private def do_receipts_report
+    text_report = ReceiptsReport.new(context, *missing_existing_unused_receipts).generate
+    write_report(:receipts, text_report)
   end
 
 
