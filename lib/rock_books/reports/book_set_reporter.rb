@@ -41,6 +41,7 @@ class BookSetReporter
     do_statements
     do_journals
     do_transaction_reports
+    do_single_account_reports
     all_reports(filter).each { |report| write_report(*report) }
   end
 
@@ -61,8 +62,8 @@ class BookSetReporter
   private def do_journals
     journals.each do |journal|
       report_data = JournalData.new(journal, context, filter).fetch
-      report_text = JournalReport.new(report_data, context, filter).generate
-      write_report(journal.short_name, report_text)
+      text_report = JournalReport.new(report_data, context, filter).generate
+      write_report(journal.short_name, text_report)
     end
   end
 
@@ -71,8 +72,8 @@ class BookSetReporter
 
     do_date_or_amount_report = ->(sort_field, short_name) do
       data = MultidocTxnReportData.new(context, sort_field, filter).fetch
-      report_text = MultidocTransactionReport.new(data, context).generate
-      write_report(short_name, report_text)
+      text_report = MultidocTransactionReport.new(data, context).generate
+      write_report(short_name, text_report)
     end
 
     do_acct_report = -> do
@@ -86,7 +87,17 @@ class BookSetReporter
     do_acct_report.()
   end
 
-  
+
+  private def do_single_account_reports
+    chart_of_accounts.accounts.each do |account|
+      short_name = ('acct_' + account.code).to_sym
+      data = TxOneAccountData.new(context, account.code).fetch
+      text_report = TxOneAccount.new(data, context).generate
+      write_report(short_name, text_report)
+    end
+  end
+
+
   # @return a hash whose keys are short names as symbols, and values are report text strings
   private def all_reports(filter = nil)
 
@@ -98,17 +109,7 @@ class BookSetReporter
       end
     end
 
-    do_single_account_reports = -> do
-      chart_of_accounts.accounts.each do |account|
-        short_name = ('acct_' + account.code).to_sym
-        report = TxOneAccount.new(context, account.code).generate
-        reports_by_short_name[short_name] = report
-      end
-    end
-
     do_receipt_reports.()
-    do_single_account_reports.()
-
     reports_by_short_name
   end
 
@@ -165,13 +166,13 @@ class BookSetReporter
   end
 
 
-  private def write_report(short_name, report_text)
+  private def write_report(short_name, text_report)
 
     txt_filespec = build_filespec(output_dir, short_name, 'txt')
     html_filespec = build_filespec(output_dir, short_name, 'html')
     pdf_filespec = build_filespec(output_dir, short_name, 'pdf')
 
-    File.write(txt_filespec, report_text)
+    File.write(txt_filespec, text_report)
 
     # Mac OS
     textutil = ->(font_size) do

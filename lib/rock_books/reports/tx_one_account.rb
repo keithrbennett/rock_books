@@ -15,10 +15,9 @@ module RockBooks
     attr_reader :context, :account_code, :data
 
 
-    def initialize(report_context, account_code)
+    def initialize(data, report_context)
+      @data = data
       @context = report_context
-      @account_code = account_code
-      @data = TxOneAccountData.new(context, account_code).fetch
     end
 
 

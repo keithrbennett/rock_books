@@ -298,9 +298,9 @@ When in interactive shell mode:
 
 
   def cmd_d
-    book_set.all_reports($filter).each do |short_name, report_text|
+    book_set.all_reports($filter).each do |short_name, text_report|
       puts "#{short_name}:\n\n"
-      puts report_text
+      puts text_report
       puts "\n\n\n"
     end
     nil
