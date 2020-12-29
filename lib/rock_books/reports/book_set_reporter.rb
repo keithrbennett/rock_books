@@ -12,6 +12,7 @@ require_relative 'tx_one_account'
 require_relative 'helpers/erb_helper'
 require_relative 'helpers/reporter'
 
+require 'prawn'
 
 module RockBooks
 class BookSetReporter
@@ -24,6 +25,8 @@ class BookSetReporter
   def_delegator :book_set, :journals
   def_delegator :book_set, :chart_of_accounts
   def_delegator :book_set, :run_options
+
+  FONT_FILESPEC = File.absolute_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'assets', 'fonts', 'JetBrainsMono-Medium.ttf'))
 
 
   def initialize(book_set, output_dir, filter = nil)
@@ -123,7 +126,7 @@ class BookSetReporter
     end
 
     raise "Report generation is not currently supported in Windows." if OS.windows?
-    required_exes = OS.mac? ? %w(textutil cupsfilter) : %w(txt2html wkhtmltopdf)
+    required_exes = OS.mac? ? %w(textutil) : %w(txt2html)
     missing_exes = required_exes.reject { |exe| executable_exists.(exe) }
     if missing_exes.any?
       raise "Missing required report generation executable(s): #{missing_exes.join(', ')}. Please install them with your system's package manager."
@@ -157,6 +160,17 @@ class BookSetReporter
   end
 
 
+  private def prawn_create_document(pdf_filespec, text)
+    Prawn::Document.generate(pdf_filespec) do
+      font(FONT_FILESPEC, size: 10)
+
+      utf8_nonbreaking_space = "\uC2A0"
+      unicode_nonbreaking_space = "\u00A0"
+      text(text.gsub(' ', unicode_nonbreaking_space))
+    end
+    puts "Finished generating #{pdf_filespec} with prawn."
+  end
+
   private def write_report(short_name, text_report)
 
     txt_filespec = build_filespec(output_dir, short_name, 'txt')
@@ -169,20 +183,15 @@ class BookSetReporter
     textutil = ->(font_size) do
       run_command("textutil -convert html -font 'Courier New Bold' -fontsize #{font_size} #{txt_filespec} -output #{html_filespec}")
     end
-    cupsfilter = -> { run_command("cupsfilter #{txt_filespec} > #{pdf_filespec}") }
 
     # Linux
     txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 #{txt_filespec} > #{html_filespec}") }
-    html2pdf = -> { run_command("wkhtmltopdf #{html_filespec} #{pdf_filespec}") }
 
+    prawn_create_document(pdf_filespec, text_report)
     if OS.mac?
-      textutil.(11)
-      cupsfilter.()
-      # Use smaller size for the PDF but larger size for the web pages:
       textutil.(14)
     else
       txt2html.()
-      html2pdf.()
     end
 
     hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
