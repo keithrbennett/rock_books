@@ -171,6 +171,7 @@ class BookSetReporter
     puts "Finished generating #{pdf_filespec} with prawn."
   end
 
+
   private def write_report(short_name, text_report)
 
     txt_filespec = build_filespec(output_dir, short_name, 'txt')
@@ -185,7 +186,7 @@ class BookSetReporter
     end
 
     # Linux
-    txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 #{txt_filespec} > #{html_filespec}") }
+    txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 --hrule_min 9999 #{txt_filespec} > #{html_filespec}") }
 
     prawn_create_document(pdf_filespec, text_report)
     if OS.mac?
