@@ -8,13 +8,13 @@
 <%   short_name = sprintf(short_name_format_string, journal.short_name) -%>
 <%=  fn_center.("#{short_name} -- #{journal.title}") %>
 <% end -%>
-
 <%= banner_line %>
+
 
    Date     Document           Amount      Account
    ----     --------           ------      -------
 
-<% entries.each do |entry| %>
+<% entries.each do |entry| -%>
 <%=  fn_format_multidoc_entry.(entry) %>
 <% end %>
 

@@ -111,7 +111,7 @@ class BookSetReporter
   private def run_command(command)
     puts "\n----\nRunning command: #{command}"
     stdout, stderr, status = Open3.capture3(command)
-    puts "Status was #{status}."
+    puts "Exit code was #{status.exitstatus}."
     puts "\nStdout was:\n\n#{stdout}" unless stdout.size == 0
     puts "\nStderr was:\n\n#{stderr}" unless stderr.size == 0
     puts
