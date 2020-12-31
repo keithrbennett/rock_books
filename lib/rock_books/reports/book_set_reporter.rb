@@ -186,7 +186,18 @@ class BookSetReporter
     end
 
     # Linux
-    txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 --hrule_min 9999 --no-make_links - #{txt_filespec} > #{html_filespec}") }
+    txt2html = -> do
+      command = [
+          'txt2html',
+          '--preformat_trigger_lines 0',
+          '--hrule_min 9999 ',
+          '--no-make_links',
+          '--explicit_headings',
+          "--outfile #{html_filespec}",
+          txt_filespec
+      ].join(' ')
+      run_command(command)
+    end
 
     prawn_create_document(pdf_filespec, text_report)
     if OS.mac?
