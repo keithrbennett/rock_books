@@ -178,33 +178,34 @@ class BookSetReporter
     html_filespec = build_filespec(output_dir, short_name, 'html')
     pdf_filespec = build_filespec(output_dir, short_name, 'pdf')
 
-    File.write(txt_filespec, text_report)
+    create_text_report = -> { File.write(txt_filespec, text_report) }
 
-    # Mac OS
-    textutil = ->(font_size) do
-      run_command("textutil -convert html -font 'Courier New Bold' -fontsize #{font_size} #{txt_filespec} -output #{html_filespec}")
+    create_pdf_report = -> { prawn_create_document(pdf_filespec, text_report) }
+
+    create_html_report = -> do
+      mac_create = -> do
+        run_command("textutil -convert html -font 'Courier New Bold' -fontsize 14 #{txt_filespec} -output #{html_filespec}")
+      end
+
+      linux_create = -> do
+        command = [
+            'txt2html',
+            '--preformat_trigger_lines 0',
+            '--hrule_min 9999 ',
+            '--no-make_links',
+            '--explicit_headings',
+            "--outfile #{html_filespec}",
+            txt_filespec
+        ].join(' ')
+        run_command(command)
+      end
+
+      OS.mac? ? mac_create.() : linux_create.()
     end
 
-    # Linux
-    txt2html = -> do
-      command = [
-          'txt2html',
-          '--preformat_trigger_lines 0',
-          '--hrule_min 9999 ',
-          '--no-make_links',
-          '--explicit_headings',
-          "--outfile #{html_filespec}",
-          txt_filespec
-      ].join(' ')
-      run_command(command)
-    end
-
-    prawn_create_document(pdf_filespec, text_report)
-    if OS.mac?
-      textutil.(14)
-    else
-      txt2html.()
-    end
+    create_text_report.()
+    create_pdf_report.()
+    create_html_report.()
 
     hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
     if replacements_made
