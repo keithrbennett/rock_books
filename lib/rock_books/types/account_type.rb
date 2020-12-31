@@ -30,7 +30,11 @@ module RockBooks
 
     # Converts type upper case letter representation to a type object (e.g. 'A' => ASSET)
     def self.letter_to_type(string)
-      LETTER_TO_TYPE[string[0].upcase]
+      key = string[0].upcase
+      LETTER_TO_TYPE.fetch(key) do
+        raise Error.new("Account type of #{string} not valid. " +
+            "Must be one of #{LETTER_TO_TYPE.keys} (#{ALL_TYPES.map(&:singular_name)})")
+      end
     end
 
     def self.symbol_to_type(symbol)

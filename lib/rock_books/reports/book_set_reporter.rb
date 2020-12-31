@@ -207,10 +207,7 @@ class BookSetReporter
     create_pdf_report.()
     create_html_report.()
 
-    hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
-    if replacements_made
-      File.write(html_filespec, hyperlinkized_text)
-    end
+    HtmlHelper.convert_receipts_to_hyperlinks_in_file(html_filespec)
 
     puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
   end

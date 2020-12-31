@@ -91,10 +91,6 @@ class ChartOfAccounts
 
         account_type_token = matcher[1]
         account_type = AccountType.letter_to_type(account_type_token)
-        if account_type.nil?
-          raise Error.new("Account type of #{string} not valid. " +
-              "Must be one of #{LETTER_TO_TYPE.keys} (#{ALL_TYPES.map(&:singular_name)})")
-        end
 
         name = matcher[2]
 
