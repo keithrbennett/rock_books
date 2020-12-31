@@ -13,6 +13,8 @@ require_relative 'helpers/erb_helper'
 require_relative 'helpers/reporter'
 
 require 'prawn'
+require 'trick_bag'
+
 
 module RockBooks
 class BookSetReporter
@@ -186,7 +188,16 @@ class BookSetReporter
     end
 
     # Linux
-    txt2html = -> { run_command("txt2html --preformat_trigger_lines 0 --hrule_min 9999 --no-make_links - #{txt_filespec} > #{html_filespec}") }
+    txt2html = -> do
+      utf8_nonbreaking_space = "\uC2A0"
+      unicode_nonbreaking_space = "\u00A0"
+      temp_text = File.readlines(txt_filespec).map do |line|
+        line == "\n" ? "#{utf8_nonbreaking_space}\n" : line
+      end.join
+      TrickBag::Io::TempFiles.file_containing(temp_text, 'rock_books') do |tmp_filespec|
+        run_command("txt2html --preformat_trigger_lines 0 --hrule_min 9999 --no-make_links --explicit_headings --outfile #{html_filespec} #{tmp_filespec}")
+      end
+    end
 
     prawn_create_document(pdf_filespec, text_report)
     if OS.mac?
@@ -195,10 +206,10 @@ class BookSetReporter
       txt2html.()
     end
 
-    hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
-    if replacements_made
-      File.write(html_filespec, hyperlinkized_text)
-    end
+    # hyperlinkized_text, replacements_made = HtmlHelper.convert_receipts_to_hyperlinks(File.read(html_filespec))
+    # if replacements_made
+    #   File.write(html_filespec, hyperlinkized_text)
+    # end
 
     puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
   end
