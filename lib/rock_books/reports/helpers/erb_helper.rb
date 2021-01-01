@@ -8,15 +8,19 @@ module ErbHelper
 
 
   def self.render_binding(erb_relative_filespec, template_binding)
-    puts "Rendering template #{erb_relative_filespec}..."
-    erb_template(erb_relative_filespec).result(template_binding)
+    print "Rendering template #{erb_relative_filespec}..."
+    result = erb_template(erb_relative_filespec).result(template_binding)
+    puts 'done.'
+    result
   end
 
   # Takes 2 hashes, one with data, and the other with presentation functions/lambdas, and passes their union to ERB
   # for rendering.
   def self.render_hashes(erb_relative_filespec, data_hash, presentation_hash)
-    puts "Rendering template #{erb_relative_filespec}..."
+    print "Rendering template #{erb_relative_filespec}..."
     combined_hash = (data_hash || {}).merge(presentation_hash || {})
-    erb_template(erb_relative_filespec).result_with_hash(combined_hash)
+    result = erb_template(erb_relative_filespec).result_with_hash(combined_hash)
+    puts 'done.'
+    result
   end
 end

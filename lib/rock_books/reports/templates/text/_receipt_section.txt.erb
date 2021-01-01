@@ -1,0 +1,17 @@
+<% receipt_info_line = ->(info) { sprintf("%-16.16s  %s", info[:journal], info[:receipt]) } -%>
+<% format_heading_line = ->(str1, str2) { sprintf("%-16.16s  %s", str1, str2) } -%>
+
+
+
+<%= name %> Receipts:
+
+<%= format_heading_line.('Journal', 'Receipt Filespec') %>
+<%= format_heading_line.('-------', '----------------') %>
+
+<% if list.empty? -%>
+[None]
+<% else -%>
+<%   list.each do |receipt|  -%>
+<%=    receipt_info_line.(receipt) %>
+<%   end -%>
+<% end -%>

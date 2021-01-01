@@ -1,0 +1,13 @@
+<% create_section = ->(name, list) do
+  fn_erb_render_hashes.('text/_receipt_section.txt.erb', { name: name, list: list }, {})
+end -%>
+<%= banner_line %>
+<%= fn_center.(entity || 'Unspecified Entity') %>
+<%= fn_center.('Receipts Report') %>
+<%= banner_line %>
+
+<% # Unlike existing and missing, which arrays of hashes with keys :receipt and :journal, unused is an array of receipt filespecs %>
+
+<%= create_section.('Missing', missing) %>
+<%= create_section.('Unused', unused.map { |receipt| { receipt: receipt, journal: nil } }) %>
+<%= create_section.('Existing', existing) %>
