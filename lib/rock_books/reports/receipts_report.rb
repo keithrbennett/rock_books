@@ -27,13 +27,15 @@ class ReceiptsReport
 
 
   def receipt_info_line(info)
-    "%-16.16s  %s\n" % [info[:journal], info[:receipt]]
+    sprintf("%-16.16s  %s\n", info[:journal], info[:receipt])
   end
 
 
   def column_headings
     format_string = "%-16.16s  %s\n"
-    (format_string % ['Journal', 'Receipt Filespec']) << (format_string % %w(------- ----------------)) << "\n"
+    sprintf(format_string, 'Journal', 'Receipt Filespec') \
+        + sprintf(format_string, '-------', '----------------') \
+        + "\n"
   end
 
 

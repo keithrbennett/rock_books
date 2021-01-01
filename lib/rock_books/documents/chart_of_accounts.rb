@@ -130,7 +130,7 @@ class ChartOfAccounts
 
     code_width = @accounts.inject(0) { |width, a| width = [width, a.code.length].max }
     format_string = "%-#{code_width}s  %-10.10s  %s\n"
-    accounts.each { |a| result << (format_string % [a.code, a.type.to_s, a.name]) }
+    accounts.each { |a| result << sprintf(format_string, a.code, a.type.to_s, a.name) }
 
     result.string
   end

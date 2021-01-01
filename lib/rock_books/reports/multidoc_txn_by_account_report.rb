@@ -21,7 +21,7 @@ class MultidocTransactionByAccountReport
 
   def account_total_line(account_code, account_total)
     account_name = context.chart_of_accounts.name_for_code(account_code)
-    "%.2f  Total for account: %s - %s" % [account_total, account_code, account_name]
+    sprintf("%.2f  Total for account: %s - %s", account_total, account_code, account_name)
   end
 
   def generate
