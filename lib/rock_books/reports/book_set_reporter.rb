@@ -2,6 +2,7 @@ require_relative '../documents/book_set'
 
 require_relative 'balance_sheet'
 require_relative 'data/bs_is_data'
+require_relative 'data/receipts_report_data'
 require_relative 'income_statement'
 require_relative 'multidoc_txn_report'
 require_relative 'receipts_report'
@@ -103,7 +104,8 @@ class BookSetReporter
 
 
   private def do_receipts_report
-    text_report = ReceiptsReport.new(context, *missing_existing_unused_receipts).generate
+    data = ReceiptsReportData.new(book_set.all_entries, run_options.receipt_dir).fetch
+    text_report = ReceiptsReport.new(context, data).generate
     write_report(:receipts, text_report)
   end
 

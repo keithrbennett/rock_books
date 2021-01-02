@@ -105,7 +105,7 @@ When in interactive shell mode:
       end
     end
 
-    validate_receipts_dir = -> do
+    validate_receipt_dir = -> do
       File.directory?(options.receipt_dir) ? nil : \
           "Receipts directory '#{options.receipt_dir}' does not exist. "
     end
@@ -114,7 +114,7 @@ When in interactive shell mode:
     output << validate_input_dir.()
     output << validate_output_dir.()
     if run_options.do_receipts
-      output << validate_receipts_dir.()
+      output << validate_receipt_dir.()
     end
 
     output.compact!
