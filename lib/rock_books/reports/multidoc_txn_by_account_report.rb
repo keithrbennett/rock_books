@@ -1,6 +1,6 @@
 require_relative '../documents/chart_of_accounts'
 require_relative 'helpers/erb_helper'
-require_relative 'helpers/reporter'
+require_relative 'helpers/text_report_helper'
 require_relative 'report_context'
 require_relative 'data/multidoc_txn_by_account_data'
 
@@ -8,7 +8,7 @@ module RockBooks
 
 class MultidocTransactionByAccountReport
 
-  include Reporter
+  include TextReportHelper
   include ErbHelper
 
   attr_reader :context, :data

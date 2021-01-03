@@ -1,5 +1,5 @@
 module RockBooks
-module HtmlHelper
+module HtmlReportHelper
 
   def self.convert_receipts_to_hyperlinks(original_html_string, html_filespec)
     html_lines = original_html_string.split("\n")

@@ -1,7 +1,7 @@
 module RockBooks
   class TxOneAccountData
 
-    include Reporter
+    include TextReportHelper
 
     attr_reader :context, :account_code, :account, :entries, :account_total, :totals
 

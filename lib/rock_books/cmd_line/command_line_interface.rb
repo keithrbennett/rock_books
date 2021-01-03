@@ -4,7 +4,7 @@ require 'ostruct'
 
 require_relative '../../rock_books'
 require_relative '../version'
-require_relative '../reports/helpers/reporter'
+require_relative '../reports/helpers/text_report_helper'
 require_relative '../helpers/book_set_loader'
 
 module RockBooks

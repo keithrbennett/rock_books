@@ -1,7 +1,7 @@
 module RockBooks
 class MultidocTxnByAccountData
 
-  include Reporter
+  include TextReportHelper
 
   attr_reader :context, :account_code
 

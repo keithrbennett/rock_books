@@ -4,7 +4,6 @@ require 'os'
 require_relative 'chart_of_accounts'
 require_relative 'journal'
 require_relative '../filters/journal_entry_filters'  # for shell mode
-require_relative '../helpers/html_helper'
 require_relative '../helpers/parse_helper'
 require_relative '../reports/book_set_reporter'
 

@@ -1,5 +1,5 @@
 require_relative 'helpers/erb_helper'
-require_relative 'helpers/reporter'
+require_relative 'helpers/text_report_helper'
 
 module RockBooks
 
@@ -8,7 +8,7 @@ module RockBooks
 # in order to calculate the correct balances, so we ignore the global $filter.
 class BalanceSheet
 
-  include Reporter
+  include TextReportHelper
   include ErbHelper
 
   attr_accessor :context, :data

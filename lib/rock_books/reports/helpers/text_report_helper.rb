@@ -2,7 +2,7 @@ require_relative '../../documents/journal_entry'
 require_relative 'erb_helper'
 
 module RockBooks
-module Reporter
+module TextReportHelper
 
   SHORT_NAME_MAX_LENGTH = 16
 

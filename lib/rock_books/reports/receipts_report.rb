@@ -4,7 +4,7 @@ require_relative 'report_context'
 module RockBooks
 class ReceiptsReport
 
-  include Reporter
+  include TextReportHelper
 
   attr_reader :context, :data
 

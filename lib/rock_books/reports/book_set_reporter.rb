@@ -11,7 +11,8 @@ require_relative 'journal_report'
 require_relative 'multidoc_txn_by_account_report'
 require_relative 'tx_one_account'
 require_relative 'helpers/erb_helper'
-require_relative 'helpers/reporter'
+require_relative 'helpers/text_report_helper'
+require_relative 'helpers/html_report_helper'
 
 require 'prawn'
 
@@ -109,16 +110,6 @@ class BookSetReporter
   end
 
 
-  private def run_command(command)
-    puts "\n----\nRunning command: #{command}"
-    stdout, stderr, status = Open3.capture3(command)
-    puts "Exit code was #{status.exitstatus}."
-    puts "\nStdout was:\n\n#{stdout}" unless stdout.size == 0
-    puts "\nStderr was:\n\n#{stderr}" unless stderr.size == 0
-    puts
-  end
-
-
   private def create_directories
     %w(txt pdf html).each do |format|
       dir = File.join(output_dir, format, SINGLE_ACCT_SUBDIR)
@@ -153,7 +144,6 @@ class BookSetReporter
       unicode_nonbreaking_space = "\u00A0"
       text(text.gsub(' ', unicode_nonbreaking_space))
     end
-    puts "Finished generating #{pdf_filespec} with prawn."
   end
 
 
@@ -170,7 +160,7 @@ class BookSetReporter
     create_html_report = -> do
       data = { report_body: text_report }
       html_raw_report = ErbHelper.render_hashes("html/report_page.html.erb", data, {})
-      html_report = HtmlHelper.convert_receipts_to_hyperlinks(html_raw_report, html_filespec)
+      html_report = HtmlReportHelper.convert_receipts_to_hyperlinks(html_raw_report, html_filespec)
       File.write(html_filespec, html_report)
     end
 
@@ -178,8 +168,7 @@ class BookSetReporter
     create_pdf_report.()
     create_html_report.()
 
-
-    puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
+    puts "Created text, PDF, and HTML reports for #{short_name}."
   end
 
 

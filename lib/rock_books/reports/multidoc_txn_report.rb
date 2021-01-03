@@ -1,14 +1,14 @@
 require_relative 'data/multidoc_txn_report_data'
 require_relative '../documents/journal'
 require_relative 'helpers/erb_helper'
-require_relative 'helpers/reporter'
+require_relative 'helpers/text_report_helper'
 require_relative 'report_context'
 
 module RockBooks
 
 class MultidocTransactionReport
 
-  include Reporter
+  include TextReportHelper
   include ErbHelper
 
   attr_reader :context, :data
