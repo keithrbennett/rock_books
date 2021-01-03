@@ -39,7 +39,6 @@ class BookSetReporter
 
 
   def generate
-    check_prequisite_executables
     create_directories
     create_index_html
 
@@ -120,22 +119,6 @@ class BookSetReporter
   end
 
 
-  private def check_prequisite_executables
-
-    executable_exists = ->(name) do
-      `which #{name}`
-      $?.success?
-    end
-
-    raise "Report generation is not currently supported in Windows." if OS.windows?
-    required_exes = OS.mac? ? %w(textutil) : %w(txt2html)
-    missing_exes = required_exes.reject { |exe| executable_exists.(exe) }
-    if missing_exes.any?
-      raise "Missing required report generation executable(s): #{missing_exes.join(', ')}. Please install them with your system's package manager."
-    end
-  end
-
-
   private def create_directories
     %w(txt pdf html).each do |format|
       dir = File.join(output_dir, format, SINGLE_ACCT_SUBDIR)
@@ -185,31 +168,16 @@ class BookSetReporter
     create_pdf_report = -> { prawn_create_document(pdf_filespec, text_report) }
 
     create_html_report = -> do
-      mac_create = -> do
-        run_command("textutil -convert html -font 'Courier New Bold' -fontsize 14 #{txt_filespec} -output #{html_filespec}")
-      end
-
-      linux_create = -> do
-        command = [
-            'txt2html',
-            '--preformat_trigger_lines 0',
-            '--hrule_min 9999 ',
-            '--no-make_links',
-            '--explicit_headings',
-            "--outfile #{html_filespec}",
-            txt_filespec
-        ].join(' ')
-        run_command(command)
-      end
-
-      OS.mac? ? mac_create.() : linux_create.()
+      data = { report_body: text_report }
+      html_raw_report = ErbHelper.render_hashes("html/report_page.html.erb", data, {})
+      html_report = HtmlHelper.convert_receipts_to_hyperlinks(html_raw_report, html_filespec)
+      File.write(html_filespec, html_report)
     end
 
     create_text_report.()
     create_pdf_report.()
     create_html_report.()
 
-    HtmlHelper.convert_receipts_to_hyperlinks_in_file(html_filespec)
 
     puts "Created reports in txt, html, and pdf for #{"%-20s" % short_name} at #{File.dirname(txt_filespec)}.\n\n\n"
   end

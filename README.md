@@ -33,10 +33,8 @@ To simplify its implementation, RockBooks assumes some conventions:
   
 #### Supported Operating Systems
 
-At this time, RockBooks is supported only on Mac OS and Linux. (It's really the external tools that is the issue, not the Ruby code.) It should probably work with Windows Subsystem for Linux (WSL) but it hasn't been tested. If you're unsuccessful trying to use RockBooks with WSL, give me as much information as possible and I'll try to resolve the issue.
+At this time, RockBooks is tested only on Mac OS and Linux. However, it will probably work fine on Windows.
 
-If you get an error message saying that an external command is missing, install that command using your system's package manager (e.g. `sudo apt install txt2html`). For `wkhtmltopdf` on Linux, see [https://wkhtmltopdf.org/](https://wkhtmltopdf.org/).
-  
 #### Text Files as Input
 
 Instead of a web interface, data input is done in plain text files. This isn't as fancy but has the following advantages:
