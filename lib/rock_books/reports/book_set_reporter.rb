@@ -158,7 +158,7 @@ class BookSetReporter
     create_pdf_report = -> { prawn_create_document(pdf_filespec, text_report) }
 
     create_html_report = -> do
-      data = { report_body: text_report }
+      data = { report_body: text_report, title: "#{short_name} Report -- RockBooks" }
       html_raw_report = ErbHelper.render_hashes("html/report_page.html.erb", data, {})
       html_report = HtmlReportHelper.convert_receipts_to_hyperlinks(html_raw_report, html_filespec)
       File.write(html_filespec, html_report)
