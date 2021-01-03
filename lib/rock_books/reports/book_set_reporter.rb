@@ -136,14 +136,29 @@ class BookSetReporter
   end
 
 
-  private def prawn_create_document(pdf_filespec, text)
-    Prawn::Document.generate(pdf_filespec) do
+  private def report_metadata(doc_short_name)
+    {
+        RBCreator:      "RockBooks v#{VERSION} (#{PROJECT_URL})",
+        RBEntity:       context.entity,
+        RBCreated:      Time.now.to_s,
+        RBDocumentCode: doc_short_name.to_s,
+    }
+  end
+
+
+  private def prawn_create_document(pdf_filespec, report_text, doc_short_name)
+    Prawn::Document.generate(pdf_filespec, info: report_metadata(doc_short_name)) do
       font(FONT_FILESPEC, size: 10)
 
       utf8_nonbreaking_space = "\uC2A0"
       unicode_nonbreaking_space = "\u00A0"
-      text(text.gsub(' ', unicode_nonbreaking_space))
+      text(report_text.gsub(' ', unicode_nonbreaking_space))
     end
+  end
+
+
+  private def html_metadata_comment(doc_short_name)
+    "\n" + report_metadata(doc_short_name).ai(plain: true) + "\n"
   end
 
 
@@ -155,10 +170,14 @@ class BookSetReporter
 
     create_text_report = -> { File.write(txt_filespec, text_report) }
 
-    create_pdf_report = -> { prawn_create_document(pdf_filespec, text_report) }
+    create_pdf_report = -> { prawn_create_document(pdf_filespec, text_report, short_name) }
 
     create_html_report = -> do
-      data = { report_body: text_report, title: "#{short_name} Report -- RockBooks" }
+      data = {
+          report_body: text_report,
+          title: "#{short_name} Report -- RockBooks",
+          metadata_comment: html_metadata_comment(short_name)
+      }
       html_raw_report = ErbHelper.render_hashes("html/report_page.html.erb", data, {})
       html_report = HtmlReportHelper.convert_receipts_to_hyperlinks(html_raw_report, html_filespec)
       File.write(html_filespec, html_report)
@@ -199,6 +218,7 @@ class BookSetReporter
     erb_filespec = File.join(File.dirname(__FILE__), 'templates', 'html', 'index.html.erb')
     erb = ERB.new(File.read(erb_filespec))
     erb.result_with_hash(
+        metadata_comment: html_metadata_comment('index.html'),
         journals: journals,
         chart_of_accounts: chart_of_accounts,
         run_options: run_options)
