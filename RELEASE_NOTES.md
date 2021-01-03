@@ -1,3 +1,11 @@
+### v0.7.1
+
+* Refactor report helpers. 
+* Improve/reduce text output during reporting.
+* Add title to HTML reports.
+* Minor fixes.
+
+
 ### v0.7.0
 
 * Dependencies on external commands in Linux and Mac OS for generating PDF and HTML files has been eliminated,
