@@ -1,3 +1,15 @@
+### v0.7.0
+
+* Dependencies on external commands in Linux and Mac OS for generating PDF and HTML files has been eliminated,
+using the prawn gem for PDF and simple ERB templating for HTML.
+* Massive refactoring of reports to separate data generation from presentation.
+* Reports are now computed and then written one at a time. Previously they were all computed, then all written.
+* ERB is now used for generating text reports.
+* Fix receipt hyperlinks in HTML output.
+* Improve some error output.
+* Various minor improvements and bug fixes.
+
+
 ### v0.6.1
 
 * Linux PDF generation fixed by using wkhtmltopdf instead of cupsfilter.
