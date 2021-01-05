@@ -65,9 +65,8 @@ class Journal
   attr_reader :short_name, :account_code, :chart_of_accounts, :date_prefix, :debit_or_credit, :doc_type, :title, :entries
 
   # short_name is a name that will appear on reports identifying the journal from which a transaction comes
-  def initialize(chart_of_accounts, input_lines, short_name = nil)
+  def initialize(chart_of_accounts, input_lines)
     @chart_of_accounts = chart_of_accounts
-    @short_name = short_name
     @entries = []
     @date_prefix = ''
     input_lines.each_with_index do |line, linenum|
