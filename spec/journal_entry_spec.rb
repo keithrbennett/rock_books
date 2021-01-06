@@ -8,13 +8,12 @@ module RockBooks
 
 RSpec.describe RockBooks::JournalEntry do
 
-  FN_GENERAL_JOURNAL = -> do
+  let(:general_journal) do
     gj_filespec = File.join(File.dirname(__FILE__), 'samples', 'general_journal.txt')
     Journal.from_file(Samples.chart_of_accounts, gj_filespec)
   end
 
   it 'should provide the correct values for total_amount and balanced? when zero' do
-    general_journal = FN_GENERAL_JOURNAL.()
     journal_entry = general_journal.entries.first
     acct_amounts = journal_entry.acct_amounts
     expect(acct_amounts.map(&:amount)).to eq([1000.00, 2500.00, -500.00, -800.00, -2200.00])
@@ -24,7 +23,6 @@ RSpec.describe RockBooks::JournalEntry do
 
 
   it 'should provide the correct values for total_amount and balanced? when NOT zero' do
-    general_journal = FN_GENERAL_JOURNAL.()
     journal_entry = general_journal.entries.first
     acct_amounts = journal_entry.acct_amounts
     acct_amounts.first.amount = 1001.00  # from 1000.00

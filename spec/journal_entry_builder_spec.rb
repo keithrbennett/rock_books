@@ -10,14 +10,10 @@ module RockBooks
     TEST_DATE = Date.iso8601('2018-05-13')
 
 
-    create_empty_journal = -> do
-      Journal.from_string(Samples.chart_of_accounts,
-          "@account_code: 101\n@short_name: sample_journal \n@debit_or_credit: debit")
-    end
-
-
     create_journal_entry_builder = ->(data_line) do
-      context = JournalEntryContext.new(create_empty_journal.(), 1, data_line)
+      journal_text = "@account_code: 101\n@short_name: sample_journal \n@debit_or_credit: debit"
+      empty_journal = Journal.from_string(Samples.chart_of_accounts, journal_text)
+      context = JournalEntryContext.new(empty_journal, 1, data_line)
       JournalEntryBuilder.new(context)
     end
 

@@ -58,7 +58,8 @@ RSpec.describe RockBooks::ChartOfAccounts do
 
   it 'does not choke on empty or comment lines' do
     data = "#{sample_text}\n\n\n\n201 L Loan Payable\n301 O Retained Earnings\n#\n#\n"
-    ChartOfAccounts.from_string(data)
+    chart = ChartOfAccounts.from_string(data)
+    expect(chart.accounts.size).to eq(3)  # sample text plus 2 specified here
   end
 
   it 'can handle a final line without a line ending' do
