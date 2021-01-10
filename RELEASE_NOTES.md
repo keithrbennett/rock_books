@@ -38,7 +38,7 @@ using the prawn gem for PDF and simple ERB templating for HTML.
 * Add receipt hyperlinks to HTML output.
 
 
-## v0.4.0
+### v0.4.0
 
 * Sort unused receipts alphanumerically.
 * Add 'x' receipts option for reporting both missing and unused receipts.
@@ -46,7 +46,7 @@ using the prawn gem for PDF and simple ERB templating for HTML.
 * Improve Receipts report.
 
 
-## v0.3.0
+### v0.3.0
 
 * Added ability to report unused receipts.
 * Errors now include more context information.
@@ -54,12 +54,12 @@ using the prawn gem for PDF and simple ERB templating for HTML.
 * Change license from MIT to Apache 2.
 
 
-## v0.2.1
+### v0.2.1
 
 * Add help text to readme.
 
 
-## v0.2.0
+### v0.2.0
 
 * Add instruction manual, modify readme.
 * Overhaul generated index.html.
@@ -67,18 +67,18 @@ using the prawn gem for PDF and simple ERB templating for HTML.
 * Add validation of transaction dates to ensure within configured date range.
 * Make report hash / OpenStruct keys consistently symbols.
 
-## v0.1.6
+### v0.1.6
 
 * Fixed PDF output; PDF files were corrupt because cupsfilter starting sending
 output to stderr at some point.
 
 
-## v0.1.4, v0.1.5
+### v0.1.4, v0.1.5
 
 * Intermediate unsatisfactory fixes, these versions were published but yanked. 
 
 
-## v0.1.3
+### v0.1.3
 
 * Report output now goes to separate txt, html, and pdf subdirectories.
 * Add vendor.yml to exclude generated report files from language reporting.
@@ -93,17 +93,17 @@ output to stderr at some point.
 * Add 'from_string' methods to Journal and ChartOfAccounts.
 
 
-## v0.1.2
+### v0.1.2
 
 * Improve error message when the needed directories do not exist. 
 
 
-## v0.1.1
+### v0.1.1
 
 * Fix startup error.
 
 
-## v0.1.0
+### v0.1.0
 
 * First release.
 
