@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- <%= metadata_comment %> -->
+  <!-- <%= metadata %> -->
   <head>
 
     <meta charset="utf-8">
@@ -32,8 +32,10 @@
 
   <body>
 
-    <h1><%= chart_of_accounts.entity %></h1>
-    <p class="muted">Reports Generated at <%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%=RockBooks::VERSION %></p>
+    <h1><%= entity %></h1>
+    <h1><%= accounting_period %></h1>
+    <p class="muted"><%= generated %></p>
+<!--    <p class="muted">Reports Generated at <%#= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%#=RockBooks::VERSION %></p>-->
 
     <h2>Financial Statements</h2>
     <div id="financial-statements">

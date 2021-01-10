@@ -4,6 +4,7 @@ require_relative 'balance_sheet'
 require_relative 'data/bs_is_data'
 require_relative 'data/receipts_report_data'
 require_relative 'income_statement'
+require_relative 'index_html_page'
 require_relative 'multidoc_txn_report'
 require_relative 'receipts_report'
 require_relative 'report_context'
@@ -21,7 +22,7 @@ class BookSetReporter
 
   extend Forwardable
 
-  attr_reader :book_set, :output_dir, :filter, :context
+  attr_reader :book_set, :context, :filter, :output_dir
 
   def_delegator :book_set, :all_entries
   def_delegator :book_set, :journals
@@ -129,13 +130,6 @@ class BookSetReporter
   end
 
 
-  private def create_index_html
-    filespec = build_filespec(output_dir, 'index', 'html')
-    File.write(filespec, index_html_content)
-    puts "Created index.html"
-  end
-
-
   private def report_metadata(doc_short_name)
     {
         RBCreator:      "RockBooks v#{VERSION} (#{PROJECT_URL})",
@@ -214,14 +208,11 @@ class BookSetReporter
   end
 
 
-  private def index_html_content
-    erb_filespec = File.join(File.dirname(__FILE__), 'templates', 'html', 'index.html.erb')
-    erb = ERB.new(File.read(erb_filespec))
-    erb.result_with_hash(
-        metadata_comment: html_metadata_comment('index.html'),
-        journals: journals,
-        chart_of_accounts: chart_of_accounts,
-        run_options: run_options)
+  private def create_index_html
+    filespec = build_filespec(output_dir, 'index', 'html')
+    content = IndexHtmlPage.new(context, html_metadata_comment('index.html'), run_options).generate
+    File.write(filespec, content)
+    puts "Created index.html"
   end
 end
 end
