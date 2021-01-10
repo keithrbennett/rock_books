@@ -1,6 +1,7 @@
 <%= banner_line %>
 <%= fn_center.(entity || 'Unspecified Entity') %>
 <%= fn_center.("Balance Sheet for Period Ending #{end_date}") %>
+<%= fn_center.(generated) %>
 <%= banner_line %>
 
 <% %i(asset liability equity).each do |section_type| -%>

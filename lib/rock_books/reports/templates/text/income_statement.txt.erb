@@ -1,6 +1,7 @@
 <%= banner_line %>
 <%= fn_center.(entity || 'Unspecified Entity') %>
 <%= fn_center.("Income Statement -- #{start_date} to #{end_date}") %>
+<%= fn_center.(generated) %>
 <%= banner_line %>
 
 <% %i(income expense).each do |section_type| -%>

@@ -4,6 +4,7 @@ end -%>
 <%= banner_line %>
 <%= fn_center.(entity || 'Unspecified Entity') %>
 <%= fn_center.('Receipts Report') %>
+<%= fn_center.(generated) %>
 <%= banner_line %>
 
 <% # Unlike existing and missing, which arrays of hashes with keys :receipt and :journal, unused is an array of receipt filespecs %>

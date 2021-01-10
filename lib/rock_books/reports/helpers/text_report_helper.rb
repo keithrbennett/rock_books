@@ -130,7 +130,7 @@ module TextReportHelper
       fn_format_multidoc_entry: method(:format_multidoc_entry),
       fn_section_heading: method(:section_heading),
       fn_total_with_ok_or_discrepancy: method(:total_with_ok_or_discrepancy),
-      generated: "Reports Generated at #{DateTime.now.strftime('%Y-%m-%d %H:%M:%S')} by RockBooks version #{RockBooks::VERSION}",
+      generated: "Generated at #{DateTime.now.strftime('%Y-%m-%d %H:%M:%S')} by RockBooks version #{RockBooks::VERSION}",
       line_item_format_string: line_item_format_string,
       short_name_format_string: SHORT_NAME_FORMAT_STRING,
       start_date: start_date,
