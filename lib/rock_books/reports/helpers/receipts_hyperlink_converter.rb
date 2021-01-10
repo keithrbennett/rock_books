@@ -1,7 +1,7 @@
 module RockBooks
 class ReceiptsHyperlinkConverter
 
-  def self.convert_receipts_to_hyperlinks(html_string, html_filespec)
+  def self.convert(html_string, html_filespec)
     ReceiptsHyperlinkConverter.new(html_string, html_filespec).convert
   end
 

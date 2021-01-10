@@ -1,3 +1,10 @@
+### v0.8.0
+
+* Add metadata to PDF and HTML reports
+* Add report generation timestamp and accounting period to all reports.
+* Refactoring and cleanup.
+
+
 ### v0.7.1
 
 * Refactor report helpers. 
