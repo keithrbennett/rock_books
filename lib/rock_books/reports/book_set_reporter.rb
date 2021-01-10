@@ -13,7 +13,7 @@ require_relative 'multidoc_txn_by_account_report'
 require_relative 'tx_one_account'
 require_relative 'helpers/erb_helper'
 require_relative 'helpers/text_report_helper'
-require_relative 'helpers/html_report_helper'
+require_relative 'helpers/receipts_hyperlink_converter'
 
 require 'prawn'
 
@@ -173,7 +173,7 @@ class BookSetReporter
           metadata_comment: html_metadata_comment(short_name)
       }
       html_raw_report = ErbHelper.render_hashes("html/report_page.html.erb", data, {})
-      html_report = HtmlReportHelper.convert_receipts_to_hyperlinks(html_raw_report, html_filespec)
+      html_report = ReceiptsHyperlinkConverter.convert_receipts_to_hyperlinks(html_raw_report, html_filespec)
       File.write(html_filespec, html_report)
     end
 

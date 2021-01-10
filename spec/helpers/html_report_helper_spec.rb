@@ -1,4 +1,4 @@
-require_relative '../../lib/rock_books/reports/helpers/html_report_helper'
+require_relative '../../lib/rock_books/reports/helpers/receipts_hyperlink_converter'
 
 module RockBooks
 
