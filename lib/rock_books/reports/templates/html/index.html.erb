@@ -48,9 +48,10 @@
     <div id="supporting-documents" style="display: inline ">
       <%
         subdir_link = ->(name, caption) do
-          dir_name = File.expand_path(File.join(Dir.pwd, name))
-          if Dir.exist?(dir_name)
-            %Q{<a href=#{dir_name} class="btn btn-primary">#{caption}</a>}
+          link_dir_name = File.join('..', '..', name)
+          test_dir_name = name
+          if Dir.exist?(test_dir_name)
+            %Q{<a href=#{link_dir_name} class="btn btn-primary">#{caption}</a>}
           end
         end
       %>
