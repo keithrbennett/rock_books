@@ -19,7 +19,9 @@ module RockBooks
     end
 
     def generate
-      ErbHelper.render_hashes('html/index.html.erb', data, template_presentation_context)
+      webized_generate_message_lines = template_presentation_context[:generated].split("\n")
+      presentation_context = template_presentation_context.merge( { generated: webized_generate_message_lines})
+      ErbHelper.render_hashes('html/index.html.erb', data, presentation_context)
     end
   end
 end

@@ -33,9 +33,13 @@
   <body>
 
     <h1><%= entity %></h1>
+    <h1>Financial Statements, Reports, and Source Data</h1>
     <h1><%= accounting_period %></h1>
-    <p class="muted"><%= generated %></p>
-<!--    <p class="muted">Reports Generated at <%#= DateTime.now.strftime('%Y-%m-%d %H:%M:%S') %> by RockBooks version <%#=RockBooks::VERSION %></p>-->
+    <br />
+    <h4><%= generated[0] %></h4>
+    <h4><%= generated[1] %> (<a href="https://github.com/keithrbennett/rock_books">https://github.com/keithrbennett/rock_books</a>)</h4>
+    <h4>Open Source Software Provided by <a href="https://www.bbs-software.com/">Bennett Business Solutions, Inc.</a></h4>
+    <br />
 
     <h2>Financial Statements</h2>
     <div id="financial-statements">

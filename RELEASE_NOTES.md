@@ -1,3 +1,10 @@
+### v0.9.0
+
+* Improve report headings.
+* Fix index.html hyperlinks to resource (receipts, invoices, statements, worksheets) directories.
+* Fix cases where split journal entries were not included in the journal report.
+
+
 ### v0.8.0
 
 * Add metadata to PDF and HTML reports
