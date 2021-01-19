@@ -15,6 +15,13 @@
         padding: 36px;
         background-color: #88c1f7;
         color: #01182d;
+        max-width: 1024px;
+        float: none !important;
+        margin: 0 auto !important;
+      }
+
+      .top_heading {
+          text-align: center;
       }
 
       h2 {
@@ -32,13 +39,15 @@
 
   <body>
 
-    <h1><%= entity %></h1>
-    <h1>Financial Statements, Reports, and Source Data</h1>
-    <h1><%= accounting_period %></h1>
+    <h1 class="top_heading"><%= entity %></h1>
+    <h1 class="top_heading">Financial Statements, Reports, and Source Data</h1>
+    <h1 class="top_heading"><%= accounting_period %></h1>
     <br />
-    <h4><%= generated[0] %></h4>
-    <h4><%= generated[1] %> (<a href="https://github.com/keithrbennett/rock_books">https://github.com/keithrbennett/rock_books</a>)</h4>
-    <h4>Open Source Software Provided by <a href="https://www.bbs-software.com/">Bennett Business Solutions, Inc.</a></h4>
+    <br />
+    <h4 class="top_heading"><%= generated[0] %></h4>
+    <h4 class="top_heading"><%= generated[1] %> (<a href="https://github.com/keithrbennett/rock_books">https://github.com/keithrbennett/rock_books</a>)</h4>
+    <h4 class="top_heading">Open Source Software Provided by <a href="https://www.bbs-software.com/">Bennett Business Solutions, Inc.</a></h4>
+    <br />
     <br />
 
     <h2>Financial Statements</h2>
