@@ -114,7 +114,7 @@ module TextReportHelper
   def generation_info_display_string
     now = Time.now
     timestamp = "#{now} (#{now.utc})"
-    "Generated at #{timestamp} by RockBooks version #{RockBooks::VERSION}"
+    center("Generated at #{timestamp}") + "\n" + center("by RockBooks version #{RockBooks::VERSION}")
   end
 
 
