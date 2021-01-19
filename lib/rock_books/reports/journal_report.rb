@@ -24,18 +24,25 @@ class JournalReport
   end
 
 
+  private def format_date_and_account_amount(date, acct_amount)
+    "#{date}  #{format_acct_amount(acct_amount)}\n"
+  end
+
+
   private def format_entry_first_acct_amount(entry)
-    entry.date.to_s \
-         + '  ' \
-         + format_acct_amount(entry.acct_amounts.last) \
-         + "\n"
+    format_date_and_account_amount(entry.date, entry.acct_amounts.first)
+  end
+
+
+  private def format_entry_last_acct_amount(entry)
+    format_date_and_account_amount(entry.date, entry.acct_amounts.last)
   end
 
 
   # Formats an entry like this, with entry description added on additional line(s) if it exists:
   # 2018-05-21   $120.00   701  Office Supplies
   private def format_entry_no_split(entry)
-    output = format_entry_first_acct_amount(entry)
+    output = format_entry_last_acct_amount(entry)
 
     if entry.description && entry.description.length > 0
       output += entry.description
@@ -48,7 +55,8 @@ class JournalReport
   # 2018-05-21   $120.00   95.00     701  Office Supplies
   #                        25.00     751  Gift to Customer
   private def format_entry_with_split(entry)
-    output = format_entry_first_acct_amount(entry)
+    output = StringIO.new
+    output << format_entry_first_acct_amount(entry)
     indent = ' ' * 12
 
     entry.acct_amounts[1..-1].each do |acct_amount|
@@ -58,6 +66,8 @@ class JournalReport
     if entry.description && entry.description.length > 0
       output << entry.description
     end
+
+    output.string
   end
 
 
