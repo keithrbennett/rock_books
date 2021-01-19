@@ -1,5 +1,6 @@
 ### v0.9.0
 
+* Center generated index.html's content.
 * Improve report headings.
 * Fix index.html hyperlinks to resource (receipts, invoices, statements, worksheets) directories.
 * Fix cases where split journal entries were not included in the journal report.
