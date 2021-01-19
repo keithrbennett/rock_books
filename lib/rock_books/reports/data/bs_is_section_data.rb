@@ -19,7 +19,9 @@ class BsIsSectionData
     totals = journals_acct_totals.select { |code, _amount| codes.include?(code) }
     need_to_reverse_sign = %i{liability equity income}.include?(type)
     if need_to_reverse_sign
-      totals.keys.each { |code| totals[code] = -totals[code] }
+      totals.keys.each do |code|
+        totals[code] = -totals[code] unless totals[code] == 0.0
+      end
     end
     totals
   end

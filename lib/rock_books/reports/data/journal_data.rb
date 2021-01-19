@@ -25,6 +25,7 @@ class JournalData
       name: journal.chart_of_accounts.name_for_code(journal.account_code),
       title: journal.title,
       short_name: journal.short_name,
+      debit_or_credit: journal.debit_or_credit,
       start_date: context.chart_of_accounts.start_date,
       end_date: context.chart_of_accounts.end_date,
       entries: entries,

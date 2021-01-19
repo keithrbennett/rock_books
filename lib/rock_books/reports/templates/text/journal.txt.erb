@@ -2,12 +2,15 @@
 <%= fn_center.(entity || 'Unspecified Entity') %>
 <%= fn_center.(title) %>
 <%= fn_center.(accounting_period) %>
+
 <% if code && name -%>
 <%= fn_center.("Account: #{name} (#{code})") %>
 <% end -%>
 <% if short_name -%>
 <%= fn_center.("Journal Short Name: #{short_name}") %>
+<%= fn_center.("Amounts shown are #{debit_or_credit}s to specified accounts (negate for #{short_name})") %>
 <% end -%>
+
 <%= fn_center.(generated) %>
 <%= banner_line %>
 
