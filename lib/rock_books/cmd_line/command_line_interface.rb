@@ -52,7 +52,6 @@ Commands:
 
 rec[eipts]                - receipts: a/:a all, m/:m missing, e/:e existing, u/:u unused
 rep[orts]                 - return an OpenStruct containing all reports (interactive shell mode only)
-d[isplay_reports]         - display all reports on stdout
 w[rite_reports]           - write all reports to the output directory (see -o option)
 c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
@@ -282,7 +281,7 @@ When in interactive shell mode:
   # All reports as Ruby objects; only makes sense in shell mode.
   def cmd_rep
     unless run_options.interactive_mode
-      raise Error.new("Option 'all_reports' is only available in shell mode. Try 'display_reports' or 'write_reports'.")
+      raise Error.new("Option 'all_reports' is only available in shell mode. Try 'write_reports'.")
     end
 
     os = OpenStruct.new(book_set.all_reports($filter))
@@ -295,16 +294,6 @@ When in interactive shell mode:
     def os.at(index); self.public_send(keys[index]); end
 
     os
-  end
-
-
-  def cmd_d
-    book_set.all_reports($filter).each do |short_name, text_report|
-      puts "#{short_name}:\n\n"
-      puts text_report
-      puts "\n\n\n"
-    end
-    nil
   end
 
 
@@ -375,7 +364,6 @@ When in interactive shell mode:
     @commands_ ||= [
         Command.new('rec', 'receipts',          -> (*options)  { cmd_rec(options)  }),
         Command.new('rep', 'reports',           -> (*_options) { cmd_rep           }),
-        Command.new('d',   'display_reports',   -> (*_options) { cmd_d             }),
         Command.new('w',   'write_reports',     -> (*_options) { cmd_w             }),
         Command.new('c',   'chart_of_accounts', -> (*_options) { cmd_c             }),
         Command.new('jo',  'journals',          -> (*_options) { cmd_j             }),
