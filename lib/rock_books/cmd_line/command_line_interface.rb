@@ -56,7 +56,7 @@ w[rite_reports]           - write all reports to the output directory (see -o op
 c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
-proj[ect_page]            - open the RockBooks Github project page in a browser
+proj[ect_page]            - prints the RockBooks Github project page URL
 rel[oad_data]             - reload data from input files
 q[uit]                    - exits this program (interactive shell mode only) (see also 'x')
 x[it]                     - exits this program (interactive shell mode only) (see also 'q')
@@ -298,7 +298,7 @@ When in interactive shell mode:
 
 
   def cmd_proj
-    `open https://github.com/keithrbennett/rock_books`
+    puts 'https://github.com/keithrbennett/rock_books'
   end
 
 
