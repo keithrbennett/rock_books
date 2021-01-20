@@ -38,6 +38,10 @@ module RockBooks
       @all_entries ||= Journal.entries_in_documents(journals)
     end
 
+
+    def all_reports(filter = nil)
+      BookSetReporter.new(self, nil, filter).get_all_report_data
+    end
   end
 end
 

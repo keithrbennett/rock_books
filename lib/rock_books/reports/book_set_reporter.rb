@@ -52,6 +52,29 @@ class BookSetReporter
   end
 
 
+  def get_all_report_data
+    reports = {}
+
+    reports[:bs_is] = BsIsData.new(context)
+
+    reports[:journals] = journals.each_with_object({}) do |journal, journals|
+      journals[journal.short_name] = JournalData.new(journal, context, filter).fetch
+    end
+
+    reports[:txn_reports] = {
+      by_account: MultidocTxnByAccountData.new(context).fetch,
+      by_date: MultidocTxnReportData.new(context, :date, filter).fetch,
+      by_amount: MultidocTxnReportData.new(context, :amount, filter).fetch
+    }
+
+    reports[:single_accounts] = chart_of_accounts.accounts.each_with_object({}) do |account, single_accts|
+      single_accts[account.code.to_sym] = TxOneAccountData.new(context, account.code).fetch
+    end
+
+    reports[:receipts] = ReceiptsReportData.new(book_set.all_entries, run_options.receipt_dir).fetch
+    reports
+  end
+
   # All methods after this point are private.
 
   private def do_statements
