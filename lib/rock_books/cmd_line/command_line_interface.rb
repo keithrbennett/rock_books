@@ -4,6 +4,7 @@ require 'ostruct'
 
 require_relative '../../rock_books'
 require_relative '../version'
+require_relative '../reports/data/receipts_report_data'
 require_relative '../reports/helpers/text_report_helper'
 require_relative '../helpers/book_set_loader'
 
@@ -317,7 +318,9 @@ When in interactive shell mode:
       raise Error.new("Receipt processing was requested but has been disabled with --no-receipts.")
     end
 
-    missing, existing, unused = book_set.missing_existing_unused_receipts
+    data = ReceiptsReportData.new(all_entries, run_options.receipt_dir).fetch
+
+    missing, existing, unused = data[:missing], data[:existing], data[:unused]
 
     print_missing  = -> { puts "\n\nMissing Receipts:";  ap missing }
     print_existing = -> { puts "\n\nExisting Receipts:"; ap existing }
@@ -326,11 +329,11 @@ When in interactive shell mode:
     case options.first.to_s
       when 'a'  # all
         if run_options.interactive_mode
-          { missing: missing, existing: existing, unused: unused }
+          data
         else
-           print_missing.()
-           print_existing.()
-           print_unused.()
+          print_missing.()
+          print_existing.()
+          print_unused.()
         end
 
       when 'm'

@@ -185,29 +185,6 @@ class BookSetReporter
   end
 
 
-  private def missing_existing_unused_receipts
-    missing_receipts = []
-    existing_receipts = []
-    receipt_full_filespec = ->(receipt_filespec) { File.join(run_options.receipt_dir, receipt_filespec) }
-
-    # We will start out putting all filespecs in the unused array, and delete them as they are found in the transactions.
-    unused_receipt_filespecs = Dir['receipts/**/*'].select { |s| File.file?(s) } \
-        .sort \
-        .map { |s| "./" +  s }  # Prepend './' to match the data
-
-    all_entries.each do |entry|
-      entry.receipts.each do |receipt|
-        filespec = receipt_full_filespec.(receipt)
-        unused_receipt_filespecs.delete(filespec)
-        file_exists = File.file?(filespec)
-        list = (file_exists ? existing_receipts : missing_receipts)
-        list << { receipt: receipt, journal: entry.doc_short_name }
-      end
-    end
-    [missing_receipts, existing_receipts, unused_receipt_filespecs]
-  end
-
-
   private def create_index_html
     filespec = build_filespec(output_dir, 'index', 'html')
     content = IndexHtmlPage.new(context, html_metadata_comment('index.html'), run_options).generate
