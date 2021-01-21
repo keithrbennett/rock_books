@@ -6,6 +6,7 @@ class ReceiptsHyperlinkConverter
   end
 
   RECEIPT_REGEX = /Receipt:\s*(\S*)/
+  INVOICE_REGEX = /Invoice:\s*(\S*)/
 
   attr_reader :html_string, :num_dirs_up
 
@@ -16,14 +17,19 @@ class ReceiptsHyperlinkConverter
 
 
   def convert
-    html_string.split("\n").map do |line|
-      matches = RECEIPT_REGEX.match(line)
+    process_link_type = ->(line, regex, dir_name) do
+      matches = regex.match(line)
       if matches
-        listed_receipt_filespec = matches[1]
-        receipt_anchor_line(line, listed_receipt_filespec)
+        listed_filespec = matches[1]
+        anchor_line(line, listed_filespec, dir_name)
       else
         line
       end
+    end
+
+    html_string.split("\n").map do |line|
+      line = process_link_type.(line, RECEIPT_REGEX, 'receipts')
+      process_link_type.(line, INVOICE_REGEX, 'invoices')
     end.join("\n")
   end
 
@@ -32,16 +38,22 @@ class ReceiptsHyperlinkConverter
   #   the processed link should be '../../../receipts/[receipt_filespec]'
   # else it's in DATA_DIR/rockbooks-reports/html, and
   #   the processed link should be '../../receipts/[receipt_filespec]'
-  private def processed_receipt_filespec(listed_receipt_filespec)
-    File.join(('../' * num_dirs_up), 'receipts', listed_receipt_filespec)
+  #
+  # `dir_name` will be 'receipts' or 'invoices'
+  private def dirized_filespec(listed_filespec, dir_name)
+    File.join(('../' * num_dirs_up), dir_name, listed_filespec)
   end
 
-  private def receipt_anchor_line(line, listed_receipt_filespec)
+  private def anchor_line(line, listed_filespec, dir_name)
+    label = {
+      'receipts' => 'Receipt',
+      'invoices' => 'Invoice'
+    }.fetch(dir_name)
+
     line.gsub( \
-          /Receipt:\s*#{listed_receipt_filespec}/, \
-          %Q{Receipt: <a href="#{processed_receipt_filespec(listed_receipt_filespec)}">#{listed_receipt_filespec}</a>})
+          /#{label}:\s*#{listed_filespec}/, \
+          %Q{#{label}: <a href="#{dirized_filespec(listed_filespec, dir_name)}">#{listed_filespec}</a>})
   end
-
 end
 end
 
