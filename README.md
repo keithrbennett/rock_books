@@ -47,17 +47,17 @@ Instead of a web interface, data input is done in plain text files. This isn't a
 
 * Users can use their favorite text editors.
 
-* All data entry can be done without moving the hands away from the keyboard.
+* All data entry can be done without moving the hands away from the keyboard (assuming the editor software supports it, as does `vim`).
 
 
 #### The Accounting Period
 
-There is no handling of end of year closings or the like; the entire set of data in the input files is considered included in the reporting period when generating the reports. Therefore, the best approach is to create a new data set for each year. The chart of accounts and journal files can be copied and modified as necessary.
+There is no handling of end of year closings or the like; the entire set of data in the input files is considered included in the reporting period when generating the reports. Therefore, the best approach is to create a new data set for each year. The chart of accounts and journal files can be copied from the previous year and modified as necessary.
 
 #### RockBooks Help Text
 
 ```
-Command Line Switches:                    [rock-books version 0.2.1 at https://github.com/keithrbennett/rock_books]
+Command Line Switches:                    [rock-books version 0.10.0 at https://github.com/keithrbennett/rock_books]
 
 -i   input directory specification, default: './rockbooks-inputs'
 -o   output (reports) directory specification, default: './rockbooks-reports'
@@ -66,14 +66,13 @@ Command Line Switches:                    [rock-books version 0.2.1 at https://g
 
 Commands:
 
-rec[eipts]                - receipts: a/:a all, m/:m missing, e/:e existing
+rec[eipts]                - receipts: a/:a all, m/:m missing, e/:e existing, u/:u unused
 rep[orts]                 - return an OpenStruct containing all reports (interactive shell mode only)
-d[isplay_reports]         - display all reports on stdout
 w[rite_reports]           - write all reports to the output directory (see -o option)
 c[hart_of_accounts]       - chart of accounts
 h[elp]                    - prints this help
 jo[urnals]                - list of the journals' short names
-proj[ect_page]            - open the RockBooks Github project page in a browser
+proj[ect_page]            - prints the RockBooks Github project page URL
 rel[oad_data]             - reload data from input files
 q[uit]                    - exits this program (interactive shell mode only) (see also 'x')
 x[it]                     - exits this program (interactive shell mode only) (see also 'q')
@@ -88,7 +87,8 @@ When in interactive shell mode:
 
 ## What RockBooks Is Not
 
-As a product written by a single developer in his spare time, RockBooks lacks some conveniences of traditional accounting software programs, such as:
+As a product written by a single developer in his spare time, 
+RockBooks lacks many conveniences of traditional accounting software programs, such as:
 
 * Import of data from financial institutions
 * On the fly data validation

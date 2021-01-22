@@ -15,7 +15,7 @@ Install the RockBooks software:
 It is recommended that you create a directory structure such as this:
 
 ```.
-├── 2018-xyz-inc
+├── 2021-xyz-inc
 │   ├── invoices
 │   ├── receipts
 │   ├── references
@@ -44,9 +44,9 @@ Feel free to organize your files in subdirectories of these directories in whate
 
 ### Version Control
 
-Tracking this directory tree with version control software such as `git` in a private repository is _highly_ recommended because it provides:
+Tracking this directory tree with version control software such as `git` is _highly_ recommended because it provides:
 
-* free cloud backup with Github, Gitlab, and/or Bitbucket
+* free cloud backup in a private repository with Github, Gitlab, and/or Bitbucket
 * an audit trail with human readable diffs
 * manageable collaboration
 
@@ -58,7 +58,7 @@ You will need a chart of accounts in the `rockbooks-inputs` directory. A sample 
 
 ### Journals
 
-You will need journals. Usually there would be one journal per external financial institution accounts, such as checking and credit card accounts. Samples have been provided in the sample_data/minimal/rockbooks-inputs directory of the gem:
+You will need journals. Usually there would be one journal per external financial institution account, such as checking and credit card accounts. Samples have been provided in the sample_data/minimal/rockbooks-inputs directory of the gem:
 
 * [Checking](sample_data/minimal/rockbooks-inputs/2018-xyz-checking-journal.txt)
 * [Credit Card](sample_data/minimal/rockbooks-inputs/2018-xyz-visa-journal.txt)
@@ -92,10 +92,8 @@ Fields are space separated; any number of spaces can be used.
 
 #### Comment Lines
 
-Lines beginning with `#` will be ignored when the input data is parsed. Comment lines are useful for:
- 
-* explanations of the input itself
-* information that you would like to be available for deeper research or examination but not printed in the reports
+Lines beginning with `#` will be ignored when the input data is parsed. Therefore, comment lines will not be included in the generated reports. Comment lines are useful for explanations that are too verbose for the reports, but that should be available for deeper research. An example might be several lines of explanatory notes about an unusual transaction.
+
 
 #### Document Properties
 
@@ -110,19 +108,19 @@ as opposed to input records, will be expressed as lines beginning with `@`:
 
 #### Input Records
 
-Input records are multiple records for the type appropriate to the document:
+Input records are records of a type appropriate to the document:
 
 * chart of accounts - each account
 * journals - each transaction
 
-Input records are, in general, entered into the text files after all properties. One exception is that the `@date_prefix` is often specified in multiple places in the journal, usually with a new month (e.g. `@date_prefix: 2018-11`).
+Input records are, in general, entered into the text files after all properties. One exception is that the `@date_prefix` is often specified in multiple places in the journal, usually with a new month (e.g. `@date_prefix: 2021-11`).
 
 
 
 Data lines will contain fields that an be separated with an arbitrary number of spaces, e.g.:
 
 ```
-2018-05-18   123.45   supplies 
+2021-05-18   123.45   supplies 
 ```
 
 In journals, all entries will begin with dates, and all dates begin with numerals, so the
@@ -133,11 +131,11 @@ its other data and included in reports.
 
 In order to make the entry of dates more convenient, many documents will support
 a `@date_prefix` property that will be prepended to dates. For example, if this prefix
-contains `2018-`, then subsequent dates must exclude that prefix since it will be
+contains `2021-`, then subsequent dates must exclude that prefix since it will be
 automatically prepended. So, for example, a journal might contain the following lines:
 
 ```
-@date_prefix: 2018-
+@date_prefix: 2021-
 # ...more lines...
 05-29   37.50   ofc.spls
 05-30   22.20   tr.taxi
@@ -236,9 +234,8 @@ the cash account), you would set the property to `debit`:
 
 #### General Journal
 
-The general journal is a special form of journal that does not have a primary account.
-
-In this journal, debits and credits need to be specified literally as account code/amount
+Since the general journal is a special form of journal that does not have a primary account, 
+debits and credits need to be specified literally as account code/amount
 pairs, where positive numbers will result in debits, and negative numbers will result in credits, e.g.:
 
 ```
