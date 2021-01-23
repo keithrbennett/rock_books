@@ -16,13 +16,14 @@ require_relative 'helpers/text_report_helper'
 require_relative 'helpers/receipts_hyperlink_converter'
 
 require 'prawn'
+require 'tty-progressbar'
 
 module RockBooks
 class BookSetReporter
 
   extend Forwardable
 
-  attr_reader :book_set, :context, :filter, :output_dir
+  attr_reader :book_set, :context, :filter, :output_dir, :progress_bar
 
   def_delegator :book_set, :all_entries
   def_delegator :book_set, :journals
@@ -37,6 +38,7 @@ class BookSetReporter
     @output_dir = output_dir
     @filter = filter
     @context = ReportContext.new(book_set.chart_of_accounts, book_set.journals, 80)
+    @progress_bar = TTY::ProgressBar.new("Generating reports [:bar]", total: report_count)
   end
 
 
@@ -49,6 +51,17 @@ class BookSetReporter
     do_transaction_reports
     do_single_account_reports
     do_receipts_report
+    progress_bar.finish
+  end
+
+
+  def report_count
+    bal_sheet_income_statement = 2
+    journal_count = journals.size
+    txn_report_count = 3
+    single_account_count = chart_of_accounts.accounts.size
+    receipt_report_count = 1
+    bal_sheet_income_statement + journal_count + txn_report_count + single_account_count + receipt_report_count
   end
 
 
@@ -204,7 +217,7 @@ class BookSetReporter
     create_pdf_report.()
     create_html_report.()
 
-    puts "Created text, PDF, and HTML reports for #{short_name}."
+    progress_bar.advance
   end
 
 
@@ -212,7 +225,7 @@ class BookSetReporter
     filespec = build_filespec(output_dir, 'index', 'html')
     content = IndexHtmlPage.new(context, html_metadata_comment('index.html'), run_options).generate
     File.write(filespec, content)
-    puts "Created index.html"
+    progress_bar.advance
   end
 end
 end
