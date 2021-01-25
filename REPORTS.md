@@ -15,6 +15,10 @@ This should bring up a page looking something like this:
 
 ![sample RockBooks data home page](assets/doc-images/sample-index-html.png "Sample RockBooks Data Home Page")
 
+## ! Important Security Warning !
+
+The generated HTML files are intended for local and individual use only. For your convenience, they contain links that enable you to navigate your data directories, but also your entire file system. _Making your files accessible via a web server or screen sharing would enable the remote user to view all the files on your system and is not recommended!_ You can give others access to your files safely by instead sending them only the data files, most conveniently in the form of a zip file.
+
 ## Initially Submitted Data is Not Necessarily Final
 
 When you initially submit your data to your accountant, he or she may offer corrections and suggestions. Be prepared to regenerate the reports after making any changes. It's easy to do; in a terminal, run `rock_books w` in the project data directory.
