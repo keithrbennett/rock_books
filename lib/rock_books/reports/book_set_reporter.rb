@@ -38,7 +38,7 @@ class BookSetReporter
     @output_dir = output_dir
     @filter = filter
     @context = ReportContext.new(book_set.chart_of_accounts, book_set.journals, 80)
-    @progress_bar = TTY::ProgressBar.new("[:bar] Generating report :report_short_name ", total: report_count)
+    @progress_bar = TTY::ProgressBar.new("[:bar] :caption", total: report_count + 10)
   end
 
 
@@ -51,6 +51,7 @@ class BookSetReporter
     do_transaction_reports
     do_single_account_reports
     do_receipts_report
+    progress_bar.advance(caption: 'Finished generating reports.')
     progress_bar.finish
   end
 
@@ -217,12 +218,12 @@ class BookSetReporter
     create_pdf_report.()
     create_html_report.()
 
-    progress_bar.advance(report_short_name: short_name.to_s)
+    progress_bar.advance(caption: "Generating report: #{short_name}")
   end
 
 
   private def create_index_html
-    progress_bar.advance(report_short_name: 'index.html')
+    progress_bar.advance(caption: 'Generating index.html')
     filespec = build_filespec(output_dir, 'index', 'html')
     content = IndexHtmlPage.new(context, html_metadata_comment('index.html'), run_options).generate
     File.write(filespec, content)
