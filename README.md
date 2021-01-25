@@ -1,14 +1,20 @@
 # RockBooks
+### A simple but useful free and open source accounting application for very small entities [[link]](https://github.com/keithrbennett/rock_books).
+#### Sponsored and Written by [Keith Bennett](https://github.com/keithrbennett) of [Bennett Business Solutions, Inc.](https://www.bbs-software.com)
 
-| Note: |
+| Other documentation files: |
 | ---- |
-| The [manual.md file](manual.md) has more detailed information about RockBooks usage. |
+| * [MANUAL.md](MANUAL.md) - more detailed information about RockBooks usage, especially setting up the data directory and inputting data. |
+| * [REPORTS.md](REPORTS.md) - viewing the generated reports |
+| * [RELEASE_NOTES.md](RELEASE_NOTES.md) |
 
-**A simple but useful accounting software application for very small entities.**
+The generated reports and supporting files can be submitted in the form of a zip file to an accountant, _who does not need any special software_ to view them...only a web browser.
 
 A supreme goal of this project is to give _you_ control over your data. Want to serialize it to YAML, JSON, CSV, or manipulate it in your custom code? No problem! 
 
-After entering the data in input files, there is a processing step (a single command) that is done to validate the input and generate the reports and home page. (This could be automated using `guard`, etc.) An `index.html` is generated that links to the reports, input documents, receipts, invoices, statements, worksheets, etc., in a unified interface. This `index.html` can be opened locally using a `file:///` URL but the directory tree can easily be copied to a web server for shared and/or remote access.
+After entering the data in input files, a single command validates the input and generates the reports and home page. A `rockbooks_reports/html/index.html` file is generated that links to the reports, input documents, receipts, invoices, statements, worksheets, etc., in a unified interface. This `index.html` can be opened locally using a `file:///` URL but the directory tree can easily be copied to a web server for shared and/or remote access. Here is an example page:
+
+![sample RockBooks data home page](assets/doc-images/sample-index-html.png "Sample RockBooks Data Home Page")
 
 #### How RockBooks Is Different
 
@@ -18,7 +24,7 @@ RockBooks is different in many ways.
 
 The software is in the form of Ruby classes and objects that can be incorporated into your own code for your own customizations. The data is available to programmers as Ruby objects (and therefore JSON, YAML, etc.) In addition, RockBooks could be used as an engine with alternate pluggable UI's. Feel free to write a web app for inputting the data!
 
-Rather than hiding accounting concepts from the user, RockBooks embraces and exposes them. There is no attempt to hide the traditional double entry bookkeeping system, with debits and credits. Accounting terminology is used throughout (e.g. "chart of accounts", "journals"). Some understanding of accounting or bookkeeping principles is helpful but not absolutely necessary.
+Rather than hiding accounting concepts from the user, RockBooks embraces and exposes them. There is no attempt to hide the traditional double entry bookkeeping system, with debits and credits. Accounting terminology is used throughout (e.g. "chart of accounts" and "journals"). Some understanding of accounting or bookkeeping principles is helpful but not absolutely necessary.
 
 To simplify its implementation, RockBooks assumes some conventions:
 
@@ -57,7 +63,7 @@ There is no handling of end of year closings or the like; the entire set of data
 #### RockBooks Help Text
 
 ```
-Command Line Switches:                    [rock-books version 0.10.0 at https://github.com/keithrbennett/rock_books]
+Command Line Switches:                    [rock-books version 0.11.0 at https://github.com/keithrbennett/rock_books]
 
 -i   input directory specification, default: './rockbooks-inputs'
 -o   output (reports) directory specification, default: './rockbooks-reports'
@@ -93,6 +99,8 @@ RockBooks lacks many conveniences of traditional accounting software programs, s
 * Import of data from financial institutions
 * On the fly data validation
 * Data entry conveniences such as drop down selection lists for data such as accounts
+* Tracking of receivables and payables (other than generating the standard report set)
+* Aggregation of sub-accounts, such as aggregating separate receivable accounts for each client
 * Fancy reporting and graphing -- however, RockBooks' bringing links to all the entity's documentation and output into a single web page may well be more useful
 
 

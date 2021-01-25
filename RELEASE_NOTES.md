@@ -1,3 +1,8 @@
+# Release Notes
+
+[[go to README](README.md)]
+
+
 ### v0.10.0
 
 * Add invoice hyperlinks to generated HTML.

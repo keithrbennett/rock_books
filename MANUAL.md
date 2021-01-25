@@ -1,5 +1,7 @@
 # RockBooks Manual
 
+[[return to README](README.md)]
+
 
 | Note: |
 | ---- |
@@ -25,26 +27,27 @@ It is recommended that you create a directory structure such as this:
 │   └── worksheets
 ```
 
-The top level is a directory containing your data for a given entity for a single reporting period (probably a year).
+The directory tree will contain your data for a given entity for a single reporting period (probably a year).
 
 Here are the subdirectories:
 
 * `rockbooks-inputs` - all input documents (chart of accounts, journals)
 * `rockbooks-reports` - all generated reports and web content
-* `receipts`
-* `invoices`
-* `references`
-* `statements`
-* `worksheets`
+* `receipts` - receipts and invoices from vendors
+* `invoices` - sales invoices (not invoices from vendors)
+* `statements` - downloaded statements from financial institutions, etc.
+* `worksheets` - supporting worksheets (e.g. for mileage allowances, meals and incidental allowances)
 
-The last five can contain your non-RockBooks specific files that you would normally keep anyway. These directories will be offered by the reports home page web interface merely to navigate the filesystem, with links to view the files using the default application for that file type. Receipts are handled specially though -- you can specify a receipt in a journal and it will be checked for existence in the Receipts report. In the future we hope to generate hyperlinks to both receipts and invoices in the journal reports.
+The last four can contain your non-RockBooks specific files that you would normally keep anyway. These directories will be offered by the reports home page web interface merely to navigate the filesystem, with links to view the files using the default application for that file type. Receipts and invoices are handled specially though -- you can specify a receipt or invoice filespec in a journal and its file will be linked to in the corresponding report transaction. In the Receipts report, receipts specified are checked for existence, and existing receipts files are checked for references in the journals; in the future we hope to do so for invoices as well.
 
 Feel free to organize your files in subdirectories of these directories in whatever way makes sense to you. I have subdirectories of `receipts` for each month (`01`, `02` ... `12`).
+
+In addition to the directories listed above, feel free to create other directories to organize your data. For example, you might want a `govt` directory for documents relating to business registration and licensing. Although there is no dedicated button for these additional directories on the data home page, you will be able to navigate to it with the `Browse All Data Files` button.
 
 
 ### Version Control
 
-Tracking this directory tree with version control software such as `git` is _highly_ recommended because it provides:
+Tracking your data directory tree with version control software such as `git` is _highly_ recommended because it provides:
 
 * free cloud backup in a private repository with Github, Gitlab, and/or Bitbucket
 * an audit trail with human readable diffs
@@ -162,10 +165,10 @@ that will be used. Each account should contain the following fields:
 | ------------- | ------------- |
 | code          | a short string with which to identify an account, e.g. `ret.earn` for retained earnings
 | type          | 'A' for asset, 'L' for liability, 'O' for (owners) equity, 'I' for income, and 'E' for expenses.
-| name          | a longer more descriptive name, used in reports, so no more than 30 or so characters long is recommended
+| name          | a longer more descriptive name, used in reports, so no more than 30 or so characters long
   
 
-So, the chart of accounts data might include something like this:
+So, the chart of accounts data might include the following accounts:
 
 ```
 ck.xyz       A   XYZ Bank Checking Account
@@ -180,7 +183,7 @@ we recommend periods; they're much easier to type, and you'll be doing a _lot_ o
 
 There is no maximum length for account codes, and reports will automatically align based
 on the longest account code. However, keep in mind that you will need to type these codes,
-and they will consume space in reports.
+and they will consume valuable horizontal space in reports.
 
 For clarity, it is recommended that all accounts for each of the five account types be grouped together. That is, list all the assets first, then all the liabilities, etc.
 
