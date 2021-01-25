@@ -1,3 +1,15 @@
+### v0.10.0
+
+* Add invoice hyperlinks to generated HTML.
+* Improve documentation.
+* Add progress bar to report generation.
+* Change 'proj[ect]' command to print the project home page URL, rather than call `open` on it. This makes the command useful in more cases and removes environment dependency.
+* Remove interactive 'display reports' option. It's not that useful and easy enough to write all reports to disk and selectively view them.
+* Fix rep[orts] interactive option.
+* Fix and refactor handling of receipt data on command line.
+* Add styling to report HTML pages, mostly for centering the reports, increasing the font size, and providing a faint blue background.
+
+
 ### v0.9.0
 
 * Center generated index.html's content.
