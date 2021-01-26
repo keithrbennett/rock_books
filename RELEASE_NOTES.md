@@ -2,6 +2,11 @@
 
 [[go to README](README.md)]
 
+### v0.11.0
+
+* Add and fix documentation, especially addition of REPORTS.md about viewing the generated reports.
+* Add "Original Input Documents" and "Browse All Data Files" buttons to generated index.html.
+
 
 ### v0.10.0
 
