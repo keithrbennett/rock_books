@@ -25,15 +25,16 @@ class BsIsData
 
 
     def bal_sheet_data
+      sections = {
+        asset:       section_data(:asset),
+        liability:   section_data(:liability),
+        equity:      section_data(:equity),
+      }
       {
           end_date:    end_date,
           entity:      context.entity,
-          sections: {
-            asset:       section_data(:asset),
-            liability:   section_data(:liability),
-            equity:      section_data(:equity),
-          },
-          grand_total: journals_acct_totals.values.sum.round(2)
+          sections:    sections,
+          grand_total: sections.values.sum { |data| data[:total] }.round(2)
       }
     end
 
