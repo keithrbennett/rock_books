@@ -23,6 +23,9 @@ class BsIsData
       BsIsSectionData.new(type, context, journals_acct_totals).fetch
     end
 
+    def grand_total(sections)
+      (sections[:asset][:total] - sections[:liability][:total] - sections[:equity][:total]).round(2)
+    end
 
     def bal_sheet_data
       sections = {
@@ -34,7 +37,7 @@ class BsIsData
           end_date:    end_date,
           entity:      context.entity,
           sections:    sections,
-          grand_total: sections.values.sum { |data| data[:total] }.round(2)
+          grand_total: grand_total(sections)
       }
     end
 
