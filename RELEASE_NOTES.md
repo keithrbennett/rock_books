@@ -2,6 +2,12 @@
 
 [[go to README](README.md)]
 
+### v0.12.0
+
+* Fix balance sheet grand total computation.
+* Update bundler version constraint to ">= 2.2.33" as per dependabot.
+
+
 ### v0.11.0
 
 * Add and fix documentation, especially addition of REPORTS.md about viewing the generated reports.
