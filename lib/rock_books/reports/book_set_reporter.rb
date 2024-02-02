@@ -33,11 +33,11 @@ class BookSetReporter
   FONT_FILESPEC = File.absolute_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'assets', 'fonts', 'JetBrainsMono-Medium.ttf'))
 
 
-  def initialize(book_set, output_dir, filter = nil)
+  def initialize(book_set, filter = nil)
     @book_set = book_set
-    @output_dir = output_dir
+    @output_dir = run_options.output_dir
     @filter = filter
-    @context = ReportContext.new(book_set.chart_of_accounts, book_set.journals, 80)
+    @context = ReportContext.new(book_set)
     @progress_bar = TTY::ProgressBar.new("[:bar] :caption", total: report_count + 10)
   end
 

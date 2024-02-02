@@ -18,8 +18,11 @@
    ----     --------           ------      -------
 
 <% entries.each do |entry| -%>
-<%=  fn_format_multidoc_entry.(entry) %>
-<% end %>
+<%=   fn_format_multidoc_entry.(entry) %>
+<%    if extra_output_line -%>
+<%=     "<br />" -%>
+<%    end -%>
+<<% end %>
 
 
 <%= fn_erb_render_binding.('text/_totals.txt.erb', binding) %>

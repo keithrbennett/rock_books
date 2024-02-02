@@ -124,6 +124,7 @@ module TextReportHelper
       banner_line: banner_line,
       end_date: end_date,
       entity: context.entity,
+      extra_output_line: context.extra_output_line,
       fn_acct_name:  method(:acct_name),
       fn_account_code_name_type_string_for_code: method(:account_code_name_type_string_for_code),
       fn_center: method(:center),

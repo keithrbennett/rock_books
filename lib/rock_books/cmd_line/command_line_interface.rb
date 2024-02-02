@@ -350,7 +350,7 @@ When in interactive shell mode:
   end
 
   def cmd_w
-    BookSetReporter.new(book_set, run_options.output_dir, $filter).generate
+    BookSetReporter.new(book_set, $filter).generate
     nil
   end
 

@@ -17,6 +17,7 @@ class Main
     options.input_dir   = DEFAULT_INPUT_DIR
     options.output_dir  = DEFAULT_OUTPUT_DIR
     options.receipt_dir = DEFAULT_RECEIPT_DIR
+    options.extra_output_line = DEFAULT_EXTRA_LINE_ENABLED
     options.do_receipts = true
     options
   end
@@ -42,6 +43,11 @@ class Main
       parser.on("-h", "--help", "Show help") do |_help_requested|
         ARGV << 'h' # pass on the request to the command processor
         options.suppress_command_line_validation = true
+      end
+
+      message = "Include an extra line separating transactions in the output, default: #{DEFAULT_EXTRA_LINE_ENABLED}"
+      parser.on('-e', '--[no-]extra_output_line [FLAG]', TrueClass, message) do |v|
+        options.extra_output_line = (v.nil? ? true : v)
       end
 
       parser.on('-i', '--input_dir DIR',

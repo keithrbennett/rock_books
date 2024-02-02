@@ -22,6 +22,11 @@ module RockBooks
     end
 
 
+    def extra_output_line
+      run_options.extra_output_line
+    end
+
+
     def journal_names
       journals.map(&:short_name)
     end
