@@ -63,8 +63,9 @@ There is no handling of end of year closings or the like; the entire set of data
 #### RockBooks Help Text
 
 ```
-Command Line Switches:                    [rock-books version 0.11.0 at https://github.com/keithrbennett/rock_books]
+Command Line Switches:                    [rock-books version 0.13.0 at https://github.com/keithrbennett/rock_books]
 
+-e   include an extra line separating transactions in the output, default: true
 -i   input directory specification, default: './rockbooks-inputs'
 -o   output (reports) directory specification, default: './rockbooks-reports'
 -r   receipts directory, default: './receipts'

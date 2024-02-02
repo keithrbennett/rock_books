@@ -43,6 +43,7 @@ class CommandLineInterface
   HELP_TEXT = "
 Command Line Switches:                    [rock-books version #{RockBooks::VERSION} at https://github.com/keithrbennett/rock_books]
 
+-e   include an extra line separating transactions in the output, default: #{RockBooks::DEFAULT_EXTRA_LINE_ENABLED}
 -i   input directory specification, default: '#{DEFAULT_INPUT_DIR}'
 -o   output (reports) directory specification, default: '#{DEFAULT_OUTPUT_DIR}'
 -r   receipts directory, default: '#{DEFAULT_RECEIPT_DIR}'
