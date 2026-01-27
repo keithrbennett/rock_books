@@ -1,4 +1,6 @@
 require "bundler/setup"
+require 'simplecov'
+SimpleCov.start
 
 require_relative '../lib/rock_books'
 
