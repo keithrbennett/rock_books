@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'amazing_print', '>= 1.4.0', '< 2'
+  spec.add_dependency 'matrix', '>= 0.4.0', '< 1'
   spec.add_dependency 'os', '> 1.0.0', '< 2'
   spec.add_dependency 'pry', '>= 0.14.2', '< 2'
   spec.add_dependency 'prawn', '>= 2.4.0', '< 3'
