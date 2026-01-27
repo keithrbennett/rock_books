@@ -8,7 +8,7 @@ module RockBooks
       code = '333'; amount = 1000; date = Date.iso8601('2018-05-16')
       obj = AcctAmount.new(date, code, amount)
 
-      parsed_obj = YAML.load(obj.to_yaml)
+      parsed_obj = YAML.load(obj.to_yaml, permitted_classes: [RockBooks::AcctAmount, Date, Symbol])
 
       expect(parsed_obj.date).to eq(date)
       expect(parsed_obj.code).to eq(code)

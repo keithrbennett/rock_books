@@ -74,7 +74,7 @@ module RockBooks
       data = "@account_code: #{acct_code_1}\n2018-05-13 333.33  #{acct_code_2}"
 
       journal = Journal.from_string(chart_of_accounts, data)
-      parsed_journal = YAML.load(journal.to_yaml)
+      parsed_journal = YAML.load(journal.to_yaml, permitted_classes: [RockBooks::JournalEntry, RockBooks::AcctAmount, Date, Symbol], aliases: true)
 
       parsed_journal_code = parsed_journal[:account_code]
       expect(parsed_journal_code).to eq(acct_code_1)
