@@ -1,3 +1,5 @@
+require 'pathname'
+
 module RockBooks
 class ReceiptsReportData
 
@@ -18,11 +20,19 @@ class ReceiptsReportData
 
     all_entries.each do |entry|
       entry.receipts.each do |receipt|
-        filespec = receipt_full_filespec(receipt)
-        unused_receipt_filespecs.delete(filespec)
-        list = (File.file?(filespec) ? existing_receipts : missing_receipts)
+                full_filespec = receipt_full_filespec(receipt)
+                relative_filespec = Pathname.new(full_filespec).relative_path_from(Pathname.new(receipt_dir)).to_s
+        
+                unused_receipt_filespecs.delete(relative_filespec)
+        
+                list = (File.file?(full_filespec) ? existing_receipts : missing_receipts)
         list << { receipt: receipt, journal: entry.doc_short_name }
       end
+    end
+
+    [missing_receipts, existing_receipts].each do |receipt_list|
+      receipt_list.uniq!
+      receipt_list.sort_by! { |r| [r[:receipt], r[:journal]] }
     end
 
     {
@@ -34,9 +44,9 @@ class ReceiptsReportData
 
 
   private def all_receipt_filespecs
-    Dir['receipts/**/*'].select { |s| File.file?(s) } \
+    Dir[File.join(receipt_dir, 'receipts', '**', '*')].select { |s| File.file?(s) } \
         .sort \
-        .map { |s| "./" +  s }  # Prepend './' to match the data
+        .map { |s| Pathname.new(s).relative_path_from(Pathname.new(receipt_dir)).to_s }
   end
 
 
