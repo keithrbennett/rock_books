@@ -12,6 +12,7 @@
 # rspec failure tracking
 .rspec_status
 
+cov_loupe.log
 Gemfile.lock
 projectFilesBackup
 *.gem
