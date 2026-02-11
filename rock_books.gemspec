@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'prawn', '>= 2.4.0', '< 3'
   spec.add_dependency 'tty-progressbar', '0.18.2', '< 2'
 
-  spec.add_development_dependency 'bundler', '>= 2.2.33', '< 3'
+  spec.add_development_dependency 'bundler', '~> 4.0'
   spec.add_development_dependency 'rake', '> 13.0.6', '< 14'
   spec.add_development_dependency 'rspec', '>= 3.12.0', '< 4'
   spec.add_development_dependency 'simplecov'
