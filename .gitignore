@@ -1,18 +1,7 @@
-/.bundle/
-/.yardoc
-/_yardoc/
-/coverage/
-/doc/
-/pkg/
-/spec/reports/
-/tmp/
-/.idea/
-.DS_Store
-
-# rspec failure tracking
+.gemini/
+.idea/
+coverage/
+untracked/
 .rspec_status
-
-cov_loupe.log
 Gemfile.lock
-projectFilesBackup
 *.gem
